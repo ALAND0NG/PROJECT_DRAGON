@@ -3,18 +3,14 @@
 
 Scene::Scene()
 {
-	
-	
+	entt::registry tempReg;
+	m_SceneReg = &tempReg;
 }
 Scene::~Scene()
 {
 
 }
 
-Entity Scene::CreateEntity()
-{
-	return Entity(m_SceneReg->create());
-}
 
 entt::registry* Scene::GetSceneReg()
 {

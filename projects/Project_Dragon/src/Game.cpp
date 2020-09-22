@@ -5,8 +5,8 @@ void Game::Init()
 	
 	
 	//manually set the active scene here
-	TestScene* testscene;
-	m_ActiveScene = testscene;
+	m_scenes.push_back(new TestScene());
+	m_ActiveScene = m_scenes[0];
 	m_ActiveScene->InitScene(100.f, 100.f);
 	m_window = m_ActiveScene->GetWindow();
 	AttachRegistry();

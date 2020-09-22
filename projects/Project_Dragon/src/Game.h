@@ -28,6 +28,8 @@ private:
 	GLFWwindow* m_window;
 	entt::registry* m_registry; //the main reg
 	Scene* m_ActiveScene;
+
+	std::vector<Scene*> m_scenes;
 	
 
 

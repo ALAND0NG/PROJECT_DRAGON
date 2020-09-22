@@ -1,4 +1,4 @@
-#include "TestScene.h"
+#include "TestScene.h"     
 
 void TestScene::InitScene(float windowWidth, float windowHeight)
 {
@@ -25,9 +25,14 @@ void TestScene::InitScene(float windowWidth, float windowHeight)
 	
 	m_SceneReg = new entt::registry;
 
-	Entity testEnt(CreateEntity());
+	auto testEntity = m_SceneReg->create();
+
+	AddComponent<TestComponent>(testEntity);
 	
-	Add<TransformComponent>(testEnt.GetHandle());
+	Get<TestComponent>(testEntity).testInt = 1;
+	
+	std::cout << Get<TestComponent>(testEntity).testInt;
+	
 	
 	
 

@@ -1,8 +1,9 @@
 #pragma once
 
+#include "entt.hpp"
 #include "Componenents.h"
 #include "GLFW/glfw3.h"
-#include "Entity.h"
+
 
 class Scene
 {
@@ -10,17 +11,26 @@ public:
 	Scene();
 	~Scene();
 	
-	Entity CreateEntity();
 	
-	virtual void InitScene(float windowWidth, float windowHeight); //this is where levels are built
-	virtual void OnUpdate(); //Scene specific update function
+	
+	void virtual InitScene(float windowWidth, float windowHeight)
+	{
+	}//this is where levels are built
+	void virtual OnUpdate()
+	{
+	}//Scene specific update function
 	entt::registry* GetSceneReg();
 	GLFWwindow* GetWindow();
 	
 	template<typename T, typename... Args>
-	T& Add(Args&&... args, entt::entity ent)
+	T& AddComponent(Args&&... args, entt::entity ent)
 	{
-		return ecs.emplace<T>(ent, std::forward<Args>(args)...);
+		return m_SceneReg->emplace<T>(ent, std::forward<Args>(args)...);
+	}
+	template<typename T>
+	T& Get(entt::entity ent)
+	{
+		return m_SceneReg->get<T>(ent);
 	}
 	
 protected:

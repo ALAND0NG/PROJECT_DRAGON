@@ -1,4 +1,4 @@
-#include "..\..\projects\Project_Dragon\src\Scene.h"
+
 //
 // Header-only tiny glTF 2.0 loader and serializer.
 //
@@ -1096,9 +1096,7 @@ struct Scene {
   std::string extensions_json_string;
 
   Scene() = default;
-  inline Scene::~Scene()
-  {
-  }
+
   DEFAULT_METHODS(Scene)
   bool operator==(const Scene &) const;
 };

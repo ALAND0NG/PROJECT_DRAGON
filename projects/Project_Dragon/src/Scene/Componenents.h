@@ -4,6 +4,10 @@
 #include <glad/glad.h>
 
 
+struct TestComponent
+{
+    int testInt;
+};
 
 struct TransformComponent
 {
@@ -17,12 +21,11 @@ struct TransformComponent
 	operator glm::mat4& () { return Transform; }
 	operator const glm::mat4& () const { return Transform; }
 
-
 };
 
 
 #pragma region Camera   
-
+/*
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
 enum Camera_Movement {
     FORWARD,
@@ -32,7 +35,7 @@ enum Camera_Movement {
 };
 
     // Default camera values
-    /**/
+    
     const float YAW = -90.0f;
     const float PITCH = 0.0f;
     const float SPEED = 2.5f;
@@ -146,5 +149,6 @@ enum Camera_Movement {
 
         }
     };
-
+    
+    */
 #pragma end region
