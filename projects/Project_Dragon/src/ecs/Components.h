@@ -2,11 +2,17 @@
 
 #include <GLM/glm.hpp>
 #include <glad/glad.h>
+#include <iostream>
 
 
-struct TestComponent
+class TestComponent
 {
+public:
     int testInt;
+    void TestPrint()
+    {
+        std::cout << testInt;
+    }
 };
 
 struct TransformComponent

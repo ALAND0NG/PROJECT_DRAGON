@@ -1,7 +1,9 @@
 #include "TestScene.h"     
 
-void TestScene::InitScene(float windowWidth, float windowHeight)
-{
+void TestScene::InitScene()
+{	
+	m_SceneReg = new entt::registry;
+
 	//init GLFW
 	if (glfwInit() == GLFW_FALSE)
 	{
@@ -9,7 +11,7 @@ void TestScene::InitScene(float windowWidth, float windowHeight)
 		//return 1;
 	}
 	//create GLFW window
-	m_Scenewindow = glfwCreateWindow(windowWidth, windowHeight, "THE FUNNY APPLICATION!!!!!!", NULL, NULL);
+	m_Scenewindow = glfwCreateWindow(800, 600, "THE FUNNY APPLICATION!!!!!!", NULL, NULL);
 
 	//want gl commands to be execuited for our window
 	glfwMakeContextCurrent(m_Scenewindow);
@@ -22,23 +24,27 @@ void TestScene::InitScene(float windowWidth, float windowHeight)
 	std::cout << glGetString(GL_RENDERER) << std::endl;
 	std::cout << glGetString(GL_VERSION) << std::endl;
 	
+	auto test = CreateEntity("TestEntity");
+	test.AddComponent<TestComponent>("TestEntity");
 	
-	m_SceneReg = new entt::registry;
+	m_testEnt = test;
 
+	
+
+	/*
+	 //Example entity creation
 	auto testEntity = m_SceneReg->create();
 
-	AddComponent<TestComponent>(testEntity);
+	AddComponent<TestComponent>(testEntity); //Example add component
 	
-	Get<TestComponent>(testEntity).testInt = 1;
+	Get<TestComponent>(testEntity).testInt = 1; //Example get component
 	
 	std::cout << Get<TestComponent>(testEntity).testInt;
-	
-	
-	
+	*/
 
 }
 
 void TestScene::OnUpdate()
 {
-
+	m_testEnt.GetComponent<TestComponent>().TestPrint();
 }

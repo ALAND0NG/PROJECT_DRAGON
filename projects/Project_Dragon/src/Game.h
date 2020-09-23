@@ -16,8 +16,7 @@ public:
 	void Update();
 	GLFWwindow* GetWindow();
 	float GetdeltaTime();
-	void KeyInput();
-	void AttachRegistry();
+
 
 
 private:
@@ -25,12 +24,10 @@ private:
 	bool windowShouldClose = false;
 	float m_deltaTime;
 	float m_previousTime;
-	GLFWwindow* m_window;
-	entt::registry* m_registry; //the main reg
+	GLFWwindow* m_window; //For the 
 	Scene* m_ActiveScene;
 
 	std::vector<Scene*> m_scenes;
-	
 
 
 };

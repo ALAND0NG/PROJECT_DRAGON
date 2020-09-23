@@ -2,15 +2,11 @@
 
 void Game::Init()
 {
-	
-	
 	//manually set the active scene here
 	m_scenes.push_back(new TestScene());
 	m_ActiveScene = m_scenes[0];
-	m_ActiveScene->InitScene(100.f, 100.f);
+	m_ActiveScene->InitScene();
 	m_window = m_ActiveScene->GetWindow();
-	AttachRegistry();
-	
 
 }
 
@@ -25,7 +21,7 @@ void Game::Tick()
 void Game::Update()
 {
 	//this is the main update function
-	while (!glfwWindowShouldClose(m_window))
+	while (m_ActiveScene->GetClose() == 0)
 	{
 		Tick();
 
@@ -33,10 +29,6 @@ void Game::Update()
 		m_ActiveScene->OnUpdate();
 
 		glfwPollEvents();
-
-		KeyInput();
-
-		
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -57,8 +49,8 @@ float Game::GetdeltaTime()
 	return m_deltaTime;
 }
 
-void Game::KeyInput()
-{
+//void Game::KeyInput()
+//{
 	/*
 	//this is the basic camera/player movement movement
 	if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS)
@@ -80,12 +72,7 @@ void Game::KeyInput()
 	if (glfwGetKey(m_window, GLFW_KEY_P) == GLFW_PRESS)
 		std::cout << m_camera.Position.x << std::endl << m_camera.Position.y << std::endl << m_camera.Position.z;
 	*/		
-}
-
-void Game::AttachRegistry()
-{
-	m_registry = m_ActiveScene->GetSceneReg();
-}
+//}
 
 
 

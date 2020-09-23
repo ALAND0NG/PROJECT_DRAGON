@@ -3,12 +3,16 @@
 
 Scene::Scene()
 {
-	entt::registry tempReg;
-	m_SceneReg = &tempReg;
 }
 Scene::~Scene()
 {
 
+}
+
+Entity Scene::CreateEntity(const std::string& name)
+{
+	Entity entity(m_SceneReg->create(), this);
+	return entity;
 }
 
 
