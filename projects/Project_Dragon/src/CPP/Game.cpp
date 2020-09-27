@@ -53,7 +53,6 @@ void Game::InitGame()
 	#pragma endregion
 
 //temporary test here
-	ECS ecs;
 	
 	ecs.AttachRegistry(&m_Reg);
 
@@ -61,7 +60,7 @@ void Game::InitGame()
 
 	ecs.Add<TestComponent>(0);
 
-	std::cout << ecs.Get<TestComponent>(0).lol;
+	
 
 
 
@@ -78,7 +77,14 @@ void Game::GameLoop()
 {
 	while (!m_Close)
 	{
+		std::cout << ecs.Get<TestComponent>(0).lol;
+
 		//This is the main update function
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glfwSwapBuffers(m_Window);
 
 	}
 }

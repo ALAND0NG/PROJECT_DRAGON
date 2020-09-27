@@ -40,4 +40,6 @@ private:
 	
 	bool m_Close = false; //tells us if we should close the window
 
+	ECS ecs;
+
 };
