@@ -3,6 +3,8 @@
 #include <iostream>
 #include "entt.hpp"
 
+#include <Header/Camera.h>
+
 //only make one of these objects
 class ECS
 {
@@ -36,10 +38,4 @@ public:
 private:
 	entt::registry* m_Registry;
 	std::vector<entt::entity> EntList; //list of all the entities
-};
-
-class TestComponent
-{
-public:
-	int lol = 1;
 };
