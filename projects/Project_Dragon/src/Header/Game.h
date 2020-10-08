@@ -3,6 +3,7 @@
 #include "GLFW/glfw3.h"
 #include <glad/glad.h>
 #include "Header/Scene.h"
+#include <Header/Renderer.h>
 
 
 //main game class
@@ -20,7 +21,9 @@ public:
 
 	void InitWindow(float width, float height, std::string name);
 
-	void Draw();
+	
+
+	
 
 	void Tick()//Gives us a deltaTime
 	{
@@ -51,4 +54,6 @@ private:
 
 	std::vector<Scene*> m_Scenes;
 	Scene* m_ActiveScene = NULL;
+
+	Renderer renderer;
 };

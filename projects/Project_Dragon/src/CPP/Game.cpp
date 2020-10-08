@@ -25,6 +25,8 @@ void Game::InitGame()
 
 	m_ActiveScene->InitScene();
 
+	renderer.Init(m_Window);
+
 
 	GameLoop(); //kicks the gameloop into starting
 
@@ -48,9 +50,13 @@ void Game::GameLoop() //mainly updates the game
 
 		m_ActiveScene->Update(); //Scene specific update
 		
-		Draw();
+		renderer.Draw(m_Window);
 
 	}
+}
+
+void GlfwWindowResizedCallback(GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
 }
 
 void Game::InitWindow(float width, float height, std::string name)
@@ -69,8 +75,9 @@ void Game::InitWindow(float width, float height, std::string name)
 
 	m_Window = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr);
 
-
 	glfwMakeContextCurrent(m_Window);
+
+	glfwSetWindowSizeCallback(m_Window, GlfwWindowResizedCallback);
 
 	//This initializes OpenGL via GLAD.
 	if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == 0)
@@ -81,23 +88,6 @@ void Game::InitWindow(float width, float height, std::string name)
 
 	printf("OpenGL Renderer: %s\n", glGetString(GL_RENDERER));
 	printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
-
-
-	glEnable(GL_DEPTH_TEST);
-
-	glEnable(GL_CULL_FACE);
-
-	glBlendFuncSeparate(GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
-
-
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-void Game::Draw()
-{
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glfwSwapBuffers(m_Window);
-}
