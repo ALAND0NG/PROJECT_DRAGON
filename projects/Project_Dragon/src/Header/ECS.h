@@ -9,13 +9,10 @@
 class ECS
 {
 public:
-	
-	void AttachRegistry(entt::registry* reg)
-	{
-		m_Registry = reg;
-	}
-	
-	void Create(unsigned int EntId)
+
+	static void AttachRegistry(entt::registry* reg);
+
+	static void Create(unsigned int EntId)
 	{
 		entt::entity id = m_Registry->create();
 		EntList.push_back(id);
@@ -23,19 +20,19 @@ public:
 	}
 
 	template<typename T, typename... Args>
-	void Add(Args&&... args, unsigned int EntityNum)
+	static void Add(Args&&... args, unsigned int EntityNum)
 	{
 		m_Registry->emplace<T>(EntList[EntityNum], std::forward<Args>(args)...);
 	}
 
 	template<typename T>
-	T& Get(unsigned int EntityNum)
+	static T& Get(unsigned int EntityNum)
 	{
 		return m_Registry->get<T>(EntList[EntityNum]);
 	}
 
 
 private:
-	entt::registry* m_Registry;
-	std::vector<entt::entity> EntList; //list of all the entities
+	static entt::registry* m_Registry;
+	static std::vector<entt::entity> EntList;
 };

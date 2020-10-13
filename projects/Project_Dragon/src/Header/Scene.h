@@ -3,9 +3,9 @@
 class Scene
 {
 public:
-	Scene(ECS* SetEcs)
+	Scene()
 	{
-		ecs = SetEcs;
+		
 	}
 
 	void InitScene();
@@ -14,5 +14,5 @@ public:
 
 
 private:
-	ECS* ecs; //pointer to the ECS
+	entt::registry* m_sceneReg = nullptr;
 };
