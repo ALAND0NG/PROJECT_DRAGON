@@ -44,7 +44,7 @@ void Game::GameLoop() //mainly updates the game
 	while (!m_Close)
 	{
 		//This is the main update function
-		Tick();
+		Timer::Tick();
 
 		GameInput();
 

@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include "Header/Scene.h"
 #include <Header/BackEnd.h>
+#include <Header/Timer.h>
 
 
 
@@ -26,20 +27,20 @@ public:
 
 
 
-	void Tick()//Gives us a deltaTime
-	{
-		float time = static_cast<float>(glfwGetTime());
-		m_deltaTime = time - m_prevTime;
-		m_prevTime = time;
-	}
-
+	//void Tick()//Gives us a deltaTime
+//	{
+	//	float time = static_cast<float>(glfwGetTime());
+	//	m_deltaTime = time - m_prevTime;
+	//	m_prevTime = time;
+	//}
+//
 
 
 private:
 
-	float m_deltaTime = NULL; 
+	//float m_deltaTime = NULL; 
 
-	float m_prevTime = NULL;
+	//float m_prevTime = NULL;
 
 	bool m_Close = false; 
 

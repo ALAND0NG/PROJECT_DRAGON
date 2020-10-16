@@ -1,38 +1,22 @@
-/*
-#include "ECS.h"
-#include "BackEnd.h"
-#include "GLM/glm.hpp"
-#include "VertexBuffer.h"
-#include "VertexArrayObject.h"
-#include "Shader.h"
-#include "IBuffer.h"
-#include "IndexBuffer.h"
-
+//This is the ECS component that will handle meshes
+//just cleaner than using the Meshbuilder/meshfactory
+//Nowhere close to done
+#include <Header/MeshBuilder.h>
+#include <Header/MeshFactory.h>
+#include <Header/VertexArrayObject.h>
+#include <Header/NotObjLoader.h>
+#include <Header/OBJLoader.h>
 #include <string>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <iostream>
-
 class Mesh
 {
 public:
-	Mesh();
-	~Mesh();
+	void TestLoadFromFile();
 
-	bool LoadFromFile(const std::string& file);
+	void LoadOBJ(std::string filename);
 
-	void Unload();
-
-	unsigned int GetNumFaces() const;
-	unsigned int GetNumVertices() const;
-
-	//Opengl buffers & objects
-	VertexBuffer* VBO_Vertices = new VertexBuffer();
-	VertexBuffer* VBO_UV = new VertexBuffer();
-	VertexBuffer* VBO_NORMALS = new VertexBuffer();
-	VertexArrayObject* VAO = new VertexArrayObject();
-
+	VertexArrayObject::sptr GetVao();
+	glm::mat4 GetTransform();
 private:
+	VertexArrayObject::sptr m_vao = VertexArrayObject::Create();
+	glm::mat4 m_transform = glm::mat4(1.0f);
 };
-*/

@@ -1,31 +1,21 @@
 #include "Header/Mesh.h"
-/*
-Mesh::Mesh()
-{
 
+void Mesh::TestLoadFromFile()
+{
+	m_vao = NotObjLoader::LoadFromFile("Models/Sample.notobj");
 }
 
-Mesh::~Mesh()
+void Mesh::LoadOBJ(std::string filename)
 {
-
+	m_vao = OBJLoader::LoadFromFile(filename);
 }
 
-bool Mesh::LoadFromFile(const std::string& file)
+VertexArrayObject::sptr Mesh::GetVao()
 {
-
+	return m_vao;
 }
 
-void Mesh::Unload()
+glm::mat4 Mesh::GetTransform()
 {
-
+	return m_transform;
 }
-
-unsigned int Mesh::GetNumFaces() const
-{
-
-}
-unsigned int Mesh::GetNumVertices() const
-{
-
-}
-*/

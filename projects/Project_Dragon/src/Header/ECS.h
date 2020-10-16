@@ -5,7 +5,8 @@
 
 #include <Header/Camera.h>
 
-//only make one of these objects
+#include <Header/Mesh.h>
+
 class ECS
 {
 public:
