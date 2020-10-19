@@ -11,6 +11,7 @@
 #include <Header/Shader.h>
 #include <header/Camera.h>
 #include <Header/ECS.h>
+#include <header/Timer.h>
 
 class BackEnd
 {

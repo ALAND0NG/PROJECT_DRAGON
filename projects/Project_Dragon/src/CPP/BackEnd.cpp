@@ -17,11 +17,11 @@ void BackEnd::Init()
 	shader->LoadShaderPartFromFile("shader/frag_shader.glsl", GL_FRAGMENT_SHADER);
 	shader->Link();
 
-	glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 2.0f);
-	glm::vec3 lightCol = glm::vec3(0.3f, 0.2f, 0.5f);
-	float     lightAmbientPow = 0.05f;
+	glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, -2.0f);
+	glm::vec3 lightCol = glm::vec3(1.f, 1.f, 1.f);
+	float     lightAmbientPow = 0.5f;
 	float     lightSpecularPow = 1.0f;
-	glm::vec3 ambientCol = glm::vec3(1.0f);
+	glm::vec3 ambientCol = glm::vec3(0.1f, 0.1f, 0.1f);
 	float     ambientPow = 0.1f;
 	float     shininess = 4.0f;
 	
@@ -39,39 +39,46 @@ void BackEnd::Init()
 	//glEnable(GL_CULL_FACE);
 
 }
-
+bool spacePressed = false;
+bool currentType = true;
 void BackEnd::Update()
 {
-	
 	glClearColor(0.08f, 0.17f, 0.31f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_W) == GLFW_PRESS)
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_SPACE))
 	{
-		ECS::Get<Camera>(0).SetPosition(glm::vec3(ECS::Get<Camera>(0).GetPosition().x + 0.05, ECS::Get<Camera>(0).GetPosition().y, ECS::Get<Camera>(0).GetPosition().z));
-	}
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		ECS::Get<Camera>(0).SetPosition(glm::vec3(ECS::Get<Camera>(0).GetPosition().x - 0.05, ECS::Get<Camera>(0).GetPosition().y, ECS::Get<Camera>(0).GetPosition().z));
-	}
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		ECS::Get<Camera>(0).SetPosition(glm::vec3(ECS::Get<Camera>(0).GetPosition().x, ECS::Get<Camera>(0).GetPosition().y + 0.05, ECS::Get<Camera>(0).GetPosition().z));
-	}
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		ECS::Get<Camera>(0).SetPosition(glm::vec3(ECS::Get<Camera>(0).GetPosition().x, ECS::Get<Camera>(0).GetPosition().y - 0.05, ECS::Get<Camera>(0).GetPosition().z));
-	}
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_Q) == GLFW_PRESS)
-	{
-		ECS::Get<Camera>(0).SetPosition(glm::vec3(ECS::Get<Camera>(0).GetPosition().x, ECS::Get<Camera>(0).GetPosition().y, ECS::Get<Camera>(0).GetPosition().z + 0.05));
-	}
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_E) == GLFW_PRESS)
-	{
-		ECS::Get<Camera>(0).SetPosition(glm::vec3(ECS::Get<Camera>(0).GetPosition().x, ECS::Get<Camera>(0).GetPosition().y, ECS::Get<Camera>(0).GetPosition().z - 0.05));
-	}
+		if (spacePressed == false)
+		{
+			if (currentType == true)
+			{
+				ECS::Get<Camera>(0).SetProjection(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f, 0.f, 1000.f));
+				currentType = false;
+				std::cout << "Set to ortho\n";
+				
+			}
+			else if (currentType == false)
+			{
+				ECS::Get<Camera>(0).SetProjection(glm::perspective(glm::degrees(90.f), 800/800.f, 0.1f, 1000.f));
+				currentType = true;
+				std::cout << "Set to Perspective\n";
+				
+			}
+				
+			
+		}
+		spacePressed = true;
+		
 
-	
+	}
+	else
+		spacePressed = false;
+
+
+
+	ECS::Get<Mesh>(2).SetRotation(glm::vec3(1.f, 0.f, 0.f), 5 * Timer::dt);
+	ECS::Get<Mesh>(3).SetRotation(glm::vec3(0.f, 1.f, 0.f), 2 * Timer::dt);
+
 
 	shader->Bind();
 	// These are the uniforms that update only once per frame
@@ -80,8 +87,16 @@ void BackEnd::Update()
 
 	shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Mesh>(2).GetTransform());
 	shader->SetUniformMatrix("u_Model", ECS::Get<Mesh>(2).GetTransform());
-	shader->SetUniformMatrix("u_ModelRotation", glm::mat3(ECS::Get<Mesh>(2).GetTransform()));
+	shader->SetUniformMatrix("u_ModelRotation", ECS::Get<Mesh>(2).GetTransform());
 	ECS::Get<Mesh>(2).GetVao()->Render();
+
+	shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
+
+	shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Mesh>(3).GetTransform());
+	shader->SetUniformMatrix("u_Model", ECS::Get<Mesh>(3).GetTransform());
+	shader->SetUniformMatrix("u_ModelRotation", ECS::Get<Mesh>(3).GetTransform());
+	ECS::Get<Mesh>(2).GetVao()->Render();
+
 
 
 

@@ -15,7 +15,4 @@ VertexArrayObject::sptr Mesh::GetVao()
 	return m_vao;
 }
 
-glm::mat4 Mesh::GetTransform()
-{
-	return m_transform;
-}
+

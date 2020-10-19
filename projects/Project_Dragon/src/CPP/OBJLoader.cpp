@@ -65,7 +65,7 @@ VertexArrayObject::sptr OBJLoader::LoadFromFile(std::string filename)
 		throw std::runtime_error("Failed to open file");
 	}
 
-	MeshBuilder<VertexPosNormTex> mesh;
+	MeshBuilder<VertexPosNormTexCol> mesh;
 	std::string line = "";
 	std::string prefix = "";
 
@@ -137,7 +137,8 @@ VertexArrayObject::sptr OBJLoader::LoadFromFile(std::string filename)
 	}
 	for (unsigned int i = 0; i < Pos_Ind.size(); i++)
 	{
-		mesh.AddVertex(vertex_position[Pos_Ind[i] - 1], vertex_normal[Norm_Ind[i] - 1], vertex_texture[Tex_Ind[i] - 1]);
+		glm::vec4 col = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		mesh.AddVertex(vertex_position[Pos_Ind[i] - 1], vertex_normal[Norm_Ind[i] - 1], vertex_texture[Tex_Ind[i] - 1], col);
 	}
 
 	return mesh.Bake();

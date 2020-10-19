@@ -14,8 +14,26 @@ public:
 
 	void LoadOBJ(std::string filename);
 
+	void SetRotation(glm::vec3 axis, float amount)
+	{
+		m_transform = glm::rotate(m_transform, amount, axis);
+	}
+
+	void SetPos(glm::vec3 pos)
+	{
+		m_transform = glm::translate(m_transform, pos);
+	}
+	
+	void SetVAO(VertexArrayObject::sptr vao)
+	{
+		m_vao = vao;
+	}
+
 	VertexArrayObject::sptr GetVao();
-	glm::mat4 GetTransform();
+	glm::mat4 GetTransform()
+	{
+		return m_transform;
+	}
 private:
 	VertexArrayObject::sptr m_vao = VertexArrayObject::Create();
 	glm::mat4 m_transform = glm::mat4(1.0f);

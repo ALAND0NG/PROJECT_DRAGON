@@ -76,11 +76,21 @@ public:
 	/// </summary>
 	const glm::mat4& GetViewProjection() const;
 
+	void SetProjection(glm::mat4 proj)//true for proj, false for ortho
+	{
+		_projection = proj;
+
+		_isDirty = true;
+	}
+
+
 protected:
 	float _nearPlane;
 	float _farPlane;
 	float _fovRadians;
 	float _aspectRatio;
+
+	
 
 	glm::vec3 _position;
 	glm::vec3 _normal;

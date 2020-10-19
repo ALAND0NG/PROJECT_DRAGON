@@ -19,7 +19,13 @@ void Scene::InitScene()
 	
 	ECS::Create(2);
 	ECS::Add<Mesh>(2);
+	//ECS::Add<Transform>(2);
 	ECS::Get<Mesh>(2).LoadOBJ("Models/cube.obj");
+	ECS::Get<Mesh>(2).SetPos(glm::vec3(1.0f, 1.0f, 0.f));
+
+	ECS::Create(3);
+	ECS::Add<Mesh>(3);
+	ECS::Get<Mesh>(3).SetPos(glm::vec3(-1.f, 0.f, 0.f));
 	
 }
 

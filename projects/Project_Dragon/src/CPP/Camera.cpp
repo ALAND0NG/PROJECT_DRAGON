@@ -1,6 +1,7 @@
 #include "Header/Camera.h"
 
 #include <GLM/gtc/matrix_transform.hpp>
+#include <iostream>
 
 Camera::Camera() :
 	_nearPlane(0.1f),
@@ -62,8 +63,10 @@ const glm::mat4& Camera::GetViewProjection() const {
 
 void Camera::__CalculateProjection()
 {
-	// TODO: implement
+	
 	_projection = glm::perspective(_fovRadians, _aspectRatio, _nearPlane, _farPlane);
+
+		
 	_isDirty = true;
 }
 
