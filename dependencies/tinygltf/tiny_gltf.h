@@ -1,3 +1,4 @@
+
 //
 // Header-only tiny glTF 2.0 loader and serializer.
 //
@@ -1095,6 +1096,7 @@ struct Scene {
   std::string extensions_json_string;
 
   Scene() = default;
+
   DEFAULT_METHODS(Scene)
   bool operator==(const Scene &) const;
 };
