@@ -35,8 +35,6 @@ static inline void trim(std::string& s) {
 
 VertexArrayObject::sptr OBJLoader::LoadFromFile(std::string filename)
 {
-	
-
 
 	std::vector<glm::vec3> vertex_position;
 

@@ -35,9 +35,9 @@ void Transform::SetScale(glm::vec3 sca)
 	scale = sca;
 }
 
-void Transform::SetRotation(glm::quat rot)
+void Transform::SetRotation(glm::vec3 axis, float ammount)
 {
-	rotation = rot;
+	rotation = glm::rotate(modelMat,ammount, axis);
 }
 
 void Transform::ComputeGlobalMat()

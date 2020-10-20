@@ -46,59 +46,47 @@ void BackEnd::Update()
 	glClearColor(0.08f, 0.17f, 0.31f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_SPACE))
+
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		if (spacePressed == false)
-		{
-			if (currentType == true)
-			{
-				ECS::Get<Camera>(0).SetProjection(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f, 0.f, 1000.f));
-				currentType = false;
-				std::cout << "Set to ortho\n";
-				
-			}
-			else if (currentType == false)
-			{
-				ECS::Get<Camera>(0).SetProjection(glm::perspective(glm::degrees(90.f), 800/800.f, 0.1f, 1000.f));
-				currentType = true;
-				std::cout << "Set to Perspective\n";
-				
-			}
-				
-			
-		}
-		spacePressed = true;
-		
+		glm::vec3 posTemp = ECS::Get<Camera>(0).GetPosition();
 
+		posTemp += ECS::Get<Camera>(0).GetForward() * 1.f * Timer::dt;
+
+		ECS::Get<Camera>(0).SetPosition(posTemp);
 	}
-	else
-		spacePressed = false;
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		glm::vec3 posTemp = ECS::Get<Camera>(0).GetPosition();
+		posTemp -= ECS::Get<Camera>(0).GetForward() * 1.f * Timer::dt;
+		ECS::Get<Camera>(0).SetPosition(posTemp);
+	
+	}
 
+	
 
+	ECS::Get<Transform>(1).SetRotation(glm::vec3(0, 1, 0), 2* Timer::dt);
+	ECS::Get<Transform>(2).SetRotation(glm::vec3(1, 0, 0), 5* Timer::dt);
 
-	ECS::Get<Mesh>(2).SetRotation(glm::vec3(1.f, 0.f, 0.f), 5 * Timer::dt);
-	ECS::Get<Mesh>(3).SetRotation(glm::vec3(0.f, 1.f, 0.f), 2 * Timer::dt);
-
+	ECS::Get<Transform>(1).ComputeGlobalMat();
+	ECS::Get<Transform>(2).ComputeGlobalMat();
 
 	shader->Bind();
 	// These are the uniforms that update only once per frame
 	//shader->SetUniformMatrix("u_View", camera->GetView());
 	shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
 
-	shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Mesh>(2).GetTransform());
-	shader->SetUniformMatrix("u_Model", ECS::Get<Mesh>(2).GetTransform());
-	shader->SetUniformMatrix("u_ModelRotation", ECS::Get<Mesh>(2).GetTransform());
-	ECS::Get<Mesh>(2).GetVao()->Render();
+	shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(1).GetTransform());
+	shader->SetUniformMatrix("u_Model", ECS::Get<Transform>(1).GetTransform());
+	shader->SetUniformMatrix("u_ModelRotation", ECS::Get<Transform>(1).GetTransform());
+	ECS::Get<Mesh>(1).GetVao()->Render();
 
 	shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
 
-	shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Mesh>(3).GetTransform());
-	shader->SetUniformMatrix("u_Model", ECS::Get<Mesh>(3).GetTransform());
-	shader->SetUniformMatrix("u_ModelRotation", ECS::Get<Mesh>(3).GetTransform());
+	shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(2).GetTransform());
+	shader->SetUniformMatrix("u_Model", ECS::Get<Transform>(2).GetTransform());
+	shader->SetUniformMatrix("u_ModelRotation", ECS::Get<Transform>(2).GetTransform());
 	ECS::Get<Mesh>(2).GetVao()->Render();
-
-
-
 
 	glfwSwapBuffers(BackEnd::m_Window);
 	glfwPollEvents();
@@ -152,6 +140,7 @@ float fov = 90.0f;
 
 void mouse_Callback(GLFWwindow* window, double xpos, double ypos)
 {
+	
 	if (firstMouse)
 	{
 		lastX = xpos;
@@ -168,8 +157,8 @@ void mouse_Callback(GLFWwindow* window, double xpos, double ypos)
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 
-	yaw += xoffset;
-	pitch += yoffset;
+	yaw -= xoffset;
+	pitch -= yoffset;
 
 	// make sure that when pitch is out of bounds, screen doesn't get flipped
 	if (pitch > 89.0f)
@@ -182,4 +171,6 @@ void mouse_Callback(GLFWwindow* window, double xpos, double ypos)
 	front.y = sin(glm::radians(pitch));
 	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	ECS::Get<Camera>(0).SetForward(glm::normalize(front));
+
+	
 }
