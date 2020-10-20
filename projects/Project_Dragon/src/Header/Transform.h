@@ -16,13 +16,13 @@ public:
 
 	void SetPosition(glm::vec3 pos);
 	void SetScale(glm::vec3 sca);
-	void SetRotation(glm::quat rot);
+	void SetRotation(glm::vec3 axis, float ammount);
 
 	void ComputeGlobalMat(); //this is called everyframe from the backend
 
 private:
-	glm::vec3 position;
-	glm::vec3 scale;
-	glm::quat rotation;
+	glm::vec3 position = glm::vec3(0.0f);
+	glm::vec3 scale = glm::vec3(1.0f);
+	glm::quat rotation = glm::quat(1.0f, 0.f, 0.f, 0.f);
 	glm::mat4 modelMat = glm::mat4(1.0f); //Model matrix that is passed to the shader
 };
