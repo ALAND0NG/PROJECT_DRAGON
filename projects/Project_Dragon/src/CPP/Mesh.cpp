@@ -10,7 +10,7 @@ void Mesh::LoadOBJ(std::string filename)
 	m_vao = OBJLoader::LoadFromFile(filename);
 }
 
-VertexArrayObject::sptr Mesh::GetVao()
+VertexArrayObject::sptr Mesh::GetVAO()
 {
 	return m_vao;
 }

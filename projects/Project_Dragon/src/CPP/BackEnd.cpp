@@ -17,15 +17,13 @@ void BackEnd::Init()
 	shader->LoadShaderPartFromFile("shader/frag_shader.glsl", GL_FRAGMENT_SHADER);
 	shader->Link();
 
-	glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, -2.0f);
+	glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 lightCol = glm::vec3(1.f, 1.f, 1.f);
-	float     lightAmbientPow = 0.5f;
-	float     lightSpecularPow = 1.0f;
+	float     lightAmbientPow = 1.f;
+	float     lightSpecularPow = 5.0f;
 	glm::vec3 ambientCol = glm::vec3(0.1f, 0.1f, 0.1f);
 	float     ambientPow = 0.1f;
 	float     shininess = 4.0f;
-	
-	//vao = NotObjLoader::LoadFromFile("Sample.notobj");
 
 	shader->SetUniform("u_LightPos", lightPos);
 	shader->SetUniform("u_LightCol", lightCol);
@@ -46,63 +44,38 @@ void BackEnd::Update()
 	glClearColor(0.08f, 0.17f, 0.31f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		glm::vec3 posTemp = ECS::Get<Camera>(0).GetPosition();
-
-		posTemp += ECS::Get<Camera>(0).GetForward() * 3.f * Timer::dt;
-
-		ECS::Get<Camera>(0).SetPosition(posTemp);
-	}
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		glm::vec3 posTemp = ECS::Get<Camera>(0).GetPosition();
-		posTemp -= ECS::Get<Camera>(0).GetForward() * 3.f * Timer::dt;
-		ECS::Get<Camera>(0).SetPosition(posTemp);
-	}
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		glm::vec3 posTemp = ECS::Get<Camera>(0).GetPosition();
-		posTemp += glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp())) * 3.f * Timer::dt;
-		
-
-		ECS::Get<Camera>(0).SetPosition(posTemp);
-	}
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		glm::vec3 posTemp = ECS::Get<Camera>(0).GetPosition();
-		posTemp -= glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp())) * 3.f * Timer::dt;
-		
-
-		ECS::Get<Camera>(0).SetPosition(posTemp);
-	}
+	
+	
 
 	
 
-	ECS::Get<Transform>(1).SetRotation(glm::vec3(0, 1, 0), 2* Timer::dt);
-	ECS::Get<Transform>(2).SetRotation(glm::vec3(1, 0, 0), 5* Timer::dt);
+	ECS::Get<Transform>(1).SetRotation(glm::vec3(0, 1, 0), 2 * Timer::dt);
+	ECS::Get<Transform>(2).SetRotation(glm::vec3(1, 0, 0), 5 * Timer::dt);
 
-	ECS::Get<Transform>(1).ComputeGlobalMat();
-	ECS::Get<Transform>(2).ComputeGlobalMat();
+	
+	//here we need to take all entities with components that need to be passed to the shaders
+	//just automates this code here
+	
+	auto reg = ECS::GetReg();
 
-	shader->Bind();
-	// These are the uniforms that update only once per frame
-	//shader->SetUniformMatrix("u_View", camera->GetView());
-	shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
-
-	shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(1).GetTransform());
-	shader->SetUniformMatrix("u_Model", ECS::Get<Transform>(1).GetTransform());
-	shader->SetUniformMatrix("u_ModelRotation", ECS::Get<Transform>(1).GetTransform());
-	ECS::Get<Mesh>(1).GetVao()->Render();
-
-	shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
-
-	shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(2).GetTransform());
-	shader->SetUniformMatrix("u_Model", ECS::Get<Transform>(2).GetTransform());
-	shader->SetUniformMatrix("u_ModelRotation", ECS::Get<Transform>(2).GetTransform());
-	ECS::Get<Mesh>(2).GetVao()->Render();
-
+	for (int i = 0; i < reg->size(); i++)
+	{
+		if (ECS::Has<Transform>(i) == true && ECS::Has<Mesh>(i) == true)
+		{
+			ECS::Get<Transform>(i).ComputeGlobalMat();
+			ECS::Get<Transform>(i).ComputeGlobalMat();
+			
+			shader->Bind();
+			//I know that I could properly get the camera, but as a convention we will simply always declare it as entity 0 to avoid coding an entity
+			//identitifier
+			shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(i).GetTransform());
+			shader->SetUniformMatrix("u_Model", ECS::Get<Transform>(i).GetTransform());
+			shader->SetUniformMatrix("u_ModelRotation", ECS::Get<Transform>(i).GetTransform());
+			shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
+			ECS::Get<Mesh>(i).GetVAO()->Render();
+		}
+	}
+	
 	glfwSwapBuffers(BackEnd::m_Window);
 	glfwPollEvents();
 
