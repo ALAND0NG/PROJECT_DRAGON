@@ -51,16 +51,31 @@ void BackEnd::Update()
 	{
 		glm::vec3 posTemp = ECS::Get<Camera>(0).GetPosition();
 
-		posTemp += ECS::Get<Camera>(0).GetForward() * 1.f * Timer::dt;
+		posTemp += ECS::Get<Camera>(0).GetForward() * 3.f * Timer::dt;
 
 		ECS::Get<Camera>(0).SetPosition(posTemp);
 	}
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_S) == GLFW_PRESS)
 	{
 		glm::vec3 posTemp = ECS::Get<Camera>(0).GetPosition();
-		posTemp -= ECS::Get<Camera>(0).GetForward() * 1.f * Timer::dt;
+		posTemp -= ECS::Get<Camera>(0).GetForward() * 3.f * Timer::dt;
 		ECS::Get<Camera>(0).SetPosition(posTemp);
-	
+	}
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		glm::vec3 posTemp = ECS::Get<Camera>(0).GetPosition();
+		posTemp += glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp())) * 3.f * Timer::dt;
+		
+
+		ECS::Get<Camera>(0).SetPosition(posTemp);
+	}
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		glm::vec3 posTemp = ECS::Get<Camera>(0).GetPosition();
+		posTemp -= glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp())) * 3.f * Timer::dt;
+		
+
+		ECS::Get<Camera>(0).SetPosition(posTemp);
 	}
 
 	
