@@ -41,7 +41,7 @@ void Scene::InitScene()
 	ECS::Add<Transform>(5);
 	ECS::Get<Mesh>(5).SetVAO(ECS::Get<Mesh>(1).GetVAO());
 
-	for (int i = 6; i < 50; i++)
+	for (int i = 6; i < 20; i++)
 	{
 		ECS::Create(i);
 		ECS::Add<Mesh>(i);
