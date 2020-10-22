@@ -12,7 +12,7 @@ class Mesh
 public:
 	void TestLoadFromFile();
 
-	void LoadOBJ(std::string filename);
+	void LoadOBJ(std::string filename,glm::vec4 col);
 	
 	void SetVAO(VertexArrayObject::sptr vao)
 	{

@@ -53,6 +53,15 @@ void BackEnd::Update()
 
 	shader->SetUniform("u_LightPos", lightPos);
 
+	//Temporary VERY VERY VERY basic physics test
+	glm::vec3 tempVecCam = ECS::Get<Transform>(0).GetPosition();
+	if (tempVecCam.y <= 9.5f)
+	{
+		tempVecCam.y += 15.f * Timer::dt;
+	}
+	ECS::Get<Transform>(0).SetPosition(tempVecCam);
+	
+	
 	ECS::Get<Transform>(1).SetRotation(glm::vec3(0, 1, 0), 2 * Timer::dt);
 	ECS::Get<Transform>(2).SetRotation(glm::vec3(1, 0, 0), 5 * Timer::dt);
 	
@@ -64,6 +73,12 @@ void BackEnd::Update()
 
 	for (int i = 0; i < reg->size(); i++)
 	{
+		if (ECS::Has<Transform>(i) && ECS::Has<Camera>(i))
+		{
+			//Just updates camera stuff with tranform stuff to keep it consistent
+			ECS::Get<Camera>(i).SetPosition(ECS::Get<Transform>(i).GetPosition());
+		}
+		
 		if (ECS::Has<Transform>(i) == true && ECS::Has<Mesh>(i) == true)
 		{
 			ECS::Get<Transform>(i).ComputeGlobalMat();
@@ -75,12 +90,15 @@ void BackEnd::Update()
 			shader->SetUniformMatrix("u_Model", ECS::Get<Transform>(i).GetTransform());
 			shader->SetUniformMatrix("u_ModelRotation", glm::toMat3(ECS::Get<Transform>(i).GetRotation()));
 			shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
+			
 			ECS::Get<Mesh>(i).GetVAO()->Render();
 		}
 	}
 	
 	glfwSwapBuffers(BackEnd::m_Window);
 	glfwPollEvents();
+
+	std::cout << "Camera Up: " << ECS::Get<Camera>(0).GetUp().x << ECS::Get<Camera>(0).GetUp().y << ECS::Get<Camera>(0).GetUp().z << std::endl;
 
 }
 
