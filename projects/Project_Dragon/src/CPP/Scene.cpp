@@ -28,7 +28,19 @@ void Scene::InitScene()
 	ECS::Add<Transform>(3);
 	ECS::Get<Transform>(3).SetPosition(glm::vec3(-5.f, -5.f, -5.f));
 	ECS::Get<Mesh>(3).LoadOBJ("Models/monkey.obj");
+
 	
+	ECS::Create(4);
+	ECS::Add<Mesh>(4);
+	ECS::Add<Transform>(4);
+	ECS::Get<Transform>(4).SetPosition(glm::vec3(2.f, 1.f, 5.f));
+	ECS::Get<Mesh>(4).LoadOBJ("Models/earth.obj");
+		
+	ECS::Create(5);
+	ECS::Add<Mesh>(5);
+	ECS::Add<Transform>(5);
+	ECS::Get<Mesh>(5).SetVAO(ECS::Get<Mesh>(1).GetVAO());
+
 }
 
 void Scene::Update()
