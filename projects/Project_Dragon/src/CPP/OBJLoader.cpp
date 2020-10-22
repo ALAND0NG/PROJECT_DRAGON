@@ -135,7 +135,7 @@ VertexArrayObject::sptr OBJLoader::LoadFromFile(std::string filename)
 	}
 	for (unsigned int i = 0; i < Pos_Ind.size(); i++)
 	{
-		glm::vec4 col = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		glm::vec4 col(0.5f, 1.f, 1.f, 1.f);
 		mesh.AddVertex(vertex_position[Pos_Ind[i] - 1], vertex_normal[Norm_Ind[i] - 1], vertex_texture[Tex_Ind[i] - 1], col);
 	}
 

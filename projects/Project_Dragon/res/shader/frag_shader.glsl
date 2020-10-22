@@ -1,16 +1,18 @@
 #version 410
 
 layout(location = 0) in vec3 inPos;
-layout(location = 1) in vec3 inColor;
+layout(location = 1) in vec4 inColor;
 layout(location = 2) in vec3 inNormal;
+layout(location = 3) in vec2 inTex;
+//position normal texture
 
-uniform vec3  u_AmbientCol;
-uniform float u_AmbientStrength;
 
-uniform vec3  u_LightPos;
-uniform vec3  u_LightCol;
+uniform vec3 u_LightPos;
+uniform vec3 u_LightCol;
 uniform float u_AmbientLightStrength;
 uniform float u_SpecularLightStrength;
+uniform vec3 u_AmbientCol;
+uniform float u_AmbientStrength;
 uniform float u_Shininess;
 
 uniform vec3  u_CamPos;
@@ -43,7 +45,7 @@ void main() {
 
 	vec3 specular = u_SpecularLightStrength * spec * u_LightCol; // Can also use a specular color
 
-	vec3 result = (ambient + diffuse + specular) * inColor;
+	vec3 result = (ambient + diffuse + specular) * inColor.rgb;
 
-	frag_color = vec4(result, 1.0);
+	frag_color = vec4(result, inColor.a);
 }

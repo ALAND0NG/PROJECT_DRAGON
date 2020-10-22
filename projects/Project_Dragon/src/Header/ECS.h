@@ -33,6 +33,18 @@ public:
 		return m_Registry->get<T>(EntList[EntityNum]);
 	}
 
+	static entt::registry* GetReg()
+	{
+		return m_Registry;
+	}
+	template<typename T>
+	static bool Has(unsigned int EntityNum)
+	{
+		if (m_Registry->has<T>(EntList[EntityNum]))
+			return true;
+		else
+			return false;
+	}
 
 private:
 	static entt::registry* m_Registry;
