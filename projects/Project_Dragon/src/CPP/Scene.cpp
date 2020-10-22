@@ -23,33 +23,36 @@ void Scene::InitScene()
 	ECS::Add<Mesh>(2);
 	ECS::Add<Transform>(2);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(-5.f, -2.f, 0.f));
-	ECS::Get<Mesh>(2).LoadOBJ("Models/monkey.obj", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+	ECS::Get<Mesh>(2).LoadOBJ("Models/monkey.obj", glm::vec4(0.01f, 1.0f, 0.01f, 1.0f));
 	
 
 	ECS::Create(3);
 	ECS::Add<Mesh>(3);
 	ECS::Add<Transform>(3);
 	ECS::Get<Transform>(3).SetPosition(glm::vec3(-5.f, -5.f, -5.f));
-	ECS::Get<Mesh>(3).LoadOBJ("Models/monkey.obj", glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+	ECS::Get<Mesh>(3).LoadOBJ("Models/monkey.obj", glm::vec4(0.1f, 0.1f, 1.0f, 1.0f));
 
 	
 	ECS::Create(4);
 	ECS::Add<Mesh>(4);
 	ECS::Add<Transform>(4);
 	ECS::Get<Transform>(4).SetPosition(glm::vec3(2.f, -10.f, 5.f));
-	ECS::Get<Mesh>(4).LoadOBJ("Models/earth.obj", glm::vec4(0.0f, 0.5f, 0.5f, 1.0f));
+	ECS::Get<Mesh>(4).LoadOBJ("Models/earth.obj", glm::vec4(0.1f, 0.5f, 0.5f, 1.0f));
 		
 	ECS::Create(5);
 	ECS::Add<Mesh>(5);
 	ECS::Add<Transform>(5);
+	ECS::Get<Transform>(5).SetScale(glm::vec3(0.2f, 0.2f, 0.2f));
 	ECS::Get<Mesh>(5).SetVAO(ECS::Get<Mesh>(1).GetVAO());
 
 	ECS::Create(6);
 	ECS::Add<Mesh>(6);
 	ECS::Add<Transform>(6);
-	ECS::Get<Mesh>(6).LoadOBJ("Models/plane.obj", glm::vec4(1.f, 1.f, 1.f, 1.f));
-	ECS::Get<Transform>(6).SetPosition(glm::vec3(0.f, 10.f, 0.f));
-	ECS::Get<Transform>(6).SetScale(glm::vec3(100.f, 1.f, 100.f));
+	ECS::Get<Mesh>(6).LoadOBJ("Models/Temple.obj", glm::vec4(1.f, 1.f, 1.f, 1.f));
+	ECS::Get<Transform>(6).SetPosition(glm::vec3(0.f, 11.f, 0.f));
+	ECS::Get<Transform>(6).SetScale(glm::vec3(1.f, 1.f, 1.f));
+	ECS::Get<Transform>(6).SetRotation(glm::vec3(1.f, 0.f, 0.f), glm::radians(180.f));
+
 
 }
 

@@ -21,12 +21,12 @@ void BackEnd::Init()
 	shader->Link();
 
 	
-	glm::vec3 lightCol = glm::vec3(1.f, 1.f, 1.f);
-	float     lightAmbientPow = 0.3f;
-	float     lightSpecularPow = 5.0f;
+	glm::vec3 lightCol = glm::vec3(1.f, 0.3f, 0.f);
+	float     lightAmbientPow = 0.1f;
+	float     lightSpecularPow = 1.0f;
 	glm::vec3 ambientCol = glm::vec3(0.1f, 0.1f, 0.1f);
 	float     ambientPow = 0.1f;
-	float     shininess = 4.0f;
+	float     shininess = 1.0f;
 
 	
 	shader->SetUniform("u_LightCol", lightCol);
