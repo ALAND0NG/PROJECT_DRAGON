@@ -41,6 +41,15 @@ void Scene::InitScene()
 	ECS::Add<Transform>(5);
 	ECS::Get<Mesh>(5).SetVAO(ECS::Get<Mesh>(1).GetVAO());
 
+	for (int i = 6; i < 50; i++)
+	{
+		ECS::Create(i);
+		ECS::Add<Mesh>(i);
+		ECS::Add<Transform>(i);
+		ECS::Get<Transform>(i).SetPosition(glm::vec3(i *2.f, i *2.f, 0.f));
+		ECS::Get<Mesh>(i).SetVAO(ECS::Get<Mesh>(4).GetVAO());
+	}
+
 }
 
 void Scene::Update()

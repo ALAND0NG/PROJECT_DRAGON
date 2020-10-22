@@ -44,7 +44,7 @@ bool spacePressed = false;
 bool currentType = true;
 void BackEnd::Update()
 {
-	glClearColor(0.08f, 0.17f, 0.31f, 1.0f);
+	glClearColor(0.00f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	
@@ -96,7 +96,7 @@ void BackEnd::InitWindow()
 		throw std::runtime_error("GLFW init failed!");
 	}
 
-	glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, true);
+	//glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, true);
 
 	glfwWindowHint(GLFW_RESIZABLE, true);
 
