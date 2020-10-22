@@ -33,7 +33,7 @@ void main() {
 
 	//Attenuation
 	float dist = length(u_LightPos - inPos);
-	diffuse = diffuse / dist; // (dist*dist)
+	diffuse = diffuse / (dist*dist);
 
 	// Specular
 
