@@ -21,7 +21,7 @@ void BackEnd::Init()
 	shader->Link();
 
 	
-	glm::vec3 lightCol = glm::vec3(1.f, 0.3f, 0.f);
+	glm::vec3 lightCol = glm::vec3(1.f, 1.0f, 1.f);
 	float     lightAmbientPow = 0.1f;
 	float     lightSpecularPow = 1.0f;
 	glm::vec3 ambientCol = glm::vec3(0.1f, 0.1f, 0.1f);
@@ -55,9 +55,9 @@ void BackEnd::Update()
 
 	//Temporary VERY VERY VERY basic physics test
 	glm::vec3 tempVecCam = ECS::Get<Transform>(0).GetPosition();
-	if (tempVecCam.y <= 9.5f)
+	if (tempVecCam.y >= -9.5f)
 	{
-		tempVecCam.y += 15.f * Timer::dt;
+		tempVecCam.y -= 15.f * Timer::dt;
 	}
 	ECS::Get<Transform>(0).SetPosition(tempVecCam);
 	
@@ -97,9 +97,6 @@ void BackEnd::Update()
 	
 	glfwSwapBuffers(BackEnd::m_Window);
 	glfwPollEvents();
-
-	std::cout << "Camera Up: " << ECS::Get<Camera>(0).GetUp().x << ECS::Get<Camera>(0).GetUp().y << ECS::Get<Camera>(0).GetUp().z << std::endl;
-
 }
 
 void GlfwWindowResizedCallback(GLFWwindow* window, int width, int height) {
@@ -162,7 +159,7 @@ void mouse_Callback(GLFWwindow* window, double xpos, double ypos)
 	lastX = xpos;
 	lastY = ypos;
 
-	float sensitivity = 0.1f; // change this value to your liking
+	float sensitivity = -0.1f; // change this value to your liking
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 
