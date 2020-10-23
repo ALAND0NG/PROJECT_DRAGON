@@ -10,7 +10,7 @@ Camera::Camera() :
 	_aspectRatio(1.0f),
 	_position(glm::vec3(0.0f)),
 	_normal(glm::vec3(0.0f, 0.0f, 1.0f)),
-	_up(glm::vec3(0.0f, 1.0f, 0.0f)), // Using Y-up coordinate system by default
+	_up(glm::vec3(0.0f, -1.0f, 0.0f)), // Using Y-up coordinate system by default
 	_view(glm::mat4(1.0f)),
 	_projection(glm::mat4(1.0f)),
 	_viewProjection(glm::mat4(1.0f)),
