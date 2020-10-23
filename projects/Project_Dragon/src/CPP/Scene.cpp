@@ -10,7 +10,7 @@ void Scene::InitScene()
 	ECS::Add<Transform>(0);
 	ECS::Get<Transform>(0).SetPosition(glm::vec3(0.f, -20.f, 0.f));
 	ECS::Add<Camera>(0);
-	ECS::Get<Camera>(0).SetUp(glm::vec3(0, 1, 0));
+	//ECS::Get<Camera>(0).SetUp(glm::vec3(0, 1, 0));
 	
 	ECS::Create(1);
 	ECS::Add<Mesh>(1);
@@ -49,9 +49,9 @@ void Scene::InitScene()
 	ECS::Add<Mesh>(6);
 	ECS::Add<Transform>(6);
 	ECS::Get<Mesh>(6).LoadOBJ("Models/Temple.obj", glm::vec4(1.f, 1.f, 1.f, 1.f));
-	ECS::Get<Transform>(6).SetPosition(glm::vec3(0.f, 11.f, 0.f));
+	ECS::Get<Transform>(6).SetPosition(glm::vec3(0.f, -11.f, 0.f));
 	ECS::Get<Transform>(6).SetScale(glm::vec3(1.f, 1.f, 1.f));
-	ECS::Get<Transform>(6).SetRotation(glm::vec3(1.f, 0.f, 0.f), glm::radians(180.f));
+	//ECS::Get<Transform>(6).SetRotation(glm::vec3(0.f, 0.f, 0.f), glm::radians(180.f));
 
 
 }
