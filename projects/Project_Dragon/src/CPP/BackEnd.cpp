@@ -78,24 +78,8 @@ void BackEnd::Update()
 	ECS::Get<Transform>(0).SetPosition(tempVecCam);
 	
 	
-	ECS::Get<Transform>(1).SetRotation(glm::vec3(0, 1, 0), 2 * Timer::dt);
-	ECS::Get<Transform>(2).SetRotation(glm::vec3(1, 0, 0), 5 * Timer::dt);
-	
-
-	// Creating an empty texture
-	Texture2DDescription desc = Texture2DDescription();
-	desc.Width = 1;
-	desc.Height = 1;
-	desc.Format = InternalFormat::RGB8;
-	Texture2D::sptr texture2 = Texture2D::Create(desc);
-	texture2->Clear();
-
-	
 	//here we need to take all entities with components that need to be passed to the shaders
 	//just automates this code here
-
-
-
 	auto reg = ECS::GetReg();
 
 	for (int i = 0; i < reg->size(); i++)
@@ -128,25 +112,6 @@ void BackEnd::Update()
 
 			shader->SetUniform("u_Shininess", ECS::Get<Material>(i).GetShininess());
 
-			ECS::Get<Mesh>(i).GetVAO()->Render();
-		}
-		
-		else if (ECS::Has<Transform>(i) == true && ECS::Has<Mesh>(i) == true)
-		{
-			ECS::Get<Transform>(i).ComputeGlobalMat();
-						
-			shader->Bind();
-			//I know that I could properly get the camera, but as a convention we will simply always declare it as entity 0 to avoid coding an entity
-			//identitifier
-			shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(i).GetTransform());
-			shader->SetUniformMatrix("u_Model", ECS::Get<Transform>(i).GetTransform());
-			shader->SetUniformMatrix("u_ModelRotation", glm::toMat3(ECS::Get<Transform>(i).GetRotation()));
-			shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
-			
-			
-
-
-			
 			ECS::Get<Mesh>(i).GetVAO()->Render();
 		}
 

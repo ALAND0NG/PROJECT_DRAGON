@@ -7,12 +7,19 @@ class Material
 {
 public:
 
-	void SetAll(Texture2D::sptr alb, Texture2D::sptr spec, float shin)
+	
+	
+	void SetAll(float shin)
 	{
-		Albedo = alb;
-		Specular = spec;
+		Albedo = m_Diffuse;
+		Specular = m_Specular;
 		Shininess = shin;
 	}
+
+
+	void LoadDiffuseFromFile(std::string path);
+	void LoadSpecularFromFile(std::string path);
+
 
 	Texture2D::sptr GetAlbedo();
 	void SetAlbedo(Texture2D::sptr albedo);
@@ -27,4 +34,11 @@ private:
 	Texture2D::sptr Albedo;
 	Texture2D::sptr Specular;
 	float           Shininess;
+
+
+	Texture2DData::sptr m_DiffuseMap_DATA;
+	Texture2DData::sptr m_SpecularMap_DATA;
+	Texture2D::sptr m_Diffuse;
+	Texture2D::sptr m_Specular;
+
 };

@@ -8,7 +8,7 @@ void Scene::InitScene()
 	
 	ECS::Create(0); //please please please always have camera be entity 0 it will break otherwise
 	ECS::Add<Transform>(0);
-	ECS::Get<Transform>(0).SetPosition(glm::vec3(0.f, -20.f, 0.f));
+	ECS::Get<Transform>(0).SetPosition(glm::vec3(0.f, -50.f, 0.f));
 	ECS::Add<Camera>(0);
 	//ECS::Get<Camera>(0).SetUp(glm::vec3(0, 1, 0));
 	
@@ -17,6 +17,10 @@ void Scene::InitScene()
 	ECS::Add<Transform>(1);
 	ECS::Get<Transform>(1).SetPosition(glm::vec3(1.f, -2.f, 1.f));
 	ECS::Get<Mesh>(1).LoadOBJ("Models/cube.obj", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	ECS::Add<Material>(1);
+	ECS::Get<Material>(1).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	ECS::Get<Material>(1).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(1).SetAll(0.1f);
 	
 
 	ECS::Create(2);
@@ -25,23 +29,21 @@ void Scene::InitScene()
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(-5.f, -2.f, 0.f));
 	ECS::Get<Mesh>(2).LoadOBJ("Models/monkey.obj", glm::vec4(0.01f, 1.0f, 0.01f, 1.0f));
 	ECS::Add<Material>(2);
-	ECS::Add<Texture>(2);
-	ECS::Get<Texture>(2).LoadDiffuseFromFile("images/trappin.jpg");
-	ECS::Get<Texture>(2).LoadSpecularFromFile("images/help.jpg");
-	ECS::Get<Material>(2).SetAll(ECS::Get<Texture>(2).GetDiffuse(), ECS::Get<Texture>(2).GetSpec(), 0.1f);
+	ECS::Get<Material>(2).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(2).SetAll(0.1f);
 
 	
-
+	
 	ECS::Create(3);
 	ECS::Add<Mesh>(3);
 	ECS::Add<Transform>(3);
 	ECS::Get<Transform>(3).SetPosition(glm::vec3(-5.f, -5.f, -5.f));
 	ECS::Get<Mesh>(3).LoadOBJ("Models/monkey.obj", glm::vec4(0.1f, 0.1f, 1.0f, 1.0f));
 	ECS::Add<Material>(3);
-	ECS::Add<Texture>(3);
-	ECS::Get<Texture>(3).LoadDiffuseFromFile("images/sample.png");
-	ECS::Get<Texture>(3).LoadSpecularFromFile("images/help.jpg");
-	ECS::Get<Material>(3).SetAll(ECS::Get<Texture>(3).GetDiffuse(), ECS::Get<Texture>(3).GetSpec(), 0.1f);
+	ECS::Get<Material>(3).LoadDiffuseFromFile("images/sample.png");
+	ECS::Get<Material>(3).LoadSpecularFromFile("images/help.jpg");
+	ECS::Get<Material>(3).SetAll(0.1f);
 
 
 	
@@ -52,10 +54,9 @@ void Scene::InitScene()
 	ECS::Get<Transform>(4).SetPosition(glm::vec3(2.f, -10.f, 5.f));
 	ECS::Get<Mesh>(4).LoadOBJ("Models/earth.obj", glm::vec4(0.1f, 0.5f, 0.5f, 1.0f));
 	ECS::Add<Material>(4);
-	ECS::Add<Texture>(4);
-	ECS::Get<Texture>(4).LoadDiffuseFromFile("images/thanos.jpg");
-	ECS::Get<Texture>(4).LoadSpecularFromFile("images/help.jpg");
-	ECS::Get<Material>(4).SetAll(ECS::Get<Texture>(4).GetDiffuse(), ECS::Get<Texture>(4).GetSpec(), 0.1f);
+	ECS::Get<Material>(4).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	ECS::Get<Material>(4).LoadSpecularFromFile("images/help.jpg");
+	ECS::Get<Material>(4).SetAll(0.1f);
 
 		
 	ECS::Create(5);
@@ -67,18 +68,15 @@ void Scene::InitScene()
 	ECS::Create(6);
 	ECS::Add<Mesh>(6);
 	ECS::Add<Transform>(6);
+	ECS::Get<Transform>(6).SetPosition(glm::vec3(0.f, -11.5f, 0.f));
 	ECS::Add<Material>(6);
-	ECS::Add<Texture>(6);
-	ECS::Get<Texture>(6).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
-	ECS::Get<Texture>(6).LoadSpecularFromFile("images/help.jpg");
-	ECS::Get<Material>(6).SetAll(ECS::Get<Texture>(6).GetDiffuse(), ECS::Get<Texture>(6).GetSpec(), 0.1f);
+	ECS::Get<Mesh>(6).LoadOBJ("Models/Temple.obj", glm::vec4(1.f,1.f,1.f,1.f));
+	ECS::Get<Material>(6).LoadDiffuseFromFile("Images/trappin.JPG");
+	ECS::Get<Material>(6).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(6).SetAll(0.1f);
 
-	ECS::Get<Mesh>(6).LoadOBJ("Models/Temple.obj", glm::vec4(1.f, 1.f, 1.f, 1.f));
-	ECS::Get<Transform>(6).SetPosition(glm::vec3(0.f, -11.f, 0.f));
-	ECS::Get<Transform>(6).SetScale(glm::vec3(1.f, 1.f, 1.f));
-	
-	//ECS::Get<Transform>(6).SetRotation(glm::vec3(0.f, 0.f, 0.f), glm::radians(180.f));
-	
+
+
 
 }
 
