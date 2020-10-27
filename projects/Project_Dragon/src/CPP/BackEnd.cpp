@@ -1,20 +1,11 @@
 #include <Header/BackEnd.h>
 #include <iostream>
 
-
-
-
-
 GLFWwindow* BackEnd::m_Window = glfwCreateWindow(800, 800, "The funny game", nullptr, nullptr); //Initializing outside of class because its a static
 
 Shader::sptr BackEnd::shader = nullptr; // ^^ same comment
 
 void mouse_Callback(GLFWwindow* window, double xpos, double ypos);
-
-glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
-
-
-
 
 
 void BackEnd::Init()
@@ -29,7 +20,7 @@ void BackEnd::Init()
 	shader->Link();
 
 	
-	glm::vec3 lightCol = glm::vec3(1.f, 1.0f, 1.f);
+	//Set these values to your liking
 	float     lightAmbientPow = 0.1f;
 	float     lightSpecularPow = 1.0f;
 	glm::vec3 ambientCol = glm::vec3(0.1f, 0.1f, 0.1f);
@@ -39,7 +30,7 @@ void BackEnd::Init()
 	float     lightQuadraticFalloff = 0.032f;
 
 	
-	shader->SetUniform("u_LightCol", lightCol);
+
 	shader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
 	shader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
 	shader->SetUniform("u_AmbientCol", ambientCol);
@@ -62,28 +53,40 @@ void BackEnd::Update()
 	glClearColor(0.00f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	ECSUpdate();
 
-	
-	
-	lightPos = ECS::Get<Transform>(5).GetPosition();
-
-	shader->SetUniform("u_LightPos", lightPos);
-
-	//Temporary VERY VERY VERY basic physics test
-	glm::vec3 tempVecCam = ECS::Get<Transform>(0).GetPosition();
-	if (tempVecCam.y >= -9.5f)
+	//temp physics test ill leave this here
+	if (ECS::Get<Transform>(0).GetPosition().y >= -9.5f)
 	{
-		tempVecCam.y -= 15.f * Timer::dt;
+		glm::vec3 tempVec = ECS::Get<Transform>(0).GetPosition();
+		tempVec.y -= 15.f * Timer::dt;
+		ECS::Get<Transform>(0).SetPosition(tempVec);
 	}
-	ECS::Get<Transform>(0).SetPosition(tempVecCam);
-	
-	
+
+	glfwSwapBuffers(BackEnd::m_Window);
+	glfwPollEvents();
+}
+
+void BackEnd::ECSUpdate()
+{
+	//temp light
+	//shader->SetUniform("u_LightPos", ECS::Get<Transform>(5).GetPosition());
 	//here we need to take all entities with components that need to be passed to the shaders
 	//just automates this code here
+	//in a function here to clean up the main BackEnd::Update()
 	auto reg = ECS::GetReg();
 
 	for (int i = 0; i < reg->size(); i++)
 	{
+		shader->Bind();
+		if (ECS::Has<LightSource>(i) && ECS::Has<Transform>(i))
+		{
+			
+			shader->SetUniform("u_LightPos", ECS::Get<Transform>(i).GetPosition());
+			shader->SetUniform("u_LightCol", ECS::Get<LightSource>(i).m_Colour);
+			
+		}
+		
 		if (ECS::Has<Transform>(i) && ECS::Has<Camera>(i))
 		{
 			//Just updates camera stuff with tranform stuff to keep it consistent
@@ -94,7 +97,7 @@ void BackEnd::Update()
 		{
 			ECS::Get<Transform>(i).ComputeGlobalMat();
 
-			shader->Bind();
+			
 			//I know that I could properly get the camera, but as a convention we will simply always declare it as entity 0 to avoid coding an entity
 			//identitifier
 			shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(i).GetTransform());
@@ -114,14 +117,9 @@ void BackEnd::Update()
 
 			ECS::Get<Mesh>(i).GetVAO()->Render();
 		}
-
 		
-
-
 	}
-	
-	glfwSwapBuffers(BackEnd::m_Window);
-	glfwPollEvents();
+
 }
 
 void GlfwWindowResizedCallback(GLFWwindow* window, int width, int height) {

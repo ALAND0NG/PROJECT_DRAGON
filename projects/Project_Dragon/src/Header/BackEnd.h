@@ -20,6 +20,7 @@ class BackEnd
 public:
 	static void Init();
 	static void Update();//Called once per frame, goes through all entities and does whatever is required per component
+	static void ECSUpdate();
 
 	static Shader::sptr shader;
 

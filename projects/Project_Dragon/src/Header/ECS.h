@@ -8,6 +8,7 @@
 #include <Header/Mesh.h>
 #include <Header/Transform.h>
 #include <Header/Material.h>
+#include <Header/LightSource.h>
 
 
 
