@@ -3,10 +3,14 @@
 #include <iostream>
 #include "entt.hpp"
 
+//all the component includes
 #include <Header/Camera.h>
-
 #include <Header/Mesh.h>
 #include <Header/Transform.h>
+#include <Header/Material.h>
+#include <Header/LightSource.h>
+
+
 
 class ECS
 {

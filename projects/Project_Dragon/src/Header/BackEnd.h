@@ -12,12 +12,15 @@
 #include <header/Camera.h>
 #include <Header/ECS.h>
 #include <header/Timer.h>
+#include <header/Texture2D.h>
+#include <header/Texture2DData.h>
 
 class BackEnd
 {
 public:
 	static void Init();
 	static void Update();//Called once per frame, goes through all entities and does whatever is required per component
+	static void ECSUpdate();
 
 	static Shader::sptr shader;
 
