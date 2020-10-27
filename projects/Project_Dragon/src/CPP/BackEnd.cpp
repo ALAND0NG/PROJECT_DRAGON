@@ -81,8 +81,6 @@ void BackEnd::Update()
 	ECS::Get<Transform>(1).SetRotation(glm::vec3(0, 1, 0), 2 * Timer::dt);
 	ECS::Get<Transform>(2).SetRotation(glm::vec3(1, 0, 0), 5 * Timer::dt);
 	
-	//shader->SetUniform("s_Diffuse", 0);
-	//shader->SetUniform("s_Specular", 1);
 
 	// Creating an empty texture
 	Texture2DDescription desc = Texture2DDescription();
@@ -107,16 +105,36 @@ void BackEnd::Update()
 			//Just updates camera stuff with tranform stuff to keep it consistent
 			ECS::Get<Camera>(i).SetPosition(ECS::Get<Transform>(i).GetPosition());
 		}
-		
-		if (ECS::Has<Transform>(i) == true && ECS::Has<Mesh>(i) == true)
+
+		if (ECS::Has<Transform>(i) == 1 && ECS::Has<Mesh>(i) == 1 && ECS::Has<Material>(i) == 1)
 		{
 			ECS::Get<Transform>(i).ComputeGlobalMat();
-			
-			
 
-			
+			shader->Bind();
+			//I know that I could properly get the camera, but as a convention we will simply always declare it as entity 0 to avoid coding an entity
+			//identitifier
+			shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(i).GetTransform());
+			shader->SetUniformMatrix("u_Model", ECS::Get<Transform>(i).GetTransform());
+			shader->SetUniformMatrix("u_ModelRotation", glm::toMat3(ECS::Get<Transform>(i).GetRotation()));
+			shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
 
-			
+			// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
+			shader->SetUniform("s_Diffuse", 0);
+			shader->SetUniform("s_Specular", 1);
+
+			ECS::Get<Material>(i).GetAlbedo()->Bind(0);
+
+			ECS::Get<Material>(i).GetSpecular()->Bind(1);
+
+			shader->SetUniform("u_Shininess", ECS::Get<Material>(i).GetShininess());
+
+			ECS::Get<Mesh>(i).GetVAO()->Render();
+		}
+		
+		else if (ECS::Has<Transform>(i) == true && ECS::Has<Mesh>(i) == true)
+		{
+			ECS::Get<Transform>(i).ComputeGlobalMat();
+						
 			shader->Bind();
 			//I know that I could properly get the camera, but as a convention we will simply always declare it as entity 0 to avoid coding an entity
 			//identitifier
@@ -125,20 +143,16 @@ void BackEnd::Update()
 			shader->SetUniformMatrix("u_ModelRotation", glm::toMat3(ECS::Get<Transform>(i).GetRotation()));
 			shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
 			
-			// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
-			shader->SetUniform("s_Diffuse", 0);
-			shader->SetUniform("s_Specular", 1);
 			
-			ECS::Get<Material>(6).GetAlbedo()->Bind(0);
-
-			ECS::Get<Material>(6).GetSpecular()->Bind(1);
-			
-			shader->SetUniform("u_Shininess", ECS::Get<Material>(6).GetShininess());
 
 
 			
 			ECS::Get<Mesh>(i).GetVAO()->Render();
 		}
+
+		
+
+
 	}
 	
 	glfwSwapBuffers(BackEnd::m_Window);
