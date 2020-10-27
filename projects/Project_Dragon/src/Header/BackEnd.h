@@ -12,6 +12,8 @@
 #include <header/Camera.h>
 #include <Header/ECS.h>
 #include <header/Timer.h>
+#include <header/Texture2D.h>
+#include <header/Texture2DData.h>
 
 class BackEnd
 {

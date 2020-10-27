@@ -33,6 +33,7 @@ void Scene::InitScene()
 	ECS::Get<Mesh>(3).LoadOBJ("Models/monkey.obj", glm::vec4(0.1f, 0.1f, 1.0f, 1.0f));
 
 	
+	
 	ECS::Create(4);
 	ECS::Add<Mesh>(4);
 	ECS::Add<Transform>(4);
@@ -48,11 +49,18 @@ void Scene::InitScene()
 	ECS::Create(6);
 	ECS::Add<Mesh>(6);
 	ECS::Add<Transform>(6);
+	ECS::Add<Material>(6);
+	ECS::Add<Texture>(6);
+	ECS::Get<Texture>(6).LoadDiffuseFromFile("images/trappin.jpg");
+	ECS::Get<Texture>(6).LoadSpecularFromFile("images/help.jpg");
+	ECS::Get<Material>(6).SetAll(ECS::Get<Texture>(6).GetDiffuse(), ECS::Get<Texture>(6).GetSpec(), 0.1f);
+
 	ECS::Get<Mesh>(6).LoadOBJ("Models/Temple.obj", glm::vec4(1.f, 1.f, 1.f, 1.f));
 	ECS::Get<Transform>(6).SetPosition(glm::vec3(0.f, -11.f, 0.f));
 	ECS::Get<Transform>(6).SetScale(glm::vec3(1.f, 1.f, 1.f));
+	
 	//ECS::Get<Transform>(6).SetRotation(glm::vec3(0.f, 0.f, 0.f), glm::radians(180.f));
-
+	
 
 }
 

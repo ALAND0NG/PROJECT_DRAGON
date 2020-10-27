@@ -1,6 +1,10 @@
 #include <Header/BackEnd.h>
 #include <iostream>
 
+
+
+
+
 GLFWwindow* BackEnd::m_Window = glfwCreateWindow(800, 800, "The funny game", nullptr, nullptr); //Initializing outside of class because its a static
 
 Shader::sptr BackEnd::shader = nullptr; // ^^ same comment
@@ -8,6 +12,10 @@ Shader::sptr BackEnd::shader = nullptr; // ^^ same comment
 void mouse_Callback(GLFWwindow* window, double xpos, double ypos);
 
 glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+
+
+
+
 
 void BackEnd::Init()
 {
@@ -27,6 +35,8 @@ void BackEnd::Init()
 	glm::vec3 ambientCol = glm::vec3(0.1f, 0.1f, 0.1f);
 	float     ambientPow = 0.1f;
 	float     shininess = 1.0f;
+	float     lightLinearFalloff = 0.09f;
+	float     lightQuadraticFalloff = 0.032f;
 
 	
 	shader->SetUniform("u_LightCol", lightCol);
@@ -35,6 +45,11 @@ void BackEnd::Init()
 	shader->SetUniform("u_AmbientCol", ambientCol);
 	shader->SetUniform("u_AmbientStrength", ambientPow);
 	shader->SetUniform("u_Shininess", shininess);
+	shader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
+	shader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
+
+
+
 
 	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_CULL_FACE);
@@ -46,6 +61,7 @@ void BackEnd::Update()
 {
 	glClearColor(0.00f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
 	
 	
@@ -65,10 +81,23 @@ void BackEnd::Update()
 	ECS::Get<Transform>(1).SetRotation(glm::vec3(0, 1, 0), 2 * Timer::dt);
 	ECS::Get<Transform>(2).SetRotation(glm::vec3(1, 0, 0), 5 * Timer::dt);
 	
+	//shader->SetUniform("s_Diffuse", 0);
+	//shader->SetUniform("s_Specular", 1);
+
+	// Creating an empty texture
+	Texture2DDescription desc = Texture2DDescription();
+	desc.Width = 1;
+	desc.Height = 1;
+	desc.Format = InternalFormat::RGB8;
+	Texture2D::sptr texture2 = Texture2D::Create(desc);
+	texture2->Clear();
+
 	
 	//here we need to take all entities with components that need to be passed to the shaders
 	//just automates this code here
-	
+
+
+
 	auto reg = ECS::GetReg();
 
 	for (int i = 0; i < reg->size(); i++)
@@ -83,6 +112,11 @@ void BackEnd::Update()
 		{
 			ECS::Get<Transform>(i).ComputeGlobalMat();
 			
+			
+
+			
+
+			
 			shader->Bind();
 			//I know that I could properly get the camera, but as a convention we will simply always declare it as entity 0 to avoid coding an entity
 			//identitifier
@@ -90,6 +124,18 @@ void BackEnd::Update()
 			shader->SetUniformMatrix("u_Model", ECS::Get<Transform>(i).GetTransform());
 			shader->SetUniformMatrix("u_ModelRotation", glm::toMat3(ECS::Get<Transform>(i).GetRotation()));
 			shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
+			
+			// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
+			shader->SetUniform("s_Diffuse", 0);
+			shader->SetUniform("s_Specular", 1);
+			
+			ECS::Get<Material>(6).GetAlbedo()->Bind(0);
+
+			ECS::Get<Material>(6).GetSpecular()->Bind(1);
+			
+			shader->SetUniform("u_Shininess", ECS::Get<Material>(6).GetShininess());
+
+
 			
 			ECS::Get<Mesh>(i).GetVAO()->Render();
 		}
