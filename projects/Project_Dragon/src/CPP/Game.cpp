@@ -15,9 +15,6 @@ Game::~Game()
 void Game::InitGame()
 {
 
-	//ECS::AttachRegistry(&m_Reg);
-
-
 	BackEnd::Init();
 
 	m_Scenes.push_back(new Scene());
@@ -71,7 +68,7 @@ void Game::GameInput()
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
 		glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
-		posTemp.y = 30.f;
+		posTemp.y = -9.f;
 		ECS::Get<Transform>(0).SetPosition(posTemp);
 	}
 

@@ -48,25 +48,19 @@ void BackEnd::Init()
 }
 bool spacePressed = false;
 bool currentType = true;
+
+
 void BackEnd::Update()
 {
 	glClearColor(0.00f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	ECSUpdate();
-	//Temporary VERY VERY VERY basic physics test
-	glm::vec3 tempVecCam = ECS::Get<Transform>(0).GetPosition();
-	if (tempVecCam.y >= -9.5f)
-	{
-		glm::vec3 tempVec = ECS::Get<Transform>(0).GetPosition();
-		tempVec.y -= 15.f * Timer::dt;
-		ECS::Get<Transform>(0).SetPosition(tempVec);
-	}
-	ECS::Get<Transform>(0).SetPosition(tempVecCam);
-	
-	
 
 	
+
+
+
 	glfwSwapBuffers(BackEnd::m_Window);
 	glfwPollEvents();
 }
@@ -109,13 +103,13 @@ void BackEnd::ECSUpdate()
 			// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
 			shader->SetUniform("s_Diffuse", 0);
 			shader->SetUniform("s_Specular", 1);
-			shader->SetUniform("s_Diffuse2", 2);
+			shader->SetUniform("s_Diffuse2", 2);//remove to only have 1 texture
 
 			ECS::Get<Material>(i).GetAlbedo()->Bind(0);
 
 			ECS::Get<Material>(i).GetSpecular()->Bind(1);
 
-			ECS::Get<Material>(i).GetAlbedo2()->Bind(2);
+			ECS::Get<Material>(i).GetAlbedo2()->Bind(2);//Remove to only have 1 texture
 
 			shader->SetUniform("u_Shininess", ECS::Get<Material>(i).GetShininess());
 			shader->SetUniform("Tex1Str", ECS::Get<Material>(i).Tex1Str);

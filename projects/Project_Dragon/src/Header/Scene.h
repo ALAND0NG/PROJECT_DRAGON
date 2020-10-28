@@ -1,5 +1,7 @@
 #pragma once
 #include <Header/ECS.h>
+#include <Header/Timer.h>
+#include <Header/BackEnd.h>
 class Scene
 {
 public:

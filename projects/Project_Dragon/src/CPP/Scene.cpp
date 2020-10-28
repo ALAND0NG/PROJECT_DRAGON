@@ -14,27 +14,44 @@ void Scene::InitScene()
 	ECS::Create(1);
 	ECS::Add<Mesh>(1);
 	ECS::Add<Transform>(1);
-	
-
 	ECS::Get<Transform>(1).SetPosition(glm::vec3(1.f, -9.f, 1.f));
-	ECS::Get<Mesh>(1).LoadOBJ("Models/cube.obj", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	ECS::Get<Mesh>(1).LoadOBJ("Models/cube.obj", glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
 	ECS::Add<Material>(1);
 	ECS::Get<Material>(1).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
 	ECS::Get<Material>(1).LoadDiffuse2FromFile("images/thanos.jpg"); //used for texture blending
 	ECS::Get<Material>(1).LoadSpecularFromFile("images/Stone_001_Specular.png");
-	ECS::Get<Material>(1).Tex1Str = 0.5f;
-	ECS::Get<Material>(1).Tex2Str = 0.9f;
-	ECS::Get<Material>(1).SetAll(0.1f);
+	ECS::Get<Material>(1).Tex1Str = 1.f;
+	ECS::Get<Material>(1).Tex2Str = 1.f;
+	ECS::Get<Material>(1).SetAll(1.f);
 
 	ECS::Create(2);
 	ECS::Add<LightSource>(2);
 	ECS::Add<Transform>(2);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(5.f, -9.f, 0.f));
+
 	
-
+	ECS::Create(3);
+	ECS::Add<Mesh>(3);
+	ECS::Add<Transform>(3);
+	ECS::Add<Material>(3);
+	ECS::Get<Transform>(3).SetPosition(glm::vec3(1.f, -10.f, 0.f));
+	ECS::Get<Mesh>(3).LoadOBJ("models/temple.obj", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	ECS::Get<Material>(3).LoadDiffuseFromFile("images/trappin.jpg");
+	ECS::Get<Material>(3).LoadDiffuse2FromFile("images/trappin.jpg");
+	ECS::Get<Material>(3).LoadSpecularFromFile("images/thanos.jpg");
+	ECS::Get<Material>(3).Tex1Str = 1.f;
+	ECS::Get<Material>(3).Tex2Str = 1.f;
+	ECS::Get<Material>(3).SetAll(0.f);
+	
 }
-
+glm::vec3 tempVec;
 void Scene::Update()
 {
-	
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_J) == GLFW_PRESS)
+	{
+		//move object demo
+		tempVec = ECS::Get<Transform>(1).GetPosition();
+		tempVec.x += 1.f * Timer::dt;
+		ECS::Get<Transform>(1).SetPosition(tempVec);
+	}
 }
