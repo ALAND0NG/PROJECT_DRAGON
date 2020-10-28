@@ -54,26 +54,27 @@ void BackEnd::Update()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	ECSUpdate();
-
-	//temp physics test ill leave this here
-	if (ECS::Get<Transform>(0).GetPosition().y >= -9.5f)
+	//Temporary VERY VERY VERY basic physics test
+	glm::vec3 tempVecCam = ECS::Get<Transform>(0).GetPosition();
+	if (tempVecCam.y >= -9.5f)
 	{
 		glm::vec3 tempVec = ECS::Get<Transform>(0).GetPosition();
 		tempVec.y -= 15.f * Timer::dt;
 		ECS::Get<Transform>(0).SetPosition(tempVec);
 	}
+	ECS::Get<Transform>(0).SetPosition(tempVecCam);
+	
+	
 
+	
 	glfwSwapBuffers(BackEnd::m_Window);
 	glfwPollEvents();
 }
 
 void BackEnd::ECSUpdate()
 {
-	//temp light
-	//shader->SetUniform("u_LightPos", ECS::Get<Transform>(5).GetPosition());
 	//here we need to take all entities with components that need to be passed to the shaders
-	//just automates this code here
-	//in a function here to clean up the main BackEnd::Update()
+//just automates this code here
 	auto reg = ECS::GetReg();
 
 	for (int i = 0; i < reg->size(); i++)
@@ -108,18 +109,28 @@ void BackEnd::ECSUpdate()
 			// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
 			shader->SetUniform("s_Diffuse", 0);
 			shader->SetUniform("s_Specular", 1);
+			shader->SetUniform("s_Diffuse2", 2);
 
 			ECS::Get<Material>(i).GetAlbedo()->Bind(0);
 
 			ECS::Get<Material>(i).GetSpecular()->Bind(1);
 
+			ECS::Get<Material>(i).GetAlbedo2()->Bind(2);
+
 			shader->SetUniform("u_Shininess", ECS::Get<Material>(i).GetShininess());
+			shader->SetUniform("Tex1Str", ECS::Get<Material>(i).Tex1Str);
+			shader->SetUniform("Tex2Str", ECS::Get<Material>(i).Tex2Str);
 
 			ECS::Get<Mesh>(i).GetVAO()->Render();
 		}
-		
-	}
+		if (ECS::Has<Transform>(i) && ECS::Has<LightSource>(i))
+		{
+			shader->SetUniform("u_LightPos", ECS::Get<Transform>(i).GetPosition());
+		}
 
+
+
+	}
 }
 
 void GlfwWindowResizedCallback(GLFWwindow* window, int width, int height) {
