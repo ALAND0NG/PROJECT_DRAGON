@@ -6,7 +6,11 @@ layout(location = 2) in vec3 inNormal;
 layout(location = 3) in vec2 inUV;
 
 uniform sampler2D s_Diffuse;
+uniform sampler2D s_Diffuse2;
 uniform sampler2D s_Specular;
+
+uniform float Tex1Str;
+uniform float Tex2Str;
 
 uniform vec3  u_AmbientCol;
 uniform float u_AmbientStrength;
@@ -55,7 +59,10 @@ void main() {
 	vec3 specular = u_SpecularLightStrength * texSpec * spec * u_LightCol; // Can also use a specular color
 
 	// Get the albedo from the diffuse / albedo map
-	vec4 textureColor = texture(s_Diffuse, inUV);
+	vec4 textureColor1 = texture(s_Diffuse, inUV) * Tex1Str;
+	vec4 textureColor2 = texture(s_Diffuse2, inUV) * Tex2Str;
+	vec4 textureColor = textureColor1 + textureColor2;
+
 	vec3 result = (
 		(u_AmbientCol * u_AmbientStrength) + // global ambient light
 		(ambient + diffuse + specular) * attenuation // light factors from our single light
