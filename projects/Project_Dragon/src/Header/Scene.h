@@ -10,9 +10,9 @@ public:
 		
 	}
 
-	void InitScene();
+	virtual void InitScene();
 
-	void Update();
+	virtual void Update();
 
 
 private:

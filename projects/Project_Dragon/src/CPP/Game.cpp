@@ -17,7 +17,8 @@ void Game::InitGame()
 
 	BackEnd::Init();
 
-	m_Scenes.push_back(new Scene());
+	//m_Scenes.push_back(new Scene());
+	m_Scenes.push_back(new TankScene());
 
 	m_ActiveScene = m_Scenes[0];
 
