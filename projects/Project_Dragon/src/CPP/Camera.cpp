@@ -2,12 +2,12 @@
 
 #include <GLM/gtc/matrix_transform.hpp>
 #include <iostream>
-
+float tempAspectRatio = 16 / 9;
 Camera::Camera() :
 	_nearPlane(0.1f),
 	_farPlane(1000.0f),
 	_fovRadians(glm::degrees(90.0f)),
-	_aspectRatio(1.0f),
+	_aspectRatio(tempAspectRatio),
 	_position(glm::vec3(0.0f)),
 	_normal(glm::vec3(0.0f, 0.0f, 1.0f)),
 	_up(glm::vec3(0.0f, -1.0f, 0.0f)), // Using Y-up coordinate system by default

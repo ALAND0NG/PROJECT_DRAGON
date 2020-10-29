@@ -44,6 +44,11 @@ float PhysicsBody::GetFriction()
 	return m_Friction;
 }
 
+void PhysicsBody::SetGravity(float gravity)
+{
+	m_Gravity = gravity;
+}
+
 glm::vec3 PhysicsBody::GetVelocity()
 {
 	return m_Velocity;
@@ -51,6 +56,7 @@ glm::vec3 PhysicsBody::GetVelocity()
 
 void PhysicsBody::ApplyForce(glm::vec3 force)
 {
+	
 	m_DeltaForce = force;
 }
 
@@ -59,13 +65,14 @@ void PhysicsBody::Update(int EntNum)
 	m_Position = ECS::Get<Transform>(EntNum).GetPosition();
 	
 	m_Acceleration = (m_DeltaForce / m_Mass);
-	
-	std::cout << m_Acceleration.x;
 
 	m_Velocity += m_Acceleration;
+
+	m_DeltaForce = glm::vec3(0);
 
 	m_Position += m_Velocity * Timer::dt;
 	
 	ECS::Get<Transform>(EntNum).SetPosition(m_Position);
 
 }
+

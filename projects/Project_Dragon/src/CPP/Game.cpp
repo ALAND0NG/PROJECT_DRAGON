@@ -24,6 +24,8 @@ void Game::InitGame()
 
 	m_ActiveScene->InitScene();
 
+	ECS::Get<Camera>(0).ResizeWindow(1920, 1080);
+
 	GameLoop(); //kicks the gameloop into starting
 
 
@@ -77,7 +79,7 @@ void Game::GameInput()
 
 void Game::GameLoop() //Main update function
 {
-	while (!m_Close)
+	while (!glfwWindowShouldClose(BackEnd::m_Window))
 	{
 		Timer::Tick();
 

@@ -57,6 +57,7 @@ void RenderingSystem::ECSUpdate()
 		{
 			//Just updates camera stuff with tranform stuff to keep it consistent
 			ECS::Get<Camera>(i).SetPosition(ECS::Get<Transform>(i).GetPosition());
+			
 		}
 
 		if (ECS::Has<Transform>(i) == 1 && ECS::Has<Mesh>(i) == 1 && ECS::Has<Material>(i) == 1)

@@ -13,6 +13,9 @@ public:
 	static GLFWwindow* m_Window;
 private:
 	static void InitWindow();
+	static int m_aspectRatio;
+	static int m_WindowWidth;
+	static int m_WindowHeight;
 
 
 };

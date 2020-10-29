@@ -34,6 +34,8 @@ public:
 
 	float GetFriction();
 
+	void SetGravity(float gravity);
+
 	glm::vec3 GetVelocity();
 
 	void ApplyForce(glm::vec3 force);
@@ -47,7 +49,6 @@ private:
 	glm::vec3 m_Velocity;
 	glm::vec3 m_DeltaForce;
 	float m_Mass;
-	float m_Friction;
-
-
+	float m_Friction;//Coeficient of friction
+	float m_Gravity = 9.8f;//set in here so different things can be made to fall at different velocities
 };

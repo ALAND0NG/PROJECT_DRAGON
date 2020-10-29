@@ -2,8 +2,10 @@
 #include <Header/PhysicsSystem.h>
 #include <iostream>
 
-GLFWwindow* BackEnd::m_Window = glfwCreateWindow(800, 800, "The funny game", nullptr, nullptr); //Initializing outside of class because its a static
+GLFWwindow* BackEnd::m_Window = glfwCreateWindow(1920, 1080, "The funny game", nullptr, nullptr); //Initializing outside of class because its a static
 
+int BackEnd::m_WindowHeight = 0;
+int BackEnd::m_WindowWidth = 0;
  // ^^ same comment
 
 void mouse_Callback(GLFWwindow* window, double xpos, double ypos);
@@ -41,7 +43,14 @@ void BackEnd::Update()
 
 void GlfwWindowResizedCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
+	ECS::Get<Camera>(0).ResizeWindow(width, height);
 }
+
+void window_close_callback(GLFWwindow* window)
+{
+	glfwSetWindowShouldClose(window, GLFW_FALSE);
+}
+
 
 void BackEnd::InitWindow()
 {
@@ -55,15 +64,19 @@ void BackEnd::InitWindow()
 
 	glfwWindowHint(GLFW_RESIZABLE, true);
 
-	BackEnd::m_Window = glfwCreateWindow(800, 800, "The funny game", nullptr, nullptr);
+	BackEnd::m_Window = glfwCreateWindow(1920, 1080, "The funny game", nullptr, nullptr);
+
+	BackEnd::m_WindowHeight = 1080;
+	BackEnd::m_WindowWidth = 1920;
 
 	glfwMakeContextCurrent(BackEnd::m_Window);
+
 
 	glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glfwSetWindowSizeCallback(BackEnd::m_Window, GlfwWindowResizedCallback);
 	glfwSetCursorPosCallback(BackEnd::m_Window, mouse_Callback);
-
+	
 	//This initializes OpenGL via GLAD.
 	if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == 0)
 	{

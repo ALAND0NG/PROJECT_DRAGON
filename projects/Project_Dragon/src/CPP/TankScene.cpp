@@ -63,8 +63,5 @@ void TankScene::Update()
 	{
 		ECS::Get<PhysicsBody>(1).ApplyForce(glm::vec3(-0.1f, 0.f, 0.f));
 	}
-
-	std::cout << ECS::Get<PhysicsBody>(1).GetVelocity().x;
-
 }
 
