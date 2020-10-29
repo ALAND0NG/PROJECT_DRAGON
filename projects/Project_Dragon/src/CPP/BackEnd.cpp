@@ -65,11 +65,13 @@ void BackEnd::Update()
 	glfwPollEvents();
 }
 
+
 void BackEnd::ECSUpdate()
 {
 	//here we need to take all entities with components that need to be passed to the shaders
 //just automates this code here
 	auto reg = ECS::GetReg();
+	int LightCount = 0;
 
 	for (int i = 0; i < reg->size(); i++)
 	{
@@ -77,9 +79,9 @@ void BackEnd::ECSUpdate()
 		if (ECS::Has<LightSource>(i) && ECS::Has<Transform>(i))
 		{
 			
-			shader->SetUniform("u_LightPos", ECS::Get<Transform>(i).GetPosition());
+			shader->SetUniform("LightPositions[" + std::to_string(LightCount) + "]", ECS::Get<Transform>(i).GetPosition());
 			shader->SetUniform("u_LightCol", ECS::Get<LightSource>(i).m_Colour);
-			
+			LightCount++;
 		}
 		
 		if (ECS::Has<Transform>(i) && ECS::Has<Camera>(i))
@@ -121,10 +123,9 @@ void BackEnd::ECSUpdate()
 		{
 			shader->SetUniform("u_LightPos", ECS::Get<Transform>(i).GetPosition());
 		}
-
-
-
 	}
+
+	shader->SetUniform("u_LightCount", LightCount);
 }
 
 void GlfwWindowResizedCallback(GLFWwindow* window, int width, int height) {
