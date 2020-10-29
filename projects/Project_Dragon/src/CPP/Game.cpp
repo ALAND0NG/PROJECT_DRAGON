@@ -87,4 +87,5 @@ void Game::GameLoop() //Main update function
 
 		m_ActiveScene->Update(); //Scene specific update
 	}
+	Logger::Uninitialize();
 }
