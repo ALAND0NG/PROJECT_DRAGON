@@ -31,6 +31,8 @@ public:
 
 	void SetFriction(float friction);
 
+	void SetVelocity(glm::vec3 velocity);
+
 	float GetMass();
 
 	float GetFriction();
@@ -43,6 +45,10 @@ public:
 
 	void Update(int EntNum);
 
+	void SetBodyType(int type);//0 for static, 1 for dynamic, 2 for kinematic
+
+	int GetBodyType();//0 for static, 1 for dynamic, 2 for kinematic
+
 private:
 	BoundingBox m_BoxCollider;
 	glm::vec3 m_Position;
@@ -52,6 +58,8 @@ private:
 	float m_Mass;
 	float m_Friction;//Coeficient of friction
 	float m_Gravity = 9.8f;//set in here so different things can be made to fall at different velocities
+
+	int m_BodyType;
 
 	void UpdateBoundingBox(int EntNum);
 };

@@ -1,6 +1,9 @@
 #include <Header/PhysicsSystem.h>
+#include <Header/Timer.h>
 
 std::vector<int> PhysicsSystem::m_PhysicsBody_IDs;
+
+
 
 void PhysicsSystem::Update()
 {
@@ -19,8 +22,18 @@ void PhysicsSystem::Update()
 
 	
 	if (AABB(ECS::Get<PhysicsBody>(1), ECS::Get<PhysicsBody>(3)))
-		std::cout << "Coliding";
+	{
+		if (ECS::Get<PhysicsBody>(1).GetBodyType() == 1 && ECS::Get<PhysicsBody>(3).GetBodyType() == 0);
+		{
+			std::cout << "Dick and cock yep \n";
+			ECS::Get<Transform>(1).SetPosition(ECS::Get<Transform>(1).GetPosition() - ECS::Get<PhysicsBody>(1).GetVelocity() * (Timer::dt * 2));
+			
+		}
+	}
 	
+	
+	
+
 }
 
 bool PhysicsSystem::AABB(PhysicsBody body1, PhysicsBody body2)

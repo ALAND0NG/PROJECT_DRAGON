@@ -34,6 +34,11 @@ void PhysicsBody::SetFriction(float friction)
 	m_Friction = friction;
 }
 
+void PhysicsBody::SetVelocity(glm::vec3 velocity)
+{
+	m_Velocity = velocity;
+}
+
 float PhysicsBody::GetMass()
 {
 	return m_Mass;
@@ -86,6 +91,16 @@ void PhysicsBody::Update(int EntNum)
 	
 	ECS::Get<Transform>(EntNum).SetPosition(m_Position);
 
+}
+
+void PhysicsBody::SetBodyType(int type)
+{
+	m_BodyType = type;
+}
+
+int PhysicsBody::GetBodyType()
+{
+	return m_BodyType;
 }
 
 void PhysicsBody::UpdateBoundingBox(int EntNum)

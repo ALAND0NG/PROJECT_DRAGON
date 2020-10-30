@@ -20,6 +20,7 @@ void TankScene::InitScene()
 	ECS::Get<Mesh>(1).LoadOBJ("Models/cube.obj", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	ECS::Get<PhysicsBody>(1).SetMass(1.f);
 	ECS::Get<PhysicsBody>(1).SetFriction(0.1f);
+	ECS::Get<PhysicsBody>(1).SetBodyType(1);
 	ECS::Add<Material>(1);
 	ECS::Get<Material>(1).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
 	ECS::Get<Material>(1).LoadDiffuse2FromFile("images/sample.png"); //used for texture blending
@@ -49,6 +50,7 @@ void TankScene::InitScene()
 	ECS::Get<Material>(3).Tex1Str = 1.f;
 	ECS::Get<Material>(3).Tex2Str = 1.f;
 	ECS::Get<Material>(3).SetAll(1.f);
+	ECS::Get<PhysicsBody>(3).SetBodyType(0);
 
 
 
