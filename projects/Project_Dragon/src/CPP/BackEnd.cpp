@@ -14,7 +14,7 @@ void mouse_Callback(GLFWwindow* window, double xpos, double ypos);
 void BackEnd::Init()
 {
 	Logger::Init();
-	
+
 	InitWindow();
 
 	RenderingSystem::Init();
@@ -32,8 +32,9 @@ void BackEnd::Update()
 	glClearColor(0.00f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	PhysicsSystem::Update();
+	
 	RenderingSystem::Update();
+	PhysicsSystem::Update();
 	
 
 

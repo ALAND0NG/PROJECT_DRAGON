@@ -69,7 +69,7 @@ void RenderingSystem::ECSUpdate()
 			//identitifier
 			shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(i).GetTransform());
 			shader->SetUniformMatrix("u_Model", ECS::Get<Transform>(i).GetTransform());
-			shader->SetUniformMatrix("u_ModelRotation", glm::toMat3(ECS::Get<Transform>(i).GetRotation()));
+			//shader->SetUniformMatrix("u_ModelRotation", glm::toMat3(ECS::Get<Transform>(i).GetRotation()));
 			shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
 
 			// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
@@ -91,7 +91,7 @@ void RenderingSystem::ECSUpdate()
 		}
 		if (ECS::Has<Transform>(i) && ECS::Has<LightSource>(i))
 		{
-			shader->SetUniform("u_LightPos", ECS::Get<Transform>(i).GetPosition());
+			//shader->SetUniform("u_LightPos", ECS::Get<Transform>(i).GetPosition());
 		}
 	}
 

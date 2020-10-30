@@ -15,7 +15,6 @@ uniform float Tex2Str;
 uniform vec3  u_AmbientCol;
 uniform float u_AmbientStrength;
 
-uniform vec3  u_LightPos;
 uniform vec3  u_LightCol;
 uniform float u_AmbientLightStrength;
 uniform float u_SpecularLightStrength;

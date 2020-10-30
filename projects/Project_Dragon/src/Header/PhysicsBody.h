@@ -14,17 +14,18 @@ struct BoundingBox //This defines the bounding box, any single physics body can 
 	float m_MaxY;
 	float m_MaxZ;
 	float m_MinZ;
+	float m_SizeX;
+	float m_SizeY;
+	float m_SizeZ;
 };
 
 class PhysicsBody
 {
 public:
 	
-	int GetBoxCount();
+	BoundingBox GetBox();
 
-	BoundingBox GetBox(int box_number);
-
-	void AddBox(glm::vec3 center, float SizeX, float SizeY, float SizeZ);
+	void SetBox(glm::vec3 center, float SizeX, float SizeY, float SizeZ);
 
 	void SetMass(float mass);
 
@@ -43,7 +44,7 @@ public:
 	void Update(int EntNum);
 
 private:
-	std::vector<BoundingBox> m_BoundindBoxes; //since we let a single physics body have multiple boxes, we need a way to store them
+	BoundingBox m_BoxCollider;
 	glm::vec3 m_Position;
 	glm::vec3 m_Acceleration;
 	glm::vec3 m_Velocity;
@@ -51,4 +52,6 @@ private:
 	float m_Mass;
 	float m_Friction;//Coeficient of friction
 	float m_Gravity = 9.8f;//set in here so different things can be made to fall at different velocities
+
+	void UpdateBoundingBox(int EntNum);
 };
