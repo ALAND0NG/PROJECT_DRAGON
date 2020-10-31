@@ -49,6 +49,16 @@ float PhysicsBody::GetFriction()
 	return m_Friction;
 }
 
+void PhysicsBody::SetPosition(glm::vec3 position)
+{
+	m_Position = position;
+}
+
+glm::vec3 PhysicsBody::GetPosition()
+{
+	return m_Position;
+}
+
 void PhysicsBody::SetGravity(float gravity)
 {
 	m_Gravity = gravity;
@@ -61,8 +71,7 @@ glm::vec3 PhysicsBody::GetVelocity()
 
 void PhysicsBody::ApplyForce(glm::vec3 force)
 {
-	
-	m_DeltaForce = force;
+	m_AppliedForce = force * Timer::dt;
 }
 
 void PhysicsBody::Update(int EntNum)
@@ -71,15 +80,8 @@ void PhysicsBody::Update(int EntNum)
 
 	m_Position = ECS::Get<Transform>(EntNum).GetPosition();
 	
-	glm::vec3 FrictionForce;
 
-	FrictionForce = m_Velocity;
-
-	glm::normalize(FrictionForce);
-
-	FrictionForce *= (m_Mass * m_Gravity) * m_Friction;
-
-	m_DeltaForce += -FrictionForce;
+	CalculateDeltaForce();
 	
 	m_Acceleration = (m_DeltaForce / m_Mass);
 
@@ -103,6 +105,16 @@ int PhysicsBody::GetBodyType()
 	return m_BodyType;
 }
 
+glm::vec3 PhysicsBody::GetDeltaForce()
+{
+	return m_DeltaForce;
+}
+
+void PhysicsBody::SetGravityScale(int gravityscale)
+{
+	m_GravityScale = gravityscale;
+}
+
 void PhysicsBody::UpdateBoundingBox(int EntNum)
 {
 	m_BoxCollider.m_Center = ECS::Get<Transform>(EntNum).GetPosition();
@@ -113,5 +125,26 @@ void PhysicsBody::UpdateBoundingBox(int EntNum)
 	m_BoxCollider.m_MinZ = m_BoxCollider.m_Center.z - (0.5 * m_BoxCollider.m_SizeZ);
 	m_BoxCollider.m_MaxZ = m_BoxCollider.m_Center.z + (0.5 * m_BoxCollider.m_SizeZ);
 	
+}
+
+void PhysicsBody::CalculateDeltaForce()
+{
+	
+
+	glm::vec3 FrictionForce;
+
+	FrictionForce = m_Velocity;
+
+	glm::normalize(FrictionForce);
+
+	FrictionForce *= (m_Mass * m_Gravity) * m_Friction;
+
+	m_DeltaForce += FrictionForce * Timer::dt; //Add friction to the force
+
+	m_DeltaForce += glm::vec3(0.f, m_Gravity * m_GravityScale, 0.f); //Add gravity to the force
+
+	m_DeltaForce += m_AppliedForce; //Add player applied force
+
+	m_AppliedForce = glm::vec3(0); //Since we want to calculate by frame, set to 0
 }
 

@@ -9,6 +9,9 @@ void PhysicsSystem::Update()
 {
 	auto reg = ECS::GetReg();
 
+	
+
+
 	for (int i = 0; i < reg->size(); i++)
 	{
 		if (ECS::Has<PhysicsBody>(i) == true)
@@ -19,18 +22,25 @@ void PhysicsSystem::Update()
 
 		}
 	}
-
 	
-	if (AABB(ECS::Get<PhysicsBody>(1), ECS::Get<PhysicsBody>(3)))
-	{
-		if (ECS::Get<PhysicsBody>(1).GetBodyType() == 1 && ECS::Get<PhysicsBody>(3).GetBodyType() == 0);
-		{
-			std::cout << "Dick and cock yep \n";
-			ECS::Get<Transform>(1).SetPosition(ECS::Get<Transform>(1).GetPosition() - ECS::Get<PhysicsBody>(1).GetVelocity() * (Timer::dt * 2));
+	//for (int i = 0; i < PhysicsSystem::m_PhysicsBody_IDs.size() - 1; i++)
+	//{
+		//for (int ix = 0; ix < PhysicsSystem::m_PhysicsBody_IDs.size() - 1; ix++)
+		//{
+			//writes the bodies once so I don't have to ECSet a million fucking times
+			PhysicsBody b1, b2;
+			b1 = ECS::Get<PhysicsBody>(1);
+			b2 = ECS::Get<PhysicsBody>(6);
 			
-		}
-	}
-	
+			if (AABB(b1,b2))
+			{
+				if (b1.GetBodyType() == 1 && b2.GetBodyType() == 0)
+				{
+					b1.ApplyForce(-b2.GetDeltaForce());
+					b1.SetPosition(b1.GetPosition() - b1.GetVelocity() * 2.f);
+				}
+			}
+
 	
 	
 

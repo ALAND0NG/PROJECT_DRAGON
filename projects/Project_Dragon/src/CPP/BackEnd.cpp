@@ -35,6 +35,9 @@ void BackEnd::Update()
 	
 	RenderingSystem::Update();
 	PhysicsSystem::Update();
+
+	
+
 	
 
 
@@ -77,6 +80,7 @@ void BackEnd::InitWindow()
 
 	glfwSetWindowSizeCallback(BackEnd::m_Window, GlfwWindowResizedCallback);
 	glfwSetCursorPosCallback(BackEnd::m_Window, mouse_Callback);
+
 	
 	//This initializes OpenGL via GLAD.
 	if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == 0)
@@ -131,6 +135,6 @@ void mouse_Callback(GLFWwindow* window, double xpos, double ypos)
 	front.y = sin(glm::radians(pitch));
 	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	ECS::Get<Camera>(0).SetForward(glm::normalize(front));
-
 	
+
 }
