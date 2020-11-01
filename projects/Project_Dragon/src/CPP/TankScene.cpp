@@ -1,5 +1,7 @@
 #include <Header/TankScene.h>
 
+#include <Header/PhysicsSystem.h>
+
 void TankScene::InitScene()
 {
 	m_sceneReg = new entt::registry;
@@ -131,7 +133,7 @@ void TankScene::InitScene()
 	ECS::Get<PhysicsBody>(5).SetMass(0.01f);
 	ECS::Get<PhysicsBody>(5).SetGravityScale(0.f);
 
-
+#pragma region Walls
 	ECS::Create(6); //wall
 	ECS::Add<Transform>(6);
 	ECS::Add<Mesh>(6);
@@ -211,14 +213,15 @@ void TankScene::InitScene()
 	ECS::Get<PhysicsBody>(9).SetFriction(0.0f);
 	ECS::Get<PhysicsBody>(9).SetMass(0.01f);
 	ECS::Get<PhysicsBody>(9).SetGravityScale(0.f);
+#pragma endregion
 
 	ECS::Create(10); //center obstacle
 	ECS::Add<Transform>(10);
 	ECS::Add<Mesh>(10);
 	ECS::Add<Material>(10);
 	ECS::Add<PhysicsBody>(10);
-	ECS::Get<Transform>(10).SetPosition(glm::vec3(0.f, 2.f, 0.f));
-	ECS::Get<Transform>(10).SetScale(glm::vec3(3.f, 1.f, 3.f));
+	ECS::Get<Transform>(10).SetPosition(glm::vec3(10.f, 2.f, 0.f));
+	ECS::Get<Transform>(10).SetScale(glm::vec3(4.f, 1.f, 4.f));
 	ECS::Get<Mesh>(10).LoadOBJ("models/cube.obj", glm::vec4(1.f, 1.f, 1.f, 1.f));
 	ECS::Get<Material>(10).LoadDiffuseFromFile("images/sample.png");
 	ECS::Get<Material>(10).LoadDiffuse2FromFile("images/Stone_001_Diffuse.png");
@@ -226,11 +229,31 @@ void TankScene::InitScene()
 	ECS::Get<Material>(10).Tex1Str = 0.f;
 	ECS::Get<Material>(10).Tex2Str = 1.f;
 	ECS::Get<Material>(10).SetAll(1.f);
-	ECS::Get<PhysicsBody>(10).SetBox(ECS::Get<Transform>(10).GetPosition(), 2, 2, 2);
+	ECS::Get<PhysicsBody>(10).SetBox(ECS::Get<Transform>(10).GetPosition(), 8, 2, 8);
 	ECS::Get<PhysicsBody>(10).SetBodyType(0);
 	ECS::Get<PhysicsBody>(10).SetFriction(0.0f);
 	ECS::Get<PhysicsBody>(10).SetMass(0.01f);
 	ECS::Get<PhysicsBody>(10).SetGravityScale(0.f);
+
+	ECS::Create(11); //center obstacle
+	ECS::Add<Transform>(11);
+	ECS::Add<Mesh>(11);
+	ECS::Add<Material>(11);
+	ECS::Add<PhysicsBody>(11);
+	ECS::Get<Transform>(11).SetPosition(glm::vec3(-10.f, 2.f, 0.f));
+	ECS::Get<Transform>(11).SetScale(glm::vec3(4.f, 1.f, 4.f));
+	ECS::Get<Mesh>(11).LoadOBJ("models/cube.obj", glm::vec4(1.f, 1.f, 1.f, 1.f));
+	ECS::Get<Material>(11).LoadDiffuseFromFile("images/sample.png");
+	ECS::Get<Material>(11).LoadDiffuse2FromFile("images/Stone_001_Diffuse.png");
+	ECS::Get<Material>(11).LoadSpecularFromFile("images/sample_spec.png");
+	ECS::Get<Material>(11).Tex1Str = 0.f;
+	ECS::Get<Material>(11).Tex2Str = 1.f;
+	ECS::Get<Material>(11).SetAll(1.f);
+	ECS::Get<PhysicsBody>(11).SetBox(ECS::Get<Transform>(10).GetPosition(), 8, 2, 8);
+	ECS::Get<PhysicsBody>(11).SetBodyType(0);
+	ECS::Get<PhysicsBody>(11).SetFriction(0.0f);
+	ECS::Get<PhysicsBody>(11).SetMass(0.01f);
+	ECS::Get<PhysicsBody>(11).SetGravityScale(0.f);
 
 
 
@@ -249,7 +272,7 @@ void TankScene::Update()
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		if (!Rotating)
-			ECS::Get<PhysicsBody>(1).ApplyForce(ECS::Get<TankData>(1).GetForward() * 2.f);
+			ECS::Get<PhysicsBody>(1).ApplyForce(ECS::Get<TankData>(1).GetForward() * 10.f);
 
 		Moving = true;
 
@@ -342,5 +365,172 @@ void TankScene::Update()
 
 #pragma endregion
 
-}
+//Since collision is buggy for now, walls won't be done through AABB since they don't move
 
+#pragma region OutsideWall
+	//for tanks
+	if (ECS::Get<Transform>(1).GetPosition().z > 48)
+		ECS::Get<Transform>(1).SetPosition(glm::vec3(ECS::Get<Transform>(1).GetPosition().x, 2.f, 48.f));
+	if (ECS::Get<Transform>(2).GetPosition().z > 48)
+		ECS::Get<Transform>(2).SetPosition(glm::vec3(ECS::Get<Transform>(2).GetPosition().x, 2.f, 48.f));
+	if (ECS::Get<Transform>(1).GetPosition().z < -48)
+		ECS::Get<Transform>(1).SetPosition(glm::vec3(ECS::Get<Transform>(1).GetPosition().x, 2.f, -48.f));
+	if (ECS::Get<Transform>(2).GetPosition().z < -48)
+		ECS::Get<Transform>(2).SetPosition(glm::vec3(ECS::Get<Transform>(2).GetPosition().x, 2.f, -48.f));
+	if (ECS::Get<Transform>(1).GetPosition().x > 25)
+		ECS::Get<Transform>(1).SetPosition(glm::vec3(25, 2, ECS::Get<Transform>(1).GetPosition().z));
+	if (ECS::Get<Transform>(2).GetPosition().x > 25)
+		ECS::Get<Transform>(2).SetPosition(glm::vec3(25, 2, ECS::Get<Transform>(2).GetPosition().z));
+	if (ECS::Get<Transform>(1).GetPosition().x < -25)
+		ECS::Get<Transform>(1).SetPosition(glm::vec3(-25, 2, ECS::Get<Transform>(1).GetPosition().z));
+	if (ECS::Get<Transform>(2).GetPosition().x < -25)
+		ECS::Get<Transform>(2).SetPosition(glm::vec3(-25, 2, ECS::Get<Transform>(2).GetPosition().z));
+	//for bullets
+	if (ECS::Get<Transform>(4).GetPosition().z > 48)
+	{
+		glm::vec3 velocity = glm::vec3(ECS::Get<PhysicsBody>(4).GetVelocity());
+		velocity.z = -velocity.z;
+		ECS::Get<PhysicsBody>(4).SetVelocity(velocity);
+	}
+	if (ECS::Get<Transform>(5).GetPosition().z > 48)
+	{
+		glm::vec3 velocity = glm::vec3(ECS::Get<PhysicsBody>(5).GetVelocity());
+		velocity.z = -velocity.z;
+		ECS::Get<PhysicsBody>(5).SetVelocity(velocity);
+	}
+	if (ECS::Get<Transform>(4).GetPosition().z < -48)
+	{
+		glm::vec3 velocity = glm::vec3(ECS::Get<PhysicsBody>(4).GetVelocity());
+		velocity.z = -velocity.z;
+		ECS::Get<PhysicsBody>(4).SetVelocity(velocity);
+	}
+	if (ECS::Get<Transform>(5).GetPosition().z < -48)
+	{
+		glm::vec3 velocity = glm::vec3(ECS::Get<PhysicsBody>(5).GetVelocity());
+		velocity.z = -velocity.z;
+		ECS::Get<PhysicsBody>(5).SetVelocity(velocity);
+	}
+	if (ECS::Get<Transform>(4).GetPosition().x > 25)
+	{
+		glm::vec3 velocity = glm::vec3(ECS::Get<PhysicsBody>(4).GetVelocity());
+		velocity.x = -velocity.x;
+		ECS::Get<PhysicsBody>(4).SetVelocity(velocity);
+	}
+	if (ECS::Get<Transform>(5).GetPosition().x > 25)
+	{
+		glm::vec3 velocity = glm::vec3(ECS::Get<PhysicsBody>(5).GetVelocity());
+		velocity.x = -velocity.x;
+		ECS::Get<PhysicsBody>(5).SetVelocity(velocity);
+	}
+	if (ECS::Get<Transform>(4).GetPosition().x < -25)
+	{
+		glm::vec3 velocity = glm::vec3(ECS::Get<PhysicsBody>(4).GetVelocity());
+		velocity.x = -velocity.x;
+		ECS::Get<PhysicsBody>(4).SetVelocity(velocity);
+	}
+	if (ECS::Get<Transform>(5).GetPosition().x < -25)
+	{
+		glm::vec3 velocity = glm::vec3(ECS::Get<PhysicsBody>(5).GetVelocity());
+		velocity.x = -velocity.x;
+		ECS::Get<PhysicsBody>(5).SetVelocity(velocity);
+	}
+
+
+#pragma endregion
+
+#pragma region InsideWalls
+	PhysicsBody tank1 = ECS::Get<PhysicsBody>(1);
+	PhysicsBody tank2 = ECS::Get<PhysicsBody>(2);
+
+	//for tanks
+	if (PhysicsSystem::AABB(tank1, ECS::Get<PhysicsBody>(10)))
+	{
+		//tank 1 colliding with inside wall
+		ECS::Get<Transform>(1).SetPosition(-ECS::Get<PhysicsBody>(1).GetVelocity() * 0.1f + ECS::Get<PhysicsBody>(1).GetPosition());
+	
+		
+	}
+	//for tanks
+	if (PhysicsSystem::AABB(ECS::Get<PhysicsBody>(4), ECS::Get<PhysicsBody>(10)))
+	{
+		//bullet 1 colliding with a wall
+		glm::vec3 velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
+		glm::vec3 position = ECS::Get<Transform>(4).GetPosition();
+		if (position.x > 6 && position.x < 14 && position.z <= 4.1f) //right wall
+		{
+			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
+			velocity.z = -velocity.z;
+		}
+		if (position.x > 6 && position.x < 14 && position.z <= -4.1f) //left wall
+		{
+			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
+			velocity.x = -velocity.x;		
+		}
+		if (position.z > -4 && position.z < 4.f && position.x >= 6.1f)
+		{
+			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
+			velocity.x = -velocity.x;
+		}
+		if (position.z > -4 && position.z < 4.f && position.x >= 14.1f)
+		{
+			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
+			velocity.z = -velocity.z;
+		}
+		
+		ECS::Get<PhysicsBody>(4).SetVelocity(velocity);
+	}
+	//for tanks
+	if (PhysicsSystem::AABB(ECS::Get<PhysicsBody>(1), ECS::Get<PhysicsBody>(11)))
+	{
+		//tank 1 colliding with a wall
+		ECS::Get<Transform>(1).SetPosition(-ECS::Get<PhysicsBody>(1).GetVelocity() * 0.1f + ECS::Get<PhysicsBody>(1).GetPosition());
+	}
+	//for tanks
+	if (PhysicsSystem::AABB(ECS::Get<PhysicsBody>(4), ECS::Get<PhysicsBody>(11)))
+	{
+		//bullet 1 colliding with a wall
+			//bullet 1 colliding with a wall
+		glm::vec3 velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
+		glm::vec3 position = ECS::Get<Transform>(4).GetPosition();
+		
+		std::cout << position.x << ' ' << position.z << std::endl;
+
+		//left wall x = -10, z = -4 middle
+		// x = -6 z = -4 top
+		// x = -14 z = -4 bottom
+		if (position.x < -6.f && position.x > -14.f && position.z >= -4.1f)
+		{
+			velocity = ECS::Get<PhysicsBody>(4).GetVelocity(); 
+			velocity.x = -velocity.x;
+			std::cout << "fuck coding\n";
+		}
+		if (position.x < -6.f && position.x > -14.f && position.z >= 4.1f)
+		{
+			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
+			velocity.x = -velocity.x;
+			std::cout << "Hollow shell\n";
+		}
+		
+		if (position.z > -4 && position.z < 4.f && position.x <= -6.1f)
+		{
+			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
+			velocity.x = -velocity.x;
+			std::cout << "fuck you\n";
+		}
+		if (position.z > -4 && position.z < 4.f && position.x >= -14.1f)
+		{
+			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
+			velocity.x = -velocity.x;
+			std::cout << "pain pain pain\n";
+		}
+		
+
+		ECS::Get<PhysicsBody>(4).SetVelocity(velocity);
+	}
+	
+
+
+#pragma endregion
+
+	
+}

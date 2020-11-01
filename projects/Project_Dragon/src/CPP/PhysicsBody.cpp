@@ -129,8 +129,6 @@ void PhysicsBody::UpdateBoundingBox(int EntNum)
 
 void PhysicsBody::CalculateDeltaForce()
 {
-	
-
 	glm::vec3 FrictionForce;
 
 	FrictionForce = m_Velocity;
