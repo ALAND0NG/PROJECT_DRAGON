@@ -255,8 +255,6 @@ void TankScene::InitScene()
 	ECS::Get<PhysicsBody>(11).SetMass(0.01f);
 	ECS::Get<PhysicsBody>(11).SetGravityScale(0.f);
 
-
-
 	
 
 }
@@ -447,6 +445,7 @@ void TankScene::Update()
 	{
 		//tank 1 colliding with inside wall
 		ECS::Get<Transform>(1).SetPosition(-ECS::Get<PhysicsBody>(1).GetVelocity() * 0.1f + ECS::Get<PhysicsBody>(1).GetPosition());
+		//ECS::Get<PhysicsBody>(1).ApplyForce(glm::vec3(0, -tank1.GetDeltaForce().y * tank1.GetMass() * 2 * tank1.GetGraviy(), 0));
 	
 		
 	}
@@ -486,44 +485,35 @@ void TankScene::Update()
 		ECS::Get<Transform>(1).SetPosition(-ECS::Get<PhysicsBody>(1).GetVelocity() * 0.1f + ECS::Get<PhysicsBody>(1).GetPosition());
 	}
 	//for tanks
+	
 	if (PhysicsSystem::AABB(ECS::Get<PhysicsBody>(4), ECS::Get<PhysicsBody>(11)))
-	{
-		//bullet 1 colliding with a wall
-			//bullet 1 colliding with a wall
+	{//bullet 1 colliding with a wall
 		glm::vec3 velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
 		glm::vec3 position = ECS::Get<Transform>(4).GetPosition();
 		
-		std::cout << position.x << ' ' << position.z << std::endl;
+		if (position.x > -6 && position.x < -14 && position.z <= -4.1f) //left wall
+		{
+			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
+			velocity.x = -velocity.x;
+		
+		}
+		else if (position.z > -4 && position.z < 4.f && position.x >= -6.1f)
+		{
+			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
+			velocity.x = -velocity.x;
+			
+		}
+		else if (position.z > -4 && position.z < 4.f && position.x >= -14.1f)
+		{
+			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
+			velocity.z = -velocity.z;
+		}
+		else if (position.x > -6 && position.x < -14 && position.z <= 4.1f) //right wall
+		{
+			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
 
-		//left wall x = -10, z = -4 middle
-		// x = -6 z = -4 top
-		// x = -14 z = -4 bottom
-		if (position.x < -6.f && position.x > -14.f && position.z >= -4.1f)
-		{
-			velocity = ECS::Get<PhysicsBody>(4).GetVelocity(); 
-			velocity.x = -velocity.x;
-			std::cout << "fuck coding\n";
+			velocity.z = -velocity.z;
 		}
-		if (position.x < -6.f && position.x > -14.f && position.z >= 4.1f)
-		{
-			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
-			velocity.x = -velocity.x;
-			std::cout << "Hollow shell\n";
-		}
-		
-		if (position.z > -4 && position.z < 4.f && position.x <= -6.1f)
-		{
-			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
-			velocity.x = -velocity.x;
-			std::cout << "fuck you\n";
-		}
-		if (position.z > -4 && position.z < 4.f && position.x >= -14.1f)
-		{
-			velocity = ECS::Get<PhysicsBody>(4).GetVelocity();
-			velocity.x = -velocity.x;
-			std::cout << "pain pain pain\n";
-		}
-		
 
 		ECS::Get<PhysicsBody>(4).SetVelocity(velocity);
 	}

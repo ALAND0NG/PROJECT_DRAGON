@@ -57,6 +57,8 @@ public:
 
 	void SetGravityScale(int gravityscale);
 
+	float GetGraviy();
+
 	
 
 private:

@@ -115,6 +115,11 @@ void PhysicsBody::SetGravityScale(int gravityscale)
 	m_GravityScale = gravityscale;
 }
 
+float PhysicsBody::GetGraviy()
+{
+	return m_Gravity;
+}
+
 void PhysicsBody::UpdateBoundingBox(int EntNum)
 {
 	m_BoxCollider.m_Center = ECS::Get<Transform>(EntNum).GetPosition();
