@@ -4,7 +4,9 @@ int main()
 {
 	Game game;
 
-	game.InitGame();
+	game.AddScene(new TankScene());
+
+	game.InitGame(0);
 
 	return 0;
 }

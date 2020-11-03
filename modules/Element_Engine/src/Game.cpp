@@ -12,15 +12,12 @@ Game::~Game()
 {
 }
 
-void Game::InitGame()
+void Game::InitGame(int scene_index)
 {
 
 	BackEnd::Init();
-
-	//m_Scenes.push_back(new Scene());
-	m_Scenes.push_back(new TankScene());
-
-	m_ActiveScene = m_Scenes[0];
+	
+	m_ActiveScene = m_Scenes[scene_index];
 
 	m_ActiveScene->InitScene();
 
@@ -30,6 +27,11 @@ void Game::InitGame()
 
 
 
+}
+
+void Game::AddScene(Scene* scene)
+{
+	m_Scenes.push_back(scene);
 }
 
 void Game::GameInput()

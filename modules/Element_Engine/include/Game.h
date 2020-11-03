@@ -16,7 +16,9 @@ public:
 	Game();
 	~Game();
 
-	void InitGame(); //Initializes all the stuff
+	void InitGame(int scene_index); //Initializes all the stuff
+
+	void AddScene(Scene* scene);
 
 	void GameInput(); //All input functions go in here
 
