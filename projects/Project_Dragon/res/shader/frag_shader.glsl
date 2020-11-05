@@ -6,11 +6,8 @@ layout(location = 2) in vec3 inNormal;
 layout(location = 3) in vec2 inUV;
 
 uniform sampler2D s_Diffuse;
-uniform sampler2D s_Diffuse2;
 uniform sampler2D s_Specular;
 
-uniform float Tex1Str;
-uniform float Tex2Str;
 
 uniform vec3  u_AmbientCol;
 uniform float u_AmbientStrength;
@@ -29,7 +26,6 @@ uniform vec3  u_CamPos;
 
 uniform int u_LightCount;
 
-//fuck it all the lights are the same just have seperate positions & also hard coded to have a max of 99 fuck you
 uniform vec3 LightPositions[99];
 
 out vec4 frag_color;
@@ -96,9 +92,8 @@ void main() {
 	specular = u_SpecularLightStrength * texSpec * spec * u_LightCol; // Can also use a specular color
 	
 	// Get the albedo from the diffuse / albedo map
-	textureColor1 = texture(s_Diffuse, inUV) * Tex1Str;
-	textureColor2 = texture(s_Diffuse2, inUV) * Tex2Str;
-	textureColor = textureColor1 + textureColor2;
+	textureColor = texture(s_Diffuse, inUV);
+	textureColor = textureColor;
 
 	result += (
 		(u_AmbientCol * u_AmbientStrength) + // global ambient light

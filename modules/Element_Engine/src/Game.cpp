@@ -36,6 +36,47 @@ void Game::AddScene(Scene* scene)
 
 void Game::GameInput()
 {
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
+
+		posTemp.x += ECS::Get<Camera>(0).GetForward().x * 8.f * Timer::dt;
+		posTemp.z += ECS::Get<Camera>(0).GetForward().z * 8.f * Timer::dt;
+
+
+		ECS::Get<Transform>(0).SetPosition(posTemp);
+	}
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
+		posTemp.x -= ECS::Get<Camera>(0).GetForward().x * 8.f * Timer::dt;
+		posTemp.z -= ECS::Get<Camera>(0).GetForward().z * 8.f * Timer::dt;
+
+		ECS::Get<Transform>(0).SetPosition(posTemp);
+	}
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
+		posTemp += glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp())) * 8.f * Timer::dt;
+
+
+		ECS::Get<Transform>(0).SetPosition(posTemp);
+	}
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
+		posTemp -= glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp())) * 8.f * Timer::dt;
+
+
+		ECS::Get<Transform>(0).SetPosition(posTemp);
+	}
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
+		posTemp.y = -9.f;
+		ECS::Get<Transform>(0).SetPosition(posTemp);
+	}
+
 	//For actual game, input will be handled here
 	//for the CG midterm, I will simply do it in the scene specific update function
 

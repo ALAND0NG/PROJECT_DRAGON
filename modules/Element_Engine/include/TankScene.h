@@ -1,3 +1,4 @@
+/*
 #pragma once
 #include <Scene.h>
 class TankScene : public Scene
@@ -10,3 +11,4 @@ private:
 	int P1Score;
 	int P2Score;
 };
+*/
