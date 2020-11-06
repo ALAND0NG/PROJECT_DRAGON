@@ -51,6 +51,12 @@ public:
 			return false;
 	}
 
+	static int GetSize()
+	{
+		return EntList.size();
+	}
+
+
 private:
 	static entt::registry* m_Registry;
 	static std::vector<entt::entity> EntList;

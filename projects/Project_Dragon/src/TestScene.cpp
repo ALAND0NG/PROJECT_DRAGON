@@ -25,9 +25,25 @@ void TestScene::InitScene()
 	ECS::Add<LightSource>(2);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(0.f, 3.f, 0.f));
 
+	IMGUIManager::imGuiCallbacks.push_back([&]() 
+	{
+		
+		if (ImGui::CollapsingHeader("TestHeaded"))
+		{
+			ImGui::Text("lol");
+		}
+	});
+
+
+	InstantiatingSystem::AddPrefab(new TestPrefab());
 
 }
 
 void TestScene::Update()
 {
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_T) == GLFW_PRESS)
+	{
+		
+		InstantiatingSystem::InitPrefab(0);
+	}
 }

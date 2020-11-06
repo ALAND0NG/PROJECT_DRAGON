@@ -1,5 +1,6 @@
 #pragma once
 #include <ElementEngine.h>
+#include <TestPrefab.h>
 
 class TestScene : public Scene
 {
