@@ -27,10 +27,13 @@ void TestScene::InitScene()
 
 	IMGUIManager::imGuiCallbacks.push_back([&]() 
 	{
-		
-		if (ImGui::CollapsingHeader("TestHeaded"))
+		static const char* items[]{"0"};
+		//We want to take all of our entities, and be able to manage their positions using this drop down menu
+		static int SelectedItem = 0;
+		if (ImGui::CollapsingHeader("Entity List"))
 		{
-			ImGui::Text("lol");
+			//ImGui::ListBox("list",&SelectedItem,items,IM_ARRAYSIZE(items));
+			ImGui::Combo("List box", &SelectedItem, items, IM_ARRAYSIZE(items));
 		}
 	});
 
