@@ -14,12 +14,6 @@ void Material::LoadSpecularFromFile(std::string path)
 	m_Specular->LoadData(m_SpecularMap_DATA);
 }
 
-void Material::LoadDiffuse2FromFile(std::string path)
-{
-	m_SpecularMap_DATA = Texture2DData::LoadFromFile(path);
-	m_Diff2 = Texture2D::Create();
-	m_Diff2->LoadData(m_SpecularMap_DATA);
-}
 
 
 

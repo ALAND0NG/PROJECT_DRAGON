@@ -45,6 +45,13 @@ void RenderingSystem::ECSUpdate()
 	for (int i = 0; i < reg->size(); i++)
 	{
 		shader->Bind();
+		
+		if (ECS::Has<Parent>(i))
+		{
+			ECS::Get<Transform>(i).SetPosition(ECS::Get<Transform>(ECS::Get<Parent>(i).GetParent()).GetPosition() + ECS::Get<Transform>(i).GetPosition());
+		}
+
+		
 		if (ECS::Has<LightSource>(i) && ECS::Has<Transform>(i))
 		{
 
@@ -75,17 +82,15 @@ void RenderingSystem::ECSUpdate()
 			// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
 			shader->SetUniform("s_Diffuse", 0);
 			shader->SetUniform("s_Specular", 1);
-			shader->SetUniform("s_Diffuse2", 2);//remove to only have 1 texture
+			
 
 			ECS::Get<Material>(i).GetAlbedo()->Bind(0);
 
 			ECS::Get<Material>(i).GetSpecular()->Bind(1);
 
-			ECS::Get<Material>(i).GetAlbedo2()->Bind(2);//Remove to only have 1 texture
+		
 
 			shader->SetUniform("u_Shininess", ECS::Get<Material>(i).GetShininess());
-			shader->SetUniform("Tex1Str", ECS::Get<Material>(i).Tex1Str);
-			shader->SetUniform("Tex2Str", ECS::Get<Material>(i).Tex2Str);
 
 			ECS::Get<Mesh>(i).GetVAO()->Render();
 		}

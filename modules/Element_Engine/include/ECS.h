@@ -10,7 +10,8 @@
 #include <Material.h>
 #include <LightSource.h>
 #include <PhysicsBody.h>
-#include <TankData.h>
+#include <Parent.h>
+
 
 
 class ECS
@@ -50,6 +51,12 @@ public:
 		else
 			return false;
 	}
+
+	static int GetSize()
+	{
+		return EntList.size();
+	}
+
 
 private:
 	static entt::registry* m_Registry;

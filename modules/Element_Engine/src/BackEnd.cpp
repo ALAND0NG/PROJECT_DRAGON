@@ -18,6 +18,7 @@ void BackEnd::Init()
 	InitWindow();
 
 	RenderingSystem::Init();
+	IMGUIManager::Init();
 
 	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_CULL_FACE);
@@ -35,6 +36,7 @@ void BackEnd::Update()
 	
 	RenderingSystem::Update();
 	PhysicsSystem::Update();
+	IMGUIManager::Update();
 
 	
 
@@ -76,7 +78,7 @@ void BackEnd::InitWindow()
 	glfwMakeContextCurrent(BackEnd::m_Window);
 
 
-	glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	glfwSetWindowSizeCallback(BackEnd::m_Window, GlfwWindowResizedCallback);
 	glfwSetCursorPosCallback(BackEnd::m_Window, mouse_Callback);
