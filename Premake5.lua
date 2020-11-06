@@ -91,6 +91,7 @@ ProjIncludes = {
 	"dependencies/gzip",
 	"dependencies/tinyGLTF",
 	"dependencies/json",
+	"dependencies/bullet/include"
 }
 
 -- These are all the default dependencies that require linking
@@ -104,6 +105,12 @@ Dependencies = {
 	"dependencies/fmod/fmod64.lib",
 	"dependencies/gzip/zlib.lib",
 	"tinyGLTF",
+	"dependencies/bullet/lib/Bullet3Common_Debug.lib",
+	"dependencies/bullet/lib/BulletCollision_Debug.lib",
+	"dependencies/bullet/lib/BulletDynamics_Debug.lib",
+	"dependencies/bullet/lib/BulletInverseDynamics_Debug.lib",
+	"dependencies/bullet/lib/BulletSoftBody_Debug.lib",
+	"dependencies/bullet/lib/LinearMath_Debug.lib"
 }
 
 -- These are what we are linking to (mostly other projects)

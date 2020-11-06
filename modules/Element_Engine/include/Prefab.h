@@ -7,7 +7,7 @@
 class Prefab
 {
 public:
-	virtual void LoadPrefab(int startAt);//The instanciating system will look at the next available entity id, and pass that on to this function
+	virtual void LoadPrefab(int startAt, glm::vec3 origin);//The instanciating system will look at the next available entity id, and pass that on to this function
 	std::vector<int> GetEntityIds()
 	{
 		return m_EntityIds;

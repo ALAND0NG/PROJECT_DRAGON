@@ -45,6 +45,13 @@ void RenderingSystem::ECSUpdate()
 	for (int i = 0; i < reg->size(); i++)
 	{
 		shader->Bind();
+		
+		if (ECS::Has<Parent>(i))
+		{
+			ECS::Get<Transform>(i).SetPosition(ECS::Get<Transform>(ECS::Get<Parent>(i).GetParent()).GetPosition() + ECS::Get<Transform>(i).GetPosition());
+		}
+
+		
 		if (ECS::Has<LightSource>(i) && ECS::Has<Transform>(i))
 		{
 
