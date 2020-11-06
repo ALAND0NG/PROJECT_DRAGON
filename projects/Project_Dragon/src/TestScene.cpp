@@ -1,4 +1,5 @@
 #include <TestScene.h>
+#include <bullet/btBulletDynamicsCommon.h>
 
 void TestScene::InitScene()
 {
@@ -13,7 +14,8 @@ void TestScene::InitScene()
 	ECS::Create(1);
 	ECS::Add<Mesh>(1);
 	ECS::Add<Transform>(1);
-	ECS::Get<Transform>(1).SetPosition(glm::vec3(0.f, 0.f, 0.f));
+	ECS::Get<Transform>(1).SetPosition(glm::vec3(3.f, 0.f, 3.f));
+
 	ECS::Get<Mesh>(1).LoadOBJ("Models/cube.obj", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	ECS::Add<Material>(1);
 	ECS::Get<Material>(1).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
@@ -24,6 +26,20 @@ void TestScene::InitScene()
 	ECS::Add<Transform>(2);
 	ECS::Add<LightSource>(2);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(0.f, 3.f, 0.f));
+
+	ECS::Create(3);
+	ECS::Add<Mesh>(3);
+	ECS::Add<Transform>(3);
+	ECS::Get<Transform>(3).SetPosition(glm::vec3(3.f, 0.f, 3.f));
+	ECS::Add<Parent>(3);
+	ECS::Get<Parent>(3).SetParent(1);
+	ECS::Get<Mesh>(3).LoadOBJ("Models/cube.obj", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	ECS::Add<Material>(3);
+	ECS::Get<Material>(3).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(3).SetAll(1.f);
+
+	
 
 	IMGUIManager::imGuiCallbacks.push_back([&]() 
 	{
@@ -46,7 +62,19 @@ void TestScene::Update()
 {
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_T) == GLFW_PRESS)
 	{
-		
-		InstantiatingSystem::InitPrefab(0);
+		InstantiatingSystem::InitPrefab(0, glm::vec3(2,0,2));
+	}
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_Y) == GLFW_PRESS)
+	{
+		InstantiatingSystem::InitPrefab(0, glm::vec3(-2, 0, -2));
+	}
+
+
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_O) == GLFW_PRESS)
+	{
+		glm::vec3 position = ECS::Get<Transform>(1).GetPosition();
+		position.x += 1 * Timer::dt;
+		ECS::Get<Transform>(1).SetPosition(position);
 	}
 }
+
