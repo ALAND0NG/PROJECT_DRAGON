@@ -8,8 +8,11 @@ public:
 	static void Init();
 	static void Update();
 
-private:
-	static btDiscreteDynamicsWorld* m_World;
+	static btDiscreteDynamicsWorld* GetWorld();
 
-	
+	static std::vector<btRigidBody*> GetBodies();
+
+	static btDiscreteDynamicsWorld* m_World;
+	static std::vector<btRigidBody*> m_bodies;
+
 };

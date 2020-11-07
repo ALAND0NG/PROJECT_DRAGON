@@ -4,7 +4,9 @@
 #include <BackEnd.h> //I hope this doesn't break it :)
 btDiscreteDynamicsWorld* PhysicsSystem::m_World;
 
-std::vector<btRigidBody*> bodies;
+std::vector<btRigidBody*> PhysicsSystem::m_bodies;
+
+
 std::vector<btCollisionShape*> colShapes;
 
 void PhysicsSystem::Init()
@@ -32,6 +34,7 @@ void PhysicsSystem::Init()
 
 	m_World->setGravity(btVector3(0, -10, 0));
 
+	/*
 	{
 		btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(5.), btScalar(5.), btScalar(5.)));
 
@@ -90,37 +93,63 @@ void PhysicsSystem::Init()
 		btTransform trans = body->getWorldTransform();
 		//ECS::Get<Transform>(1).SetPosition(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
 	}
-
+	*/
 }
 
 void PhysicsSystem::Update()
 {
-
-
-	
-	btTransform trans = bodies[1]->getWorldTransform();
-	ECS::Get<Transform>(1).SetPosition(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
 	m_World->stepSimulation(Timer::dt, 10);
 
-	//print positions of all objects
-	for (int j = m_World->getNumCollisionObjects() - 1; j >= 0; j--)
-	{
+	auto reg = ECS::GetReg();
 
-		btCollisionObject* obj = m_World->getCollisionObjectArray()[j];
-		btRigidBody* bodyt = btRigidBody::upcast(obj);
-		btTransform trans;
-		
-		if (bodyt && bodyt->getMotionState())
-		{
-			bodyt->getMotionState()->getWorldTransform(trans);
-		}
-		else
-		{
-			trans = obj->getWorldTransform();
-		}
-		
-	}
 	
 
+	for (int i = 0; i < reg->size(); i++)
+	{
+		if (ECS::Has<PhysicsBody>(i))
+		{
+			btTransform trans = m_bodies[ECS::Get<PhysicsBody>(i).m_BodyId]->getWorldTransform();
 
+			ECS::Get<Transform>(i).SetPosition(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
+			m_World->stepSimulation(Timer::dt, 10);
+
+			//print positions of all objects
+			for (int j = m_World->getNumCollisionObjects() - 1; j >= 0; j--)
+			{
+
+				btCollisionObject* obj = m_World->getCollisionObjectArray()[j];
+				btRigidBody* bodyt = btRigidBody::upcast(obj);
+				btTransform trans;
+
+				if (bodyt && bodyt->getMotionState())
+				{
+					bodyt->getMotionState()->getWorldTransform(trans);
+				}
+				else
+				{
+					trans = obj->getWorldTransform();
+				}
+			}
+
+		}
+	}
+
+
+	/*
+	so uhh this code works but its not the way im trying to do my physics, keeping it here for the time being
+	
+	
+	
+	*/
+
+}
+
+btDiscreteDynamicsWorld* PhysicsSystem::GetWorld()
+{
+	return m_World;
+}
+
+std::vector<btRigidBody*> PhysicsSystem::GetBodies()
+{
+	return m_bodies;
 }

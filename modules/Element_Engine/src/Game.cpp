@@ -75,7 +75,7 @@ void Game::GameInput()
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
 		glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
-		posTemp.y = -9.f;
+		posTemp.y = 15.f;
 		ECS::Get<Transform>(0).SetPosition(posTemp);
 	}
 
