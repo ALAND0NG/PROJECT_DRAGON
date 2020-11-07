@@ -1,7 +1,7 @@
 #include <PhysicsBody.h>
 #include <ECS.h>
 #include <Timer.h>
-
+/*
 BoundingBox PhysicsBody::GetBox()
 {
 	return m_BoxCollider;
@@ -151,3 +151,4 @@ void PhysicsBody::CalculateDeltaForce()
 	m_AppliedForce = glm::vec3(0); //Since we want to calculate by frame, set to 0
 }
 
+*/

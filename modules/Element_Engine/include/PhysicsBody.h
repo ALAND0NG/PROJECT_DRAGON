@@ -4,7 +4,8 @@
 //Add this to the entitites you want to have physics
 #include <GLM/glm.hpp>
 #include <vector>
-
+#include <bullet/btBulletDynamicsCommon.h>
+/*
 struct BoundingBox //This defines the bounding box, any single physics body can have multiple of these
 {
 	glm::vec3 m_Center;
@@ -18,13 +19,13 @@ struct BoundingBox //This defines the bounding box, any single physics body can 
 	float m_SizeY;
 	float m_SizeZ;
 };
-
+*/
 class PhysicsBody
 {
 public:
 	
-	BoundingBox GetBox();
-
+	
+	/*
 	void SetBox(glm::vec3 center, float SizeX, float SizeY, float SizeZ);
 
 	void SetMass(float mass);
@@ -58,11 +59,16 @@ public:
 	void SetGravityScale(int gravityscale);
 
 	float GetGraviy();
-
+	*/
 	
+
+
+
+
+
 
 private:
-	
+	/*
 	BoundingBox m_BoxCollider;
 	glm::vec3 m_Position;
 	glm::vec3 m_Acceleration;
@@ -78,4 +84,6 @@ private:
 
 	void UpdateBoundingBox(int EntNum);
 	void CalculateDeltaForce();
+	*/
+
 };

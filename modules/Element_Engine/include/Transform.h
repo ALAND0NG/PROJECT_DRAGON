@@ -18,6 +18,8 @@ public:
 	void SetScale(glm::vec3 sca);
 	void SetRotation(glm::vec3 axis, float ammount);
 
+	void SetModelMat(glm::mat4 modelmat);//physics engine will spit out a mat 4, we set it here every frame
+
 	void ComputeGlobalMat(); //this is called everyframe from the backend
 
 private:

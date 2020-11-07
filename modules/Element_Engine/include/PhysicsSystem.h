@@ -1,12 +1,14 @@
 #pragma once
 #include <PhysicsBody.h>
 #include <ECS.h>
+#include <bullet/btBulletDynamicsCommon.h>
 static class PhysicsSystem
 {
 public:
+	static void Init();
 	static void Update();
-	static bool AABB(PhysicsBody body1, PhysicsBody body2); //Axis Aligned Bounding Boxes Test, returns if there is a collision
+
 private:
+	static btDiscreteDynamicsWorld* m_World;
 	
-	static std::vector<int> m_PhysicsBody_IDs;
 };

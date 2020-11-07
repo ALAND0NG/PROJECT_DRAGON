@@ -16,7 +16,7 @@ void BackEnd::Init()
 	Logger::Init();
 
 	InitWindow();
-
+	PhysicsSystem::Init();
 	RenderingSystem::Init();
 	IMGUIManager::Init();
 
@@ -34,9 +34,10 @@ void BackEnd::Update()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	
-	RenderingSystem::Update();
+	
 	PhysicsSystem::Update();
 	IMGUIManager::Update();
+	RenderingSystem::Update();
 
 	
 

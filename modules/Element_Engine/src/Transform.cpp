@@ -40,6 +40,11 @@ void Transform::SetRotation(glm::vec3 axis, float ammount)
 	rotation = glm::rotate(modelMat,ammount, axis);
 }
 
+void Transform::SetModelMat(glm::mat4 modelmat)
+{
+	modelMat = modelmat;
+}
+
 void Transform::ComputeGlobalMat()
 {
 	modelMat = glm::translate(position) * glm::toMat4(rotation) * glm::scale(scale);
