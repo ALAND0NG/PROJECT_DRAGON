@@ -1,10 +1,12 @@
 #include <PhysicsSystem.h>
 #include <Timer.h>
 #include <GLM/gtc/type_ptr.hpp>
+#include <BackEnd.h> //I hope this doesn't break it :)
 btDiscreteDynamicsWorld* PhysicsSystem::m_World;
 
-
+std::vector<btRigidBody*> bodies;
 std::vector<btCollisionShape*> colShapes;
+
 void PhysicsSystem::Init()
 {
 	//I STOLE THIS FROM BULLET GITHUB PAGE GOD THIS IS SO TEMPORARY
@@ -28,7 +30,7 @@ void PhysicsSystem::Init()
 
 	m_World = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
-	m_World->setGravity(btVector3(0, -1, 0));
+	m_World->setGravity(btVector3(0, -10, 0));
 
 	{
 		btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(5.), btScalar(5.), btScalar(5.)));
@@ -55,6 +57,7 @@ void PhysicsSystem::Init()
 
 		//add the body to the dynamics world
 		m_World->addRigidBody(body);
+		bodies.push_back(body);
 	}
 
 	{
@@ -74,7 +77,7 @@ void PhysicsSystem::Init()
 		if (isDynamic)
 			colShape->calculateLocalInertia(mass, localInertia);
 
-		startTransform.setOrigin(btVector3(2, 100, 0));
+		startTransform.setOrigin(btVector3(2, 50, 0));
 
 		//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 		btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
@@ -82,48 +85,42 @@ void PhysicsSystem::Init()
 		btRigidBody* body = new btRigidBody(rbInfo);
 
 		m_World->addRigidBody(body);
-	}
+		bodies.push_back(body);
 
+		btTransform trans = body->getWorldTransform();
+		//ECS::Get<Transform>(1).SetPosition(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
+	}
 
 }
 
 void PhysicsSystem::Update()
 {
+
+
 	
+	btTransform trans = bodies[1]->getWorldTransform();
+	ECS::Get<Transform>(1).SetPosition(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
+	m_World->stepSimulation(Timer::dt, 10);
+
+	//print positions of all objects
+	for (int j = m_World->getNumCollisionObjects() - 1; j >= 0; j--)
 	{
-		m_World->stepSimulation(1.f / 60.f, 10);
-		//print positions of all objects
-		for (int j = m_World->getNumCollisionObjects() - 1; j >= 0; j--)
+
+		btCollisionObject* obj = m_World->getCollisionObjectArray()[j];
+		btRigidBody* bodyt = btRigidBody::upcast(obj);
+		btTransform trans;
+		
+		if (bodyt && bodyt->getMotionState())
 		{
-			btCollisionObject* obj = m_World->getCollisionObjectArray()[j];
-			btRigidBody* body = btRigidBody::upcast(obj);
-			btTransform trans;
-			//glm::vec3 glVec3(ECS::Get<Transform>(1).GetPosition());
-
-			//trans.setOrigin(btVector3(glVec3.x, glVec3.y, glVec3.z));
-			if (body && body->getMotionState())
-			{
-				body->getMotionState()->getWorldTransform(trans);
-			}
-			else
-			{
-				trans = obj->getWorldTransform();
-			}
-			//printf("world pos object %d = %f,%f,%f\n", j, float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ()));
-			glm::vec3 fuck;
-			fuck.x = trans.getOrigin().getX();
-			fuck.y = trans.getOrigin().getY();
-			fuck.z = trans.getOrigin().getZ();
-
-			ECS::Get<Transform>(1).SetPosition(fuck);
-			//ECS::Get<Transform>(1).SetPosition(ECS::Get<Transform>(1).GetPosition() += glm::vec3(0.1f, 0.1f, 0.1f) * Timer::dt);
-			//ECS::Get<Transform>(1).ComputeGlobalMat();
-			//std::cout << trans.getOrigin().getX() << " " << trans.getOrigin().getY() << " " << trans.getOrigin().getZ() << std::endl;
-			std::cout << ECS::Get<Transform>(1).GetPosition().x << " " << ECS::Get<Transform>(1).GetPosition().y << " " << ECS::Get<Transform>(1).GetPosition().z << std::endl;
-
+			bodyt->getMotionState()->getWorldTransform(trans);
 		}
-
-
+		else
+		{
+			trans = obj->getWorldTransform();
+		}
+		
 	}
+	
+
 
 }

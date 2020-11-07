@@ -10,5 +10,6 @@ public:
 
 private:
 	static btDiscreteDynamicsWorld* m_World;
+
 	
 };

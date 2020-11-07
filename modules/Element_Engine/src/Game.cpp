@@ -14,12 +14,14 @@ Game::~Game()
 
 void Game::InitGame(int scene_index)
 {
-
 	BackEnd::Init();
 	
 	m_ActiveScene = m_Scenes[scene_index];
 
 	m_ActiveScene->InitScene();
+
+	
+
 
 
 

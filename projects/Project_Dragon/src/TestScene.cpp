@@ -61,7 +61,7 @@ void TestScene::Update()
 
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
 	{
-		ECS::Get<Transform>(1).SetPosition(glm::vec3(0, 5, 0));
+		ECS::Get<Transform>(1).SetPosition(glm::vec3(0, 40, 0));
 	}
 
 
