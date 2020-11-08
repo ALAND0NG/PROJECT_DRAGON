@@ -79,52 +79,48 @@ void TestScene::InitScene()
 	InstantiatingSystem::AddPrefab(new StraightTrack()); //prefab 1
 
 	//WORLD GENERATOR - - - WIP
-
-	std::vector<glm::vec3> worldGenHold; // list of vectors to hold the positon of the nodes
-	std::vector<char> worldGenTags;
-	char nodeNameHold = 's';
-	for (int i = 0; i < 25; i++) { //Creates a drunk walker of 25 length
-		worldGenHold.push_back(ECS::Get<Transform>(1).GetPosition()); //pushes a new node into the list
-		switch (rand() % 4) //switch statement to move the drunk walker around
-		{
-		case 0:
-			if (nodeNameHold != 'l') {
-				ECS::Get<Transform>(1).SetPosition(glm::vec3(ECS::Get<Transform>(1).GetPosition().x, ECS::Get<Transform>(1).GetPosition().y, ECS::Get<Transform>(1).GetPosition().z + 40.f));
-				nodeNameHold = 'r';
-				break;
+	bool isForward = true, isRight = false, isLeft = false;
+	for (int i = 0; i < 10; i++) { //Creates a drunk walker of 25 length
+		InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition()); //Creates a block on spawn for the player
+		if (isForward) {
+			for (int i = 0; i < rand() % 3 + 1; i++) {
+				ECS::Get<Transform>(1).SetPosition(glm::vec3(
+					ECS::Get<Transform>(1).GetPosition().x + 40.f,
+					ECS::Get<Transform>(1).GetPosition().y,
+					ECS::Get<Transform>(1).GetPosition().z));
+				InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition());
 			}
-		case 1:
-			if (nodeNameHold != 'r') {
-				ECS::Get<Transform>(1).SetPosition(glm::vec3(ECS::Get<Transform>(1).GetPosition().x, ECS::Get<Transform>(1).GetPosition().y, ECS::Get<Transform>(1).GetPosition().z - 40.f));
-				nodeNameHold = 'l';
-				break;
+			isForward = false;
+			int temp = rand() % 2;
+			if (temp == 1) isRight = true;
+			else isLeft = true;
+		}
+		else if (isRight) {
+			for (int i = 0; i < rand() % 3 + 1; i++) {
+				ECS::Get<Transform>(1).SetPosition(glm::vec3(
+					ECS::Get<Transform>(1).GetPosition().x,
+					ECS::Get<Transform>(1).GetPosition().y,
+					ECS::Get<Transform>(1).GetPosition().z + 40.f));
+				InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition());
 			}
-		default:
-			ECS::Get<Transform>(1).SetPosition(glm::vec3(ECS::Get<Transform>(1).GetPosition().x + 40.f, ECS::Get<Transform>(1).GetPosition().y, ECS::Get<Transform>(1).GetPosition().z));
-			nodeNameHold = 's';
-			break;
+			isRight = false;
+			isForward = true;
 		}
-		worldGenTags.push_back(nodeNameHold); // pushes a new nametag into the list
-	}
+		else if (isLeft) {
+			for (int i = 0; i < rand() % 3 + 1; i++) {
+				ECS::Get<Transform>(1).SetPosition(glm::vec3(
+					ECS::Get<Transform>(1).GetPosition().x,
+					ECS::Get<Transform>(1).GetPosition().y,
+					ECS::Get<Transform>(1).GetPosition().z - 40.f));
+				InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition());
+			}
+			isLeft = false;
+			isForward = true;
+		}
 
-	for (int i = 0; i < worldGenHold.size(); i++) {
-		switch (worldGenTags[i])
-		{
-		case 's':
-			//Instantiate Straight Tile
-			InstantiatingSystem::InitPrefab(1, worldGenHold[i]);
-			break;
-		case 'r':
-			//Instantiate Right Line
-			InstantiatingSystem::InitPrefab(0, worldGenHold[i]);
-			break;
-		case 'l':
-			//Instantiate Left Line
-			InstantiatingSystem::InitPrefab(0, worldGenHold[i]);
-			break;
-		default:
-			break;
-		}
+		//
+		// add corner turns here, then update the boosl to move in a new direction
+		//
 	}
 	//WORLD GENERATOR - - - WIP
 }
