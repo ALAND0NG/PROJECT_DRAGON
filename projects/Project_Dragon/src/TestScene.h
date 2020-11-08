@@ -9,6 +9,4 @@ public:
 	void Update() override;
 private:
 	entt::registry* m_sceneReg = nullptr;
-
-
 };
