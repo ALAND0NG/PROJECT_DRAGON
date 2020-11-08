@@ -32,11 +32,18 @@ void PhysicsBody::AddBody(float mass, btVector3 origin, btVector3 size)
 
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
-	btRigidBody* body = new btRigidBody(rbInfo);
+	m_Body= new btRigidBody(rbInfo);
+
 	
-	PhysicsSystem::m_World->addRigidBody(body);
-	PhysicsSystem::m_bodies.push_back(body);
+	PhysicsSystem::m_World->addRigidBody(m_Body);
+	PhysicsSystem::m_bodies.push_back(m_Body);
 	m_BodyId = PhysicsSystem::m_bodies.size() - 1;
+	m_Body->setFriction(0.01);
 	
 
+}
+
+void PhysicsBody::SetLinearVelocity(btVector3 direction)
+{
+	m_Body->setLinearVelocity(direction);
 }

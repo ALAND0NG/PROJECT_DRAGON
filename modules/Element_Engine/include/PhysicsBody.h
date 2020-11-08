@@ -13,6 +13,8 @@ public:
 	btRigidBody* GetBody();
 	void SetBody(btRigidBody* body);
 	//for now all bodies will be boxes, will change later but really I just want to get
+
+	void SetLinearVelocity(btVector3 direction);
 	//something up and running
 	void AddBody(float mass, btVector3 origin, btVector3 size);
 
@@ -20,7 +22,7 @@ public:
 
 private:
 
-	btRigidBody* m_Body;
+	btRigidBody* m_Body = nullptr;
 	
 
 };

@@ -43,7 +43,7 @@ void TestScene::InitScene()
 	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(3).SetAll(1.f);
 	ECS::Get<PhysicsBody>(3).AddBody(1.f,btVector3(0,15,0), btVector3(1,1,1));
-	//ECS::Get<PhysicsBody>(3).m_BodyId = 0;
+
 
 	ECS::Create(4);
 	ECS::Add<Mesh>(4);
@@ -55,7 +55,7 @@ void TestScene::InitScene()
 	ECS::Get<Material>(4).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(4).SetAll(1.f);
 	ECS::Get<PhysicsBody>(4).AddBody(0.f, btVector3(0, 0, 0), btVector3(5, 1, 5));
-	//ECS::Get<PhysicsBody>(4).m_BodyId = 1;
+
 
 	
 
@@ -102,5 +102,9 @@ void TestScene::InitScene()
 
 void TestScene::Update()
 {
-
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
+	{
+		ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
+		ECS::Get<PhysicsBody>(3).SetLinearVelocity(btVector3(0, 10, 0));
+	}
 }
