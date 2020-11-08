@@ -13,6 +13,11 @@ void PhysicsBody::SetBody(btRigidBody* body)
 	m_Body = body;
 }
 
+void PhysicsBody::Update()
+{
+	
+}
+
 void PhysicsBody::AddBody(float mass, btVector3 origin, btVector3 size)
 {
 	btCollisionShape* colShape = new btBoxShape(size);
@@ -38,12 +43,20 @@ void PhysicsBody::AddBody(float mass, btVector3 origin, btVector3 size)
 	PhysicsSystem::m_World->addRigidBody(m_Body);
 	PhysicsSystem::m_bodies.push_back(m_Body);
 	m_BodyId = PhysicsSystem::m_bodies.size() - 1;
-	m_Body->setFriction(0.01);
+	m_Body->setFriction(0.5);
 	
 
 }
 
 void PhysicsBody::SetLinearVelocity(btVector3 direction)
 {
+	m_Body->setActivationState(1);
 	m_Body->setLinearVelocity(direction);
+}
+
+void PhysicsBody::ApplyForce(btVector3 direction)
+{
+	m_Body->activate(1);
+	m_Body->applyCentralImpulse(direction);
+
 }

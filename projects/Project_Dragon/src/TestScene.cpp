@@ -10,10 +10,12 @@ void TestScene::InitScene()
 	ECS::AttachRegistry(m_sceneReg);
 	ECS::Create(0); //please please please always have camera be entity 0 it will break otherwise
 	ECS::Add<Transform>(0);
-	ECS::Get<Transform>(0).SetPosition(glm::vec3(2.f, 2.f, 0.f));
+	ECS::Add<PhysicsBody>(0);
 	ECS::Add<Camera>(0);
 	ECS::Get<Camera>(0).ResizeWindow(1920, 1080);
+	ECS::Get<PhysicsBody>(0).AddBody(1, btVector3(3, 100, 3), btVector3(1,2,1));
 	ECS::Add<LightSource>(0);
+	ECS::Get<PhysicsBody>(0).m_Entity = 0;
 
 	//Drunk Walker - - - Important For World Generation
 	ECS::Create(1);
@@ -25,6 +27,7 @@ void TestScene::InitScene()
 	ECS::Get<Material>(1).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
 	ECS::Get<Material>(1).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(1).SetAll(1.f);
+
 
 	ECS::Create(2);
 	ECS::Add<Transform>(2);
@@ -43,31 +46,13 @@ void TestScene::InitScene()
 	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(3).SetAll(1.f);
 	ECS::Get<PhysicsBody>(3).AddBody(1.f,btVector3(0,15,0), btVector3(1,1,1));
-
-
-	ECS::Create(4);
-	ECS::Add<Mesh>(4);
-	ECS::Add<Material>(4);
-	ECS::Add<Transform>(4);
-	ECS::Add<PhysicsBody>(4);
-	ECS::Get<Mesh>(4).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<Material>(4).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
-	ECS::Get<Material>(4).LoadSpecularFromFile("images/Stone_001_Specular.png");
-	ECS::Get<Material>(4).SetAll(1.f);
-	ECS::Get<PhysicsBody>(4).AddBody(0.f, btVector3(0, 0, 0), btVector3(5, 1, 5));
-
-
+	ECS::Get<PhysicsBody>(3).m_Entity = 3;
 	
 
 
 	
 
-	IMGUIManager::imGuiCallbacks.push_back([&]() 
-	{
-		static const char* items[]{"0"};
-		//We want to take all of our entities, and be able to manage their positions using this drop down menu
-		static int SelectedItem = 0;
-		if (ImGui::CollapsingHeader("Entity List"))
+	IMGUIManager::imGuiCallbacks.push_back([&]()
 		{
 			static const char* items[]{ "0" };
 			//We want to take all of our entities, and be able to manage their positions using this drop down menu
@@ -79,8 +64,14 @@ void TestScene::InitScene()
 				static int SelectedItem = 0;
 				if (ImGui::CollapsingHeader("Entity List"))
 				{
-					//ImGui::ListBox("list",&SelectedItem,items,IM_ARRAYSIZE(items));
-					ImGui::Combo("List box", &SelectedItem, items, IM_ARRAYSIZE(items));
+					static const char* items[]{ "0" };
+					//We want to take all of our entities, and be able to manage their positions using this drop down menu
+					static int SelectedItem = 0;
+					if (ImGui::CollapsingHeader("Entity List"))
+					{
+						//ImGui::ListBox("list",&SelectedItem,items,IM_ARRAYSIZE(items));
+						ImGui::Combo("List box", &SelectedItem, items, IM_ARRAYSIZE(items));
+					}
 				}
 			}
 		});
@@ -139,7 +130,7 @@ void TestScene::Update()
 {
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
 	{
-		ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
-		ECS::Get<PhysicsBody>(3).SetLinearVelocity(btVector3(0, 10, 0));
+	//	ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
+		ECS::Get<PhysicsBody>(3).SetLinearVelocity(btVector3(5, 0, 0));
 	}
 }

@@ -33,7 +33,7 @@ void BackEnd::Update()
 	glClearColor(0.00f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	
+	std::cout << 1 / Timer::dt << std::endl;
 	
 	PhysicsSystem::Update();
 	IMGUIManager::Update();
@@ -79,7 +79,7 @@ void BackEnd::InitWindow()
 	glfwMakeContextCurrent(BackEnd::m_Window);
 
 
-	glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glfwSetWindowSizeCallback(BackEnd::m_Window, GlfwWindowResizedCallback);
 	glfwSetCursorPosCallback(BackEnd::m_Window, mouse_Callback);

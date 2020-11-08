@@ -32,7 +32,7 @@ void PhysicsSystem::Init()
 
 	m_World = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
-	m_World->setGravity(btVector3(0, -10, 0));
+	m_World->setGravity(btVector3(0, -5, 0));
 
 	/*
 	{
@@ -98,12 +98,37 @@ void PhysicsSystem::Init()
 
 void PhysicsSystem::Update()
 {
-	m_World->stepSimulation(Timer::dt, 10);
-
+	
+	
+	
 	auto reg = ECS::GetReg();
 
+	//auto view = reg->view<PhysicsBody, Transform>();
+	/*
+	m_World->stepSimulation(0);
+	for (int i = 0; i < reg->size(); i++)
+	{
+		if (ECS::Has<PhysicsBody>(i))
+		{
+
+	
+		btTransform trans = m_bodies[ECS::Get<PhysicsBody>(0).m_BodyId]->getWorldTransform();
+		
+		ECS::Get<Transform>(0).SetPosition(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
+	
 	
 
+	//	ECS::Get<Transform>(ECS::Get<PhysicsBody>(i).m_Entity).SetPosition(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
+	//	std::cout << trans.getOrigin().getX() << " " << trans.getOrigin().getY() << " " << trans.getOrigin().getZ() << "\n";
+		}
+
+
+		//}
+	}
+	
+	ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(1, 1, 1));
+	*/
+	m_World->stepSimulation(Timer::dt, 10);
 	for (int i = 0; i < reg->size(); i++)
 	{
 		if (ECS::Has<PhysicsBody>(i))
@@ -111,36 +136,9 @@ void PhysicsSystem::Update()
 			btTransform trans = m_bodies[ECS::Get<PhysicsBody>(i).m_BodyId]->getWorldTransform();
 
 			ECS::Get<Transform>(i).SetPosition(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
-			m_World->stepSimulation(Timer::dt, 10);
-
-			//print positions of all objects
-			for (int j = m_World->getNumCollisionObjects() - 1; j >= 0; j--)
-			{
-
-				btCollisionObject* obj = m_World->getCollisionObjectArray()[j];
-				btRigidBody* bodyt = btRigidBody::upcast(obj);
-				btTransform trans;
-
-				if (bodyt && bodyt->getMotionState())
-				{
-					bodyt->getMotionState()->getWorldTransform(trans);
-				}
-				else
-				{
-					trans = obj->getWorldTransform();
-				}
-			}
 
 		}
 	}
-
-
-	/*
-	so uhh this code works but its not the way im trying to do my physics, keeping it here for the time being
-	
-	
-	
-	*/
 
 }
 
