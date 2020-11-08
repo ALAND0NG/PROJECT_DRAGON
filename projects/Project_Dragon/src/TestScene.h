@@ -1,6 +1,7 @@
 #pragma once
 #include <ElementEngine.h>
 #include <TestPrefab.h>
+#include <StraightTrack.h>
 
 class TestScene : public Scene
 {
@@ -9,6 +10,4 @@ public:
 	void Update() override;
 private:
 	entt::registry* m_sceneReg = nullptr;
-
-
 };

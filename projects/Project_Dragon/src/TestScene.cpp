@@ -3,6 +3,8 @@
 
 void TestScene::InitScene()
 {
+	srand(time(NULL)); // This is needed for generating a new seed for randoms
+
 	//Player Camera - - - Need This For A Game To Run
 	m_sceneReg = new entt::registry;
 	ECS::AttachRegistry(m_sceneReg);
@@ -24,7 +26,6 @@ void TestScene::InitScene()
 	ECS::Get<Material>(1).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(1).SetAll(1.f);
 
-
 	ECS::Create(2);
 	ECS::Add<Transform>(2);
 	ECS::Add<LightSource>(2);
@@ -32,13 +33,12 @@ void TestScene::InitScene()
 	ECS::Get<Parent>(2).SetParent(0);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(0.f, 3.f, 0.f));
 
-	
 	ECS::Create(3);
 	ECS::Add<Mesh>(3);
 	ECS::Add<Material>(3);
 	ECS::Add<Transform>(3);
 	ECS::Add<PhysicsBody>(3);
-	ECS::Get<Mesh>(3).LoadOBJ("models/cube.obj", glm::vec4(1,1,1,1));
+	ECS::Get<Mesh>(3).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<Material>(3).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
 	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(3).SetAll(1.f);
@@ -74,30 +74,65 @@ void TestScene::InitScene()
 			static int SelectedItem = 0;
 			if (ImGui::CollapsingHeader("Entity List"))
 			{
-				//ImGui::ListBox("list",&SelectedItem,items,IM_ARRAYSIZE(items));
-				ImGui::Combo("List box", &SelectedItem, items, IM_ARRAYSIZE(items));
+				static const char* items[]{ "0" };
+				//We want to take all of our entities, and be able to manage their positions using this drop down menu
+				static int SelectedItem = 0;
+				if (ImGui::CollapsingHeader("Entity List"))
+				{
+					//ImGui::ListBox("list",&SelectedItem,items,IM_ARRAYSIZE(items));
+					ImGui::Combo("List box", &SelectedItem, items, IM_ARRAYSIZE(items));
+				}
 			}
-		}
-	});
-
+		});
 
 	InstantiatingSystem::AddPrefab(new TestPrefab()); //prefab 0
+	InstantiatingSystem::AddPrefab(new StraightTrack()); //prefab 1
 
 	//WORLD GENERATOR - - - WIP
-	for (int i = 0; i < 10; i++) {
-		InstantiatingSystem::InitPrefab(0, ECS::Get<Transform>(1).GetPosition());
-		switch (rand() % 2)
-		{
-		default:
-			break;
-		case 0:
-			ECS::Get<Transform>(1).SetPosition(glm::vec3(ECS::Get<Transform>(1).GetPosition().x + 40.f, ECS::Get<Transform>(1).GetPosition().y, ECS::Get<Transform>(1).GetPosition().z));
-			break;
-		case 1:
-			ECS::Get<Transform>(1).SetPosition(glm::vec3(ECS::Get<Transform>(1).GetPosition().x, ECS::Get<Transform>(1).GetPosition().y, ECS::Get<Transform>(1).GetPosition().z + 40.f));
-			break;
+	bool isForward = true, isRight = false, isLeft = false;
+	for (int i = 0; i < 10; i++) { //Creates a drunk walker of 25 length
+		InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition()); //Creates a block on spawn for the player
+		if (isForward) {
+			for (int i = 0; i < rand() % 3 + 1; i++) {
+				ECS::Get<Transform>(1).SetPosition(glm::vec3(
+					ECS::Get<Transform>(1).GetPosition().x + 40.f,
+					ECS::Get<Transform>(1).GetPosition().y,
+					ECS::Get<Transform>(1).GetPosition().z));
+				InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition());
+			}
+			isForward = false;
+			int temp = rand() % 2;
+			if (temp == 1) isRight = true;
+			else isLeft = true;
 		}
+		else if (isRight) {
+			for (int i = 0; i < rand() % 3 + 1; i++) {
+				ECS::Get<Transform>(1).SetPosition(glm::vec3(
+					ECS::Get<Transform>(1).GetPosition().x,
+					ECS::Get<Transform>(1).GetPosition().y,
+					ECS::Get<Transform>(1).GetPosition().z + 40.f));
+				InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition());
+			}
+			isRight = false;
+			isForward = true;
+		}
+		else if (isLeft) {
+			for (int i = 0; i < rand() % 3 + 1; i++) {
+				ECS::Get<Transform>(1).SetPosition(glm::vec3(
+					ECS::Get<Transform>(1).GetPosition().x,
+					ECS::Get<Transform>(1).GetPosition().y,
+					ECS::Get<Transform>(1).GetPosition().z - 40.f));
+				InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition());
+			}
+			isLeft = false;
+			isForward = true;
+		}
+
+		//
+		// add corner turns here, then update the boosl to move in a new direction
+		//
 	}
+	//WORLD GENERATOR - - - WIP
 }
 
 void TestScene::Update()
