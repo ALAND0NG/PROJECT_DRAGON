@@ -76,6 +76,7 @@ void TestScene::InitScene()
 		});
 
 	InstantiatingSystem::AddPrefab(new TestPrefab()); //prefab 0
+	InstantiatingSystem::AddPrefab(new StraightTrack()); //prefab 1
 
 	//WORLD GENERATOR - - - WIP
 
@@ -84,7 +85,6 @@ void TestScene::InitScene()
 	char nodeNameHold = 's';
 	for (int i = 0; i < 25; i++) { //Creates a drunk walker of 25 length
 		worldGenHold.push_back(ECS::Get<Transform>(1).GetPosition()); //pushes a new node into the list
-		worldGenTags.push_back(nodeNameHold); // pushes a new nametag into the list
 		switch (rand() % 4) //switch statement to move the drunk walker around
 		{
 		case 0:
@@ -104,6 +104,7 @@ void TestScene::InitScene()
 			nodeNameHold = 's';
 			break;
 		}
+		worldGenTags.push_back(nodeNameHold); // pushes a new nametag into the list
 	}
 
 	for (int i = 0; i < worldGenHold.size(); i++) {
@@ -111,7 +112,7 @@ void TestScene::InitScene()
 		{
 		case 's':
 			//Instantiate Straight Tile
-			InstantiatingSystem::InitPrefab(0, worldGenHold[i]);
+			InstantiatingSystem::InitPrefab(1, worldGenHold[i]);
 			break;
 		case 'r':
 			//Instantiate Right Line
