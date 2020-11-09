@@ -48,6 +48,8 @@ void TestScene::InitScene()
 	ECS::Get<Material>(3).SetAll(1.f);
 	ECS::Get<PhysicsBody>(3).AddBody(1.f,btVector3(0,15,0), btVector3(1,1,1));
 	ECS::Get<PhysicsBody>(3).m_Entity = 3;
+
+	ECS::Create(4); //for cubemap
 	
 	
 
