@@ -2,6 +2,8 @@
 #include <ElementEngine.h>
 #include <TestPrefab.h>
 #include <StraightTrack.h>
+#include <SideTrack.h>
+#include <RightTurn.h>
 
 class TestScene : public Scene
 {
