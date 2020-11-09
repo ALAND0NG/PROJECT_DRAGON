@@ -41,12 +41,14 @@ void TestScene::InitScene()
 	ECS::Add<Material>(3);
 	ECS::Add<Transform>(3);
 	ECS::Add<PhysicsBody>(3);
+	ECS::Add<LightSource>(3);
 	ECS::Get<Mesh>(3).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<Material>(3).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
 	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(3).SetAll(1.f);
 	ECS::Get<PhysicsBody>(3).AddBody(1.f,btVector3(0,15,0), btVector3(1,1,1));
 	ECS::Get<PhysicsBody>(3).m_Entity = 3;
+	
 	
 
 

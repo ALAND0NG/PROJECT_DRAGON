@@ -9,8 +9,8 @@ void StraightTrack::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Add<PhysicsBody>(startAt);
 	ECS::Get<Transform>(startAt).SetPosition(glm::vec3(origin));
 	ECS::Get<Mesh>(startAt).LoadOBJ("models/StraightTrack.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<Material>(startAt).LoadDiffuseFromFile("images/sample.png");
-	ECS::Get<Material>(startAt).LoadSpecularFromFile("images/sample_spec.png");
+	ECS::Get<Material>(startAt).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	ECS::Get<Material>(startAt).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(startAt).SetAll(1.f);
 	btVector3 physBodOrigin;
 	physBodOrigin.setX(origin.x);

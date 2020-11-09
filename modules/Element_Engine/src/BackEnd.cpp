@@ -71,7 +71,7 @@ void BackEnd::InitWindow()
 
 	glfwWindowHint(GLFW_RESIZABLE, true);
 
-	BackEnd::m_Window = glfwCreateWindow(1920, 1080, "The funny game", nullptr, nullptr);
+	BackEnd::m_Window = glfwCreateWindow(1920, 1080, "Noah Glassford - 100743060", nullptr, nullptr);
 
 	BackEnd::m_WindowHeight = 1080;
 	BackEnd::m_WindowWidth = 1920;
@@ -94,6 +94,12 @@ void BackEnd::InitWindow()
 
 	printf("OpenGL Renderer: %s\n", glGetString(GL_RENDERER));
 	printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, 0.0);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
