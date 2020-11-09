@@ -82,11 +82,13 @@ void TestScene::InitScene()
 
 	InstantiatingSystem::AddPrefab(new TestPrefab()); //prefab 0
 	InstantiatingSystem::AddPrefab(new StraightTrack()); //prefab 1
+	InstantiatingSystem::AddPrefab(new SideTrack()); //prefab 2
+	InstantiatingSystem::AddPrefab(new RightTurn()); // prefab 3
 
 	//WORLD GENERATOR - - - WIP
 	bool isForward = true, isRight = false, isLeft = false;
+	InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition()); //Creates a block on spawn for the player
 	for (int i = 0; i < 10; i++) { //Creates a drunk walker of 25 length
-		InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition()); //Creates a block on spawn for the player
 		if (isForward) {
 			for (int i = 0; i < rand() % 3 + 1; i++) {
 				ECS::Get<Transform>(1).SetPosition(glm::vec3(
@@ -97,8 +99,12 @@ void TestScene::InitScene()
 			}
 			isForward = false;
 			int temp = rand() % 2;
-			if (temp == 1) isRight = true;
-			else isLeft = true;
+			if (temp == 0) {
+				isRight = true;
+			}
+			else {
+				isLeft = true;
+			}
 		}
 		else if (isRight) {
 			for (int i = 0; i < rand() % 3 + 1; i++) {
@@ -106,7 +112,7 @@ void TestScene::InitScene()
 					ECS::Get<Transform>(1).GetPosition().x,
 					ECS::Get<Transform>(1).GetPosition().y,
 					ECS::Get<Transform>(1).GetPosition().z + 40.f));
-				InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition());
+				InstantiatingSystem::InitPrefab(2, ECS::Get<Transform>(1).GetPosition());
 			}
 			isRight = false;
 			isForward = true;
@@ -117,10 +123,15 @@ void TestScene::InitScene()
 					ECS::Get<Transform>(1).GetPosition().x,
 					ECS::Get<Transform>(1).GetPosition().y,
 					ECS::Get<Transform>(1).GetPosition().z - 40.f));
-				InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition());
+				InstantiatingSystem::InitPrefab(2, ECS::Get<Transform>(1).GetPosition());
 			}
 			isLeft = false;
 			isForward = true;
+			ECS::Get<Transform>(1).SetPosition(glm::vec3(
+				ECS::Get<Transform>(1).GetPosition().x,
+				ECS::Get<Transform>(1).GetPosition().y,
+				ECS::Get<Transform>(1).GetPosition().z - 40.f));
+			InstantiatingSystem::InitPrefab(3, ECS::Get<Transform>(1).GetPosition()); // Right Turn
 		}
 
 		//
