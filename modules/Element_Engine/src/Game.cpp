@@ -48,8 +48,12 @@ void Game::GameInput()
 
 		//ECS::Get<Transform>(0).SetPosition(posTemp);
 	
-	
-		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(1, 0, 0));
+
+		float x = ECS::Get<Camera>(0).GetForward().x;
+		float z = ECS::Get<Camera>(0).GetForward().z;
+
+
+		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(x, 0, z));
 
 
 	}
@@ -63,30 +67,27 @@ void Game::GameInput()
 		ECS::Get<Transform>(0).SetPosition(posTemp);
 		*/
 
+		float x = ECS::Get<Camera>(0).GetForward().x;
+		float z = ECS::Get<Camera>(0).GetForward().z;
+
+
 		
-		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(-1, 0, 0));
+		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(-x, 0, -z));
 	}
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		/*
-		glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
-		posTemp += glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp())) * 8.f * Timer::dt;
-		ECS::Get<Transform>(0).SetPosition(posTemp);
-		*/
-	//	ECS::Get<PhysicsBody>(0).GetBody()->setActivationState(1);
-		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(0, 0, 1));
+		
+		//glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
+		glm::vec3 direction = glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp()));
+
+		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(direction.x, direction.y, direction.z));
 	}
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		/*
-		glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
-		posTemp -= glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp())) * 8.f * Timer::dt;
+		glm::vec3 direction = -glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp()));
 
-
-		ECS::Get<Transform>(0).SetPosition(posTemp);
-		*/
-	//	ECS::Get<PhysicsBody>(0).GetBody()->setActivationState(1);
-		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(0, 0, -1));
+		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(direction.x, direction.y, direction.z));
+		
 	}
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
@@ -97,7 +98,7 @@ void Game::GameInput()
 		*/
 	//	ECS::Get<PhysicsBody>(0).GetBody()->setActivationState(1);
 		//ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(0, 10, 0));
-		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(0, 4, 0));
+		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(0, 50, 0));
 	}
 
 	//For actual game, input will be handled here

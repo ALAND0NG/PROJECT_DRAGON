@@ -33,7 +33,7 @@ void BackEnd::Update()
 	glClearColor(0.00f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	std::cout << 1 / Timer::dt << std::endl;
+
 	
 	PhysicsSystem::Update();
 	IMGUIManager::Update();
@@ -67,7 +67,7 @@ void BackEnd::InitWindow()
 		throw std::runtime_error("GLFW init failed!");
 	}
 
-	//glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, true);
+
 
 	glfwWindowHint(GLFW_RESIZABLE, true);
 
