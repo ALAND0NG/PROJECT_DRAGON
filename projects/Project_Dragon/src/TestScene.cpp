@@ -79,6 +79,9 @@ void TestScene::InitScene()
 	InstantiatingSystem::AddPrefab(new StraightTrack()); //prefab 1
 	InstantiatingSystem::AddPrefab(new SideTrack()); //prefab 2
 	InstantiatingSystem::AddPrefab(new RightTurn()); // prefab 3
+	InstantiatingSystem::AddPrefab(new RightOff()); // prefab 4
+	InstantiatingSystem::AddPrefab(new LeftTurn()); // prefab 5
+	InstantiatingSystem::AddPrefab(new LeftOff()); // prefab 6
 
 	//WORLD GENERATOR - - - WIP
 	bool isForward = true, isRight = false, isLeft = false;
@@ -102,6 +105,11 @@ void TestScene::InitScene()
 			}
 		}
 		else if (isRight) {
+			ECS::Get<Transform>(1).SetPosition(glm::vec3(
+				ECS::Get<Transform>(1).GetPosition().x + 40.f,
+				ECS::Get<Transform>(1).GetPosition().y,
+				ECS::Get<Transform>(1).GetPosition().z));
+			InstantiatingSystem::InitPrefab(4, ECS::Get<Transform>(1).GetPosition()); // Right Off
 			for (int i = 0; i < rand() % 3 + 1; i++) {
 				ECS::Get<Transform>(1).SetPosition(glm::vec3(
 					ECS::Get<Transform>(1).GetPosition().x,
@@ -111,8 +119,18 @@ void TestScene::InitScene()
 			}
 			isRight = false;
 			isForward = true;
+			ECS::Get<Transform>(1).SetPosition(glm::vec3(
+				ECS::Get<Transform>(1).GetPosition().x,
+				ECS::Get<Transform>(1).GetPosition().y,
+				ECS::Get<Transform>(1).GetPosition().z + 40.f));
+			InstantiatingSystem::InitPrefab(5, ECS::Get<Transform>(1).GetPosition()); // Left Turn
 		}
 		else if (isLeft) {
+			ECS::Get<Transform>(1).SetPosition(glm::vec3(
+				ECS::Get<Transform>(1).GetPosition().x + 40.f,
+				ECS::Get<Transform>(1).GetPosition().y,
+				ECS::Get<Transform>(1).GetPosition().z));
+			InstantiatingSystem::InitPrefab(6, ECS::Get<Transform>(1).GetPosition()); // Left Off
 			for (int i = 0; i < rand() % 3 + 1; i++) {
 				ECS::Get<Transform>(1).SetPosition(glm::vec3(
 					ECS::Get<Transform>(1).GetPosition().x,
@@ -128,10 +146,6 @@ void TestScene::InitScene()
 				ECS::Get<Transform>(1).GetPosition().z - 40.f));
 			InstantiatingSystem::InitPrefab(3, ECS::Get<Transform>(1).GetPosition()); // Right Turn
 		}
-
-		//
-		// add corner turns here, then update the boosl to move in a new direction
-		//
 	}
 	//WORLD GENERATOR - - - WIP
 }
