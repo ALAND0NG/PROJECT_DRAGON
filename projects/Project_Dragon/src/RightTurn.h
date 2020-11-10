@@ -1,6 +1,6 @@
 #pragma once
 #include <Prefab.h>
-
+#include <AssetLoader.h>
 //temporary test prefab
 class RightTurn : public Prefab
 

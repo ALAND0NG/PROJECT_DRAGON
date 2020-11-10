@@ -1,3 +1,4 @@
+#pragma once
 //This is the ECS component that will handle meshes
 //just cleaner than using the Meshbuilder/meshfactory
 //Nowhere close to done

@@ -1,6 +1,6 @@
 #pragma once
 #include <Prefab.h>
-
+#include <AssetLoader.h>
 class RightOff : public Prefab {
 public:
 	void LoadPrefab(int startAt, glm::vec3 origin) override;

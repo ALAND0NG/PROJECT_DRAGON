@@ -1,5 +1,6 @@
 #include <TestScene.h>
 #include <bullet/btBulletDynamicsCommon.h>
+#include <AssetLoader.h>
 
 void TestScene::InitScene()
 {
@@ -14,7 +15,7 @@ void TestScene::InitScene()
 	ECS::Add<PhysicsBody>(0);
 	ECS::Add<Camera>(0);
 	ECS::Get<Camera>(0).ResizeWindow(1920, 1080);
-	ECS::Get<PhysicsBody>(0).AddBody(1, btVector3(3, 100, 3), btVector3(1,2,1));
+	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 100, 3), btVector3(1,2,1));
 	ECS::Add<LightSource>(0);
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
 
@@ -59,6 +60,7 @@ void TestScene::InitScene()
 	ECS::Get<Skybox>(4).skybox->LoadShaderPartFromFile("shader/Skybox-frag.glsl", GL_FRAGMENT_SHADER);
 	ECS::Get<Skybox>(4).skybox->Link();
 	*/
+
 	
 
 
@@ -87,6 +89,37 @@ void TestScene::InitScene()
 				}
 			}
 		});
+
+	Mesh pfb0;
+	pfb0.LoadOBJ("models/StraightTrack.obj", glm::vec4(1, 1, 1, 1));
+	AssetLoader::GetMesh().push_back(pfb0);
+
+	Mesh pfb1;
+	pfb1.LoadOBJ("models/SideTrack.obj", glm::vec4(1, 1, 1, 1));
+	AssetLoader::GetMesh().push_back(pfb1);
+
+	Mesh pfb2;
+	pfb2.LoadOBJ("models/RightTurn.obj", glm::vec4(1, 1, 1, 1));
+	AssetLoader::GetMesh().push_back(pfb2);
+
+	Mesh pfb3;
+	pfb3.LoadOBJ("models/RightOff.obj", glm::vec4(1, 1, 1, 1));
+	AssetLoader::GetMesh().push_back(pfb3);
+
+	Mesh pfb4;
+	pfb4.LoadOBJ("models/LeftTurn.obj", glm::vec4(1, 1, 1, 1));
+	AssetLoader::GetMesh().push_back(pfb4);
+
+	Mesh pfb5;
+	pfb5.LoadOBJ("models/LeftOff.obj", glm::vec4(1, 1, 1, 1));
+	AssetLoader::GetMesh().push_back(pfb5);
+
+	Material mat0;
+	mat0.LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	mat0.LoadSpecularFromFile("images/Stone_001_Specular.png");
+	mat0.SetAll(1.f);
+	AssetLoader::GetMat().push_back(mat0);
+
 
 	InstantiatingSystem::AddPrefab(new TestPrefab()); //prefab 0
 	InstantiatingSystem::AddPrefab(new StraightTrack()); //prefab 1

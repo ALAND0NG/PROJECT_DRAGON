@@ -1,5 +1,6 @@
 #pragma once
 #include <Prefab.h>
+#include <AssetLoader.h>
 
 class StraightTrack : public Prefab {
 public:

@@ -53,7 +53,7 @@ void Game::GameInput()
 		float z = ECS::Get<Camera>(0).GetForward().z;
 
 
-		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(x, 0, z));
+		ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(x * 5.f, 0, z *5.f));
 
 
 	}
@@ -72,7 +72,7 @@ void Game::GameInput()
 
 
 		
-		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(-x, 0, -z));
+		ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(-x * 5.f, 0, -z*5.f));
 	}
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_A) == GLFW_PRESS)
 	{
@@ -80,13 +80,13 @@ void Game::GameInput()
 		//glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
 		glm::vec3 direction = glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp()));
 
-		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(direction.x, direction.y, direction.z));
+		ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(direction.x*5, direction.y*5, direction.z*5));
 	}
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_D) == GLFW_PRESS)
 	{
 		glm::vec3 direction = -glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp()));
 
-		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(direction.x, direction.y, direction.z));
+		ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(direction.x*5, direction.y*5, direction.z*5));
 		
 	}
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
@@ -98,11 +98,10 @@ void Game::GameInput()
 		*/
 	//	ECS::Get<PhysicsBody>(0).GetBody()->setActivationState(1);
 		//ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(0, 10, 0));
-		ECS::Get<PhysicsBody>(0).ApplyForce(btVector3(0, 50, 0));
+		ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(0, 10, 0));
 	}
+	
 
-	//For actual game, input will be handled here
-	//for the CG midterm, I will simply do it in the scene specific update function
 
 }
 
