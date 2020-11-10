@@ -6,6 +6,5 @@ class Skybox
 {
 public:
 	Shader::sptr skybox;
-	CubeMap
 
 };
