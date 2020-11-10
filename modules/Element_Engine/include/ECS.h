@@ -11,6 +11,7 @@
 #include <LightSource.h>
 #include <PhysicsBody.h>
 #include <Parent.h>
+#include <Skybox.h>
 
 
 
