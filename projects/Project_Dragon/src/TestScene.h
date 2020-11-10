@@ -4,6 +4,9 @@
 #include <StraightTrack.h>
 #include <SideTrack.h>
 #include <RightTurn.h>
+#include <RightOff.h>
+#include <LeftTurn.h>
+#include <LeftOff.h>
 
 class TestScene : public Scene
 {
