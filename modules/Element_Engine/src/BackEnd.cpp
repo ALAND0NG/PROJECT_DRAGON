@@ -30,7 +30,7 @@ bool currentType = true;
 
 void BackEnd::Update()
 {
-	glClearColor(0.00f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.00f, 0.1f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -67,7 +67,7 @@ void BackEnd::InitWindow()
 		throw std::runtime_error("GLFW init failed!");
 	}
 
-
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	glfwWindowHint(GLFW_RESIZABLE, true);
 
@@ -94,6 +94,9 @@ void BackEnd::InitWindow()
 
 	printf("OpenGL Renderer: %s\n", glGetString(GL_RENDERER));
 	printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
+
+
+
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

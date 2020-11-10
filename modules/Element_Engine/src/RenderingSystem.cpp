@@ -94,10 +94,7 @@ void RenderingSystem::ECSUpdate()
 
 			ECS::Get<Mesh>(i).GetVAO()->Render();
 		}
-		if (ECS::Has<Transform>(i) && ECS::Has<LightSource>(i))
-		{
-			//shader->SetUniform("u_LightPos", ECS::Get<Transform>(i).GetPosition());
-		}
+
 	}
 
 	shader->SetUniform("u_LightCount", LightCount);

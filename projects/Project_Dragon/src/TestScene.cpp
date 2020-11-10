@@ -8,6 +8,7 @@ void TestScene::InitScene()
 	//Player Camera - - - Need This For A Game To Run
 	m_sceneReg = new entt::registry;
 	ECS::AttachRegistry(m_sceneReg);
+	
 	ECS::Create(0); //please please please always have camera be entity 0 it will break otherwise
 	ECS::Add<Transform>(0);
 	ECS::Add<PhysicsBody>(0);
@@ -49,6 +50,7 @@ void TestScene::InitScene()
 	ECS::Get<PhysicsBody>(3).AddBody(1.f,btVector3(0,15,0), btVector3(1,1,1));
 	ECS::Get<PhysicsBody>(3).m_Entity = 3;
 
+	/*
 	ECS::Create(4); //for cubemap
 	ECS::Add<Skybox>(4);
 	ECS::Add<Transform>(4);
@@ -56,7 +58,7 @@ void TestScene::InitScene()
 	ECS::Get<Skybox>(4).skybox->LoadShaderPartFromFile("shader/Skybox-vert.glsl", GL_VERTEX_SHADER);
 	ECS::Get<Skybox>(4).skybox->LoadShaderPartFromFile("shader/Skybox-frag.glsl", GL_FRAGMENT_SHADER);
 	ECS::Get<Skybox>(4).skybox->Link();
-	
+	*/
 	
 
 
