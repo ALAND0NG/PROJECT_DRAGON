@@ -89,6 +89,7 @@ void TestScene::InitScene()
 				}
 			}
 		});
+#pragma region asset_loading
 
 	Mesh pfb0;
 	pfb0.LoadOBJ("models/StraightTrack.obj", glm::vec4(1, 1, 1, 1));
@@ -120,6 +121,7 @@ void TestScene::InitScene()
 	mat0.SetAll(1.f);
 	AssetLoader::GetMat().push_back(mat0);
 
+#pragma endregion
 
 	InstantiatingSystem::AddPrefab(new TestPrefab()); //prefab 0
 	InstantiatingSystem::AddPrefab(new StraightTrack()); //prefab 1
@@ -196,11 +198,27 @@ void TestScene::InitScene()
 	//WORLD GENERATOR - - - WIP
 }
 
+//please change this later
+int projId = 0;
+
 void TestScene::Update()
 {
+	
+
+
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
 	{
 	//	ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
 		ECS::Get<PhysicsBody>(3).SetLinearVelocity(btVector3(5, 0, 0));
+	}
+
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_E) == GLFW_PRESS)
+	{
+		
+		InstantiatingSystem::InitPrefab(0, ECS::Get<Transform>(0).GetPosition());
+
+		glm::vec3 f = ECS::Get<Camera>(0).GetForward() * 10.f;//agony
+		ECS::Get<PhysicsBody>(ECS::GetSize()-1).SetLinearVelocity(btVector3(f.x,f.y,f.z));
+
 	}
 }

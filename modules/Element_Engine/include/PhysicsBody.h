@@ -19,6 +19,7 @@ public:
 	void SetLinearVelocity(btVector3 direction);
 	void ApplyForce(btVector3 direction);
 	void AddBody(float mass, btVector3 origin, btVector3 size);
+	void AddBody(float mass, btVector3 origin, btVector3 size, float friction);
 
 	int m_BodyId;//this for da world thing
 	int m_Entity;//attach this entitys id to itself so I can call the appropriate transform in update.
