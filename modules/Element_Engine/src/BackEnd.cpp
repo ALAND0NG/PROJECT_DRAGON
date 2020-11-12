@@ -16,8 +16,8 @@ void BackEnd::Init()
 	Logger::Init();
 
 	InitWindow();
-	PhysicsSystem::Init();
 	RenderingSystem::Init();
+	PhysicsSystem::Init();
 	IMGUIManager::Init();
 
 	glEnable(GL_DEPTH_TEST);
@@ -30,7 +30,7 @@ bool currentType = true;
 
 void BackEnd::Update()
 {
-	glClearColor(0.00f, 0.1f, 0.0f, 0.0f);
+	glClearColor(0.01f, 0.1f, 0.1f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -38,7 +38,7 @@ void BackEnd::Update()
 	PhysicsSystem::Update();
 	IMGUIManager::Update();
 	RenderingSystem::Update();
-
+	
 	
 
 	
@@ -71,7 +71,7 @@ void BackEnd::InitWindow()
 
 	glfwWindowHint(GLFW_RESIZABLE, true);
 
-	BackEnd::m_Window = glfwCreateWindow(1920, 1080, "Noah Glassford - 100743060", nullptr, nullptr);
+	BackEnd::m_Window = glfwCreateWindow(1920, 1080, "Project Dragon", nullptr, nullptr);
 
 	BackEnd::m_WindowHeight = 1080;
 	BackEnd::m_WindowWidth = 1920;
@@ -79,7 +79,7 @@ void BackEnd::InitWindow()
 	glfwMakeContextCurrent(BackEnd::m_Window);
 
 
-	glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	glfwSetWindowSizeCallback(BackEnd::m_Window, GlfwWindowResizedCallback);
 	glfwSetCursorPosCallback(BackEnd::m_Window, mouse_Callback);

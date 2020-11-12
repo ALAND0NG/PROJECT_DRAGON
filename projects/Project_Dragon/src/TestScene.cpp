@@ -30,26 +30,18 @@ void TestScene::InitScene()
 	ECS::Get<Material>(1).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(1).SetAll(1.f);
 
-
 	ECS::Create(2);
+	ECS::Add<Mesh>(2);
+	ECS::Add<Material>(2);
 	ECS::Add<Transform>(2);
+	ECS::Add<PhysicsBody>(2);
 	ECS::Add<LightSource>(2);
-	ECS::Add<Parent>(2);
-	ECS::Get<Parent>(2).SetParent(0);
-	ECS::Get<Transform>(2).SetPosition(glm::vec3(0.f, 3.f, 0.f));
-
-	ECS::Create(3);
-	ECS::Add<Mesh>(3);
-	ECS::Add<Material>(3);
-	ECS::Add<Transform>(3);
-	ECS::Add<PhysicsBody>(3);
-	ECS::Add<LightSource>(3);
-	ECS::Get<Mesh>(3).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<Material>(3).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
-	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
-	ECS::Get<Material>(3).SetAll(1.f);
-	ECS::Get<PhysicsBody>(3).AddBody(1.f,btVector3(0,15,0), btVector3(1,1,1));
-	ECS::Get<PhysicsBody>(3).m_Entity = 3;
+	ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
+	ECS::Get<Material>(2).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(2).SetAll(1.f);
+	ECS::Get<PhysicsBody>(2).AddBody(0.f,btVector3(0,3,0), btVector3(1,1,1));
+	ECS::Get<PhysicsBody>(2).m_Entity = 3;
 
 	/*
 	ECS::Create(4); //for cubemap
@@ -66,29 +58,10 @@ void TestScene::InitScene()
 
 	
 
-	IMGUIManager::imGuiCallbacks.push_back([&]()
-		{
-			static const char* items[]{ "0" };
-			//We want to take all of our entities, and be able to manage their positions using this drop down menu
-			static int SelectedItem = 0;
-			if (ImGui::CollapsingHeader("Entity List"))
-			{
-				static const char* items[]{ "0" };
-				//We want to take all of our entities, and be able to manage their positions using this drop down menu
-				static int SelectedItem = 0;
-				if (ImGui::CollapsingHeader("Entity List"))
-				{
-					static const char* items[]{ "0" };
-					//We want to take all of our entities, and be able to manage their positions using this drop down menu
-					static int SelectedItem = 0;
-					if (ImGui::CollapsingHeader("Entity List"))
-					{
-						//ImGui::ListBox("list",&SelectedItem,items,IM_ARRAYSIZE(items));
-						ImGui::Combo("List box", &SelectedItem, items, IM_ARRAYSIZE(items));
-					}
-				}
-			}
-		});
+
+
+
+
 #pragma region asset_loading
 
 	Mesh pfb0;
@@ -220,5 +193,14 @@ void TestScene::Update()
 		glm::vec3 f = ECS::Get<Camera>(0).GetForward() * 10.f;//agony
 		ECS::Get<PhysicsBody>(ECS::GetSize()-1).SetLinearVelocity(btVector3(f.x,f.y,f.z));
 
+	}
+
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_F) == GLFW_PRESS)
+	{
+		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_G) == GLFW_PRESS)
+	{
+		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 }

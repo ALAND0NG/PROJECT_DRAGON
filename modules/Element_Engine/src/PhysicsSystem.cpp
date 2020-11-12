@@ -2,10 +2,12 @@
 #include <Timer.h>
 #include <GLM/gtc/type_ptr.hpp>
 #include <BackEnd.h> //I hope this doesn't break it :)
+
 btDiscreteDynamicsWorld* PhysicsSystem::m_World;
 
 std::vector<btRigidBody*> PhysicsSystem::m_bodies;
 
+BulletDebugDrawer_OpenGL PhysicsSystem::drawer;
 
 std::vector<btCollisionShape*> colShapes;
 
@@ -32,68 +34,14 @@ void PhysicsSystem::Init()
 
 	m_World = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
-	m_World->setGravity(btVector3(0, -5, 0));
+	m_World->setGravity(btVector3(0, -10, 0));
 
-	/*
-	{
-		btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(5.), btScalar(5.), btScalar(5.)));
+	
+	drawer.Init();
 
-		colShapes.push_back(groundShape);
+	m_World->setDebugDrawer(&drawer);
 
-		btTransform groundTransform;
-		groundTransform.setIdentity();
-		groundTransform.setOrigin(btVector3(0, -5, 0));
-
-		btScalar mass(0.);
-
-		//rigidbody is dynamic if and only if mass is non zero, otherwise static
-		bool isDynamic = (mass != 0.f);
-
-		btVector3 localInertia(0, 0, 0);
-		if (isDynamic)
-			groundShape->calculateLocalInertia(mass, localInertia);
-
-		//using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
-		btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, groundShape, localInertia);
-		btRigidBody* body = new btRigidBody(rbInfo);
-
-		//add the body to the dynamics world
-		m_World->addRigidBody(body);
-		bodies.push_back(body);
-	}
-
-	{
-		btCollisionShape* colShape = new btSphereShape(btScalar(1.));
-		colShapes.push_back(colShape);
-
-		/// Create Dynamic Objects
-		btTransform startTransform;
-		startTransform.setIdentity();
-
-		btScalar mass(1.f);
-
-		//rigidbody is dynamic if and only if mass is non zero, otherwise static
-		bool isDynamic = (mass != 0.f);
-
-		btVector3 localInertia(0, 0, 0);
-		if (isDynamic)
-			colShape->calculateLocalInertia(mass, localInertia);
-
-		startTransform.setOrigin(btVector3(2, 50, 0));
-
-		//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
-		btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
-		btRigidBody* body = new btRigidBody(rbInfo);
-
-		m_World->addRigidBody(body);
-		bodies.push_back(body);
-
-		btTransform trans = body->getWorldTransform();
-		//ECS::Get<Transform>(1).SetPosition(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
-	}
-	*/
+	
 }
 
 void PhysicsSystem::Update()
@@ -103,31 +51,7 @@ void PhysicsSystem::Update()
 	
 	auto reg = ECS::GetReg();
 
-	//auto view = reg->view<PhysicsBody, Transform>();
-	/*
-	m_World->stepSimulation(0);
-	for (int i = 0; i < reg->size(); i++)
-	{
-		if (ECS::Has<PhysicsBody>(i))
-		{
-
 	
-		btTransform trans = m_bodies[ECS::Get<PhysicsBody>(0).m_BodyId]->getWorldTransform();
-		
-		ECS::Get<Transform>(0).SetPosition(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
-	
-	
-
-	//	ECS::Get<Transform>(ECS::Get<PhysicsBody>(i).m_Entity).SetPosition(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
-	//	std::cout << trans.getOrigin().getX() << " " << trans.getOrigin().getY() << " " << trans.getOrigin().getZ() << "\n";
-		}
-
-
-		//}
-	}
-	
-	ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(1, 1, 1));
-	*/
 	m_World->stepSimulation(Timer::dt, 10);
 	for (int i = 0; i < reg->size(); i++)
 	{
@@ -139,7 +63,8 @@ void PhysicsSystem::Update()
 
 		}
 	}
-
+	drawer.SetMatrices(ECS::Get<Camera>(0).GetView(), ECS::Get<Camera>(0).GetProjection());
+	m_World->debugDrawWorld();
 }
 
 btDiscreteDynamicsWorld* PhysicsSystem::GetWorld()
