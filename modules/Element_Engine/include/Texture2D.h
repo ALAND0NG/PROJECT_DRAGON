@@ -78,27 +78,27 @@ public:
 	/// Gets the underlying OpenGL handle for this texture
 	/// </summary>
 	GLuint GetHandle() const { return _handle; }
-	
+
 	uint32_t GetWidth() const { return _description.Width; }
 	uint32_t GetHeight() const { return _description.Height; }
-	InternalFormat GetFormat() const { return _description.Format; }	
+	InternalFormat GetFormat() const { return _description.Format; }
 	MinFilter GetMinFilter() const { return _description.MinificationFilter; }
 	MagFilter GetMagFilter() const { return _description.MagnificationFilter; }
 	WrapMode GetWrapS() const { return _description.HorizontalWrap; }
 	WrapMode GetWrapT() const { return _description.VerticalWrap; }
-	
+
 	void SetMinFilter(MinFilter filter);
 	void SetMagFilter(MagFilter filter);
 	void SetWrapS(WrapMode mode);
 	void SetWrapT(WrapMode mode);
 
 	const Texture2DDescription& GetDescription() const { return _description; }
-	
+
 private:
 	Texture2DDescription _description;
 	GLuint _handle;
 
 	void _RecreateTexture();
-	
+
 	static int MAX_TEXTURE_SIZE;
 };

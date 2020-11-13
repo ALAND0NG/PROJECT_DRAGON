@@ -21,6 +21,10 @@ static class RenderingSystem
 public:
 	static void Init();
 	static void Update();
+	static Shader::sptr GetShader()
+	{
+		return shader;
+	}
 private:
 	static Shader::sptr shader;
 	static void ECSUpdate(); //Goes through any ECS component that needs a frame by frame update, and applies that

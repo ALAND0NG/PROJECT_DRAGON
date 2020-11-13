@@ -16,8 +16,8 @@ void BackEnd::Init()
 	Logger::Init();
 
 	InitWindow();
-
 	RenderingSystem::Init();
+	PhysicsSystem::Init();
 	IMGUIManager::Init();
 
 	glEnable(GL_DEPTH_TEST);
@@ -30,14 +30,15 @@ bool currentType = true;
 
 void BackEnd::Update()
 {
-	glClearColor(0.00f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.01f, 0.1f, 0.1f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
 	
-	RenderingSystem::Update();
 	PhysicsSystem::Update();
 	IMGUIManager::Update();
-
+	RenderingSystem::Update();
+	
 	
 
 	
@@ -66,11 +67,11 @@ void BackEnd::InitWindow()
 		throw std::runtime_error("GLFW init failed!");
 	}
 
-	//glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, true);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	glfwWindowHint(GLFW_RESIZABLE, true);
 
-	BackEnd::m_Window = glfwCreateWindow(1920, 1080, "The funny game", nullptr, nullptr);
+	BackEnd::m_Window = glfwCreateWindow(1920, 1080, "Project Dragon", nullptr, nullptr);
 
 	BackEnd::m_WindowHeight = 1080;
 	BackEnd::m_WindowWidth = 1920;
@@ -78,7 +79,7 @@ void BackEnd::InitWindow()
 	glfwMakeContextCurrent(BackEnd::m_Window);
 
 
-	glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	//glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	glfwSetWindowSizeCallback(BackEnd::m_Window, GlfwWindowResizedCallback);
 	glfwSetCursorPosCallback(BackEnd::m_Window, mouse_Callback);
@@ -93,6 +94,15 @@ void BackEnd::InitWindow()
 
 	printf("OpenGL Renderer: %s\n", glGetString(GL_RENDERER));
 	printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
+
+
+
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, 0.0);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }

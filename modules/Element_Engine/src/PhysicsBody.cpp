@@ -1,153 +1,94 @@
 #include <PhysicsBody.h>
 #include <ECS.h>
 #include <Timer.h>
+#include <PhysicsSystem.h>
 
-BoundingBox PhysicsBody::GetBox()
+btRigidBody* PhysicsBody::GetBody()
 {
-	return m_BoxCollider;
+	return m_Body;
 }
 
-void PhysicsBody::SetBox(glm::vec3 center, float SizeX, float SizeY, float SizeZ)
+void PhysicsBody::SetBody(btRigidBody* body)
 {
-	
-	m_BoxCollider.m_Center = center;
-	m_BoxCollider.m_MinX = center.x - (0.5 * SizeX);
-	m_BoxCollider.m_MaxX = center.x + (0.5 * SizeX);
-	m_BoxCollider.m_MinY = center.y - (0.5 * SizeY);
-	m_BoxCollider.m_MaxY = center.y + (0.5 * SizeY);
-	m_BoxCollider.m_MinZ = center.z - (0.5 * SizeZ);
-	m_BoxCollider.m_MaxZ = center.z + (0.5 * SizeZ);
-	m_BoxCollider.m_SizeX = SizeX;
-	m_BoxCollider.m_SizeY = SizeY;
-	m_BoxCollider.m_SizeZ = SizeZ;
-	
-
+	m_Body = body;
 }
 
-void PhysicsBody::SetMass(float mass)
+void PhysicsBody::Update()
 {
-	m_Mass = mass;
-}
-
-void PhysicsBody::SetFriction(float friction)
-{
-	m_Friction = friction;
-}
-
-void PhysicsBody::SetVelocity(glm::vec3 velocity)
-{
-	m_Velocity = velocity;
-}
-
-float PhysicsBody::GetMass()
-{
-	return m_Mass;
-}
-
-float PhysicsBody::GetFriction()
-{
-	return m_Friction;
-}
-
-void PhysicsBody::SetPosition(glm::vec3 position)
-{
-	m_Position = position;
-}
-
-glm::vec3 PhysicsBody::GetPosition()
-{
-	return m_Position;
-}
-
-void PhysicsBody::SetGravity(float gravity)
-{
-	m_Gravity = gravity;
-}
-
-glm::vec3 PhysicsBody::GetVelocity()
-{
-	return m_Velocity;
-}
-
-void PhysicsBody::ApplyForce(glm::vec3 force)
-{
-	m_AppliedForce = force * Timer::dt;
-}
-
-void PhysicsBody::Update(int EntNum)
-{
-	UpdateBoundingBox(EntNum);
-
-	m_Position = ECS::Get<Transform>(EntNum).GetPosition();
-	
-
-	CalculateDeltaForce();
-	
-	m_Acceleration = (m_DeltaForce / m_Mass);
-
-	m_Velocity += m_Acceleration;
-
-	m_DeltaForce = glm::vec3(0);
-
-	m_Position += m_Velocity * Timer::dt;
-	
-	ECS::Get<Transform>(EntNum).SetPosition(m_Position);
-
-}
-
-void PhysicsBody::SetBodyType(int type)
-{
-	m_BodyType = type;
-}
-
-int PhysicsBody::GetBodyType()
-{
-	return m_BodyType;
-}
-
-glm::vec3 PhysicsBody::GetDeltaForce()
-{
-	return m_DeltaForce;
-}
-
-void PhysicsBody::SetGravityScale(int gravityscale)
-{
-	m_GravityScale = gravityscale;
-}
-
-float PhysicsBody::GetGraviy()
-{
-	return m_Gravity;
-}
-
-void PhysicsBody::UpdateBoundingBox(int EntNum)
-{
-	m_BoxCollider.m_Center = ECS::Get<Transform>(EntNum).GetPosition();
-	m_BoxCollider.m_MinX = m_BoxCollider.m_Center.x - (0.5 * m_BoxCollider.m_SizeX);
-	m_BoxCollider.m_MaxX = m_BoxCollider.m_Center.x + (0.5 * m_BoxCollider.m_SizeX);
-	m_BoxCollider.m_MinY = m_BoxCollider.m_Center.y - (0.5 * m_BoxCollider.m_SizeY);
-	m_BoxCollider.m_MaxY = m_BoxCollider.m_Center.y + (0.5 * m_BoxCollider.m_SizeY);
-	m_BoxCollider.m_MinZ = m_BoxCollider.m_Center.z - (0.5 * m_BoxCollider.m_SizeZ);
-	m_BoxCollider.m_MaxZ = m_BoxCollider.m_Center.z + (0.5 * m_BoxCollider.m_SizeZ);
 	
 }
 
-void PhysicsBody::CalculateDeltaForce()
+void PhysicsBody::AddBody(float mass, btVector3 origin, btVector3 size)
 {
-	glm::vec3 FrictionForce;
+	btCollisionShape* colShape = new btBoxShape(size);
 
-	FrictionForce = m_Velocity;
+	btTransform startTransform;
+	startTransform.setIdentity();
 
-	glm::normalize(FrictionForce);
+	bool isDynamic = true;
+	if (mass == 0.f)
+		isDynamic = false;
 
-	FrictionForce *= (m_Mass * m_Gravity) * m_Friction;
+	btVector3 localInertia(0, 0, 0);
+	if (isDynamic)
+		colShape->calculateLocalInertia(mass, localInertia);
 
-	m_DeltaForce += FrictionForce * Timer::dt; //Add friction to the force
+	startTransform.setOrigin(origin);
 
-	m_DeltaForce += glm::vec3(0.f, m_Gravity * m_GravityScale, 0.f); //Add gravity to the force
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+	m_Body= new btRigidBody(rbInfo);
 
-	m_DeltaForce += m_AppliedForce; //Add player applied force
+	m_Body->setAngularFactor(btVector3(0.0f, 1.0f, 0.0f));
+	
+	PhysicsSystem::m_World->addRigidBody(m_Body);
+	PhysicsSystem::m_bodies.push_back(m_Body);
+	m_BodyId = PhysicsSystem::m_bodies.size() - 1;
+	m_Body->setFriction(1.f);
+	
 
-	m_AppliedForce = glm::vec3(0); //Since we want to calculate by frame, set to 0
 }
 
+
+void PhysicsBody::AddBody(float mass, btVector3 origin, btVector3 size, float friction)
+{
+	btCollisionShape* colShape = new btBoxShape(size);
+
+	btTransform startTransform;
+	startTransform.setIdentity();
+
+	bool isDynamic = true;
+	if (mass == 0.f)
+		isDynamic = false;
+
+	btVector3 localInertia(0, 0, 0);
+	if (isDynamic)
+		colShape->calculateLocalInertia(mass, localInertia);
+
+	startTransform.setOrigin(origin);
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+	m_Body = new btRigidBody(rbInfo);
+
+
+	PhysicsSystem::m_World->addRigidBody(m_Body);
+	PhysicsSystem::m_bodies.push_back(m_Body);
+	m_BodyId = PhysicsSystem::m_bodies.size() - 1;
+	m_Body->setFriction(friction);
+
+
+}
+
+void PhysicsBody::SetLinearVelocity(btVector3 direction)
+{
+	m_Body->setActivationState(1);
+	m_Body->setLinearVelocity(direction);
+}
+
+void PhysicsBody::ApplyForce(btVector3 direction)
+{
+	m_Body->activate(1);
+	m_Body->applyCentralImpulse(direction);
+
+}
