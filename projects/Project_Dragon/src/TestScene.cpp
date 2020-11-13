@@ -12,7 +12,7 @@ void TestScene::InitScene()
 	
 	ECS::Create(0); //please please please always have camera be entity 0 it will break otherwise
 	ECS::Add<Transform>(0);
-	ECS::Add<PhysicsBody>(0);
+	ECS::Add<PhysicsBody>(0);  
 	ECS::Add<Camera>(0);
 	ECS::Get<Camera>(0).ResizeWindow(1920, 1080);
 	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 100, 3), btVector3(1,2,1));
