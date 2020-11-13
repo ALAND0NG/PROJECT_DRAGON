@@ -1,9 +1,11 @@
 #include <ElementEngine.h>
 #include <TestScene.h>
+#include <MakePrefabHere_smile.h>
 int main()
 {
 	Game game;
 	game.AddScene(new TestScene());
-	game.InitGame(0);
+	game.AddScene(new PrefabMakeScene());
+	game.InitGame(1);
 	return 0;
 }
