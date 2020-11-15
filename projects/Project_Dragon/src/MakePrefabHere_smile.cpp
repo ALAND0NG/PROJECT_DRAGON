@@ -31,11 +31,25 @@ void PrefabMakeScene::InitScene()
 	ECS::Get<Material>(1).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
 	ECS::Get<Material>(1).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(1).SetAll(1.f);
-	ECS::Get<PhysicsBody>(1).AddBody(0.f, btVector3(0, 1, 0), btVector3(10000, 1, 100000));
+	ECS::Get<PhysicsBody>(1).AddBody(0.f, btVector3(0, 0, 0), btVector3(10000, 0, 100000));
 	ECS::Get<PhysicsBody>(1).m_Entity = 1;
 
-#pragma region asset_loading
+	//Enemy for animation test
+	ECS::Create(2);
+	ECS::Add<Mesh>(2);
+	ECS::Add<Material>(2);
+	ECS::Add<Transform>(2);
+	ECS::Get<Transform>(2).SetPosition(glm::vec3(1, 1, 1));
+	ECS::Get<Mesh>(2).LoadOBJ("models/animations/FIRE_ENEMY/FE_WALK_1.obj", glm::vec4(1,1,1,1));
+	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
+	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(2).SetAll(1.f);
 
+
+
+#pragma region asset_loading
+	/*
+	For now I am not using prefabs/proper model loading, I am just trying to get something up and running
 	Mesh pfb0;
 	pfb0.LoadOBJ("models/StraightTrack.obj", glm::vec4(1, 1, 1, 1));
 	AssetLoader::GetMesh().push_back(pfb0);
@@ -75,11 +89,12 @@ void PrefabMakeScene::InitScene()
 	InstantiatingSystem::AddPrefab(new RightOff()); // prefab 4
 	InstantiatingSystem::AddPrefab(new LeftTurn()); // prefab 5
 	InstantiatingSystem::AddPrefab(new LeftOff()); // prefab 6
-
+	*/
 }
 
 void PrefabMakeScene::Update()
 {
+	/*
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
 	{
 		//	ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
@@ -95,7 +110,7 @@ void PrefabMakeScene::Update()
 		ECS::Get<PhysicsBody>(ECS::GetSize() - 1).SetLinearVelocity(btVector3(f.x, f.y, f.z));
 
 	}
-
+	*/
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_F) == GLFW_PRESS)
 	{
 		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);

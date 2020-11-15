@@ -39,7 +39,7 @@ void PhysicsBody::AddBody(float mass, btVector3 origin, btVector3 size)
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 	m_Body= new btRigidBody(rbInfo);
 
-	m_Body->setAngularFactor(btVector3(0.0f, 1.0f, 0.0f));
+	m_Body->setAngularFactor(btVector3(0.0f, 0.0f, 0.0f));
 	
 	PhysicsSystem::m_World->addRigidBody(m_Body);
 	PhysicsSystem::m_bodies.push_back(m_Body);
@@ -71,6 +71,7 @@ void PhysicsBody::AddBody(float mass, btVector3 origin, btVector3 size, float fr
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 	m_Body = new btRigidBody(rbInfo);
 
+	m_Body->setAngularFactor(btVector3(0.0f, 0.0f, 0.0f));
 
 	PhysicsSystem::m_World->addRigidBody(m_Body);
 	PhysicsSystem::m_bodies.push_back(m_Body);

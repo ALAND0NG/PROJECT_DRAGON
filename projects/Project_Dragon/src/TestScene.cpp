@@ -15,7 +15,7 @@ void TestScene::InitScene()
 	ECS::Add<PhysicsBody>(0);  
 	ECS::Add<Camera>(0);
 	ECS::Get<Camera>(0).ResizeWindow(1920, 1080);
-	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 100, 3), btVector3(1,2,1));
+	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 10, 3), btVector3(1,2,1));
 	ECS::Add<LightSource>(0);
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
 
