@@ -6,6 +6,7 @@
 #include <iostream>
 #include <GLM/glm.hpp>
 #include <VertexTypes.h>
+#include <algorithm>
 
 // Borrowed from https://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
 #pragma region String Trimming
