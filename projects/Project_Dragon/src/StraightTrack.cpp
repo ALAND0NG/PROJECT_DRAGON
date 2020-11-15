@@ -15,9 +15,15 @@ void StraightTrack::LoadPrefab(int startAt, glm::vec3 origin)
 	physBodOrigin.setY(origin.y);
 	physBodOrigin.setZ(origin.z);
 
-	ECS::Get<PhysicsBody>(startAt).AddBody(0, physBodOrigin, btVector3(100, 0, 100));
+	ECS::Get<PhysicsBody>(startAt).AddBody(0, physBodOrigin, btVector3(25, 0, 25));
 	ECS::Get<PhysicsBody>(startAt).m_Entity = startAt;
 	m_EntityIds.push_back(startAt);
 	std::cout << "Loaded a prefab, starting at: " << startAt << std::endl;
 
+	ECS::Create(startAt + 1);
+	ECS::Add<PhysicsBody>(startAt + 1);
+	ECS::Add<Transform>(startAt + 1);
+	ECS::Get<PhysicsBody>(startAt + 1).AddBody(0, btVector3(physBodOrigin.getX(), physBodOrigin.getY(), physBodOrigin.getZ() + 25), btVector3(25, 25, 1));
+	ECS::Get<PhysicsBody>(startAt + 1).m_Entity = startAt + 1;
+	m_EntityIds.push_back(startAt + 1);
 }
