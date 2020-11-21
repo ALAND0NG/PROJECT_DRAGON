@@ -8,11 +8,14 @@ void Mesh::TestLoadFromFile()
 void Mesh::LoadOBJ(std::string filename, glm::vec4 col)
 {
 	m_vao = OBJLoader::LoadFromFile(filename, col);
+	
 }
 
 VertexArrayObject::sptr Mesh::GetVAO()
 {
 	return m_vao;
 }
+
+
 
 

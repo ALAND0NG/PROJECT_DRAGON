@@ -18,8 +18,7 @@ void TestPrefab::LoadPrefab(int startAt, glm::vec3 origin)
 	
 	ECS::Get<PhysicsBody>(startAt).AddBody(0.000001,physBodOrigin, btVector3(2,2,2), 0.f);
 	ECS::Get<PhysicsBody>(startAt).m_Entity = startAt;
-	ECS::Add<LightSource>(startAt);
-	
+
 	m_EntityIds.push_back(startAt);
 	std::cout << "Loaded a prefab, starting at: " << startAt << std::endl;
 }

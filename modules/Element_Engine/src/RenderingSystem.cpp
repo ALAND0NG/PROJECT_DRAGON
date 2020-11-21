@@ -2,7 +2,7 @@
 #include <IMGUIManager.h>
 
 Shader::sptr RenderingSystem::shader = nullptr;
-
+Shader::sptr RenderingSystem::AnimationShader = nullptr;
 void RenderingSystem::Init()
 {
 	//Inits all shader constants
@@ -11,6 +11,12 @@ void RenderingSystem::Init()
 	shader->LoadShaderPartFromFile("shader/vertex_shader.glsl", GL_VERTEX_SHADER);
 	shader->LoadShaderPartFromFile("shader/frag_shader.glsl", GL_FRAGMENT_SHADER);
 	shader->Link();
+
+	AnimationShader = Shader::Create();
+	AnimationShader->LoadShaderPartFromFile("shader/morph_vert.glsl", GL_VERTEX_SHADER);
+	AnimationShader->LoadShaderPartFromFile("shader/frag_shader.glsl", GL_FRAGMENT_SHADER);
+	AnimationShader->Link();
+	
 
 
 	//Set these values to your liking
@@ -31,6 +37,14 @@ void RenderingSystem::Init()
 	shader->SetUniform("u_Shininess", shininess);
 	shader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
 	shader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
+
+	AnimationShader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
+	AnimationShader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
+	AnimationShader->SetUniform("u_AmbientCol", ambientCol);
+	AnimationShader->SetUniform("u_AmbientStrength", ambientPow);
+	AnimationShader->SetUniform("u_Shininess", shininess);
+	AnimationShader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
+	AnimationShader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
 	
 	int frameIx = 0;
 	float fpsBuffer[128];
@@ -140,6 +154,37 @@ void RenderingSystem::ECSUpdate()
 			shader->SetUniform("u_Shininess", ECS::Get<Material>(i).GetShininess());
 
 			ECS::Get<Mesh>(i).GetVAO()->Render();
+		}
+
+		if (ECS::Has<Transform>(i) == 1 && ECS::Has<MorphAnimator>(i) == 1 && ECS::Has<Material>(i) == 1)
+		{
+			
+			AnimationShader->Bind();
+
+
+			//I know that I could properly get the camera, but as a convention we will simply always declare it as entity 0 to avoid coding an entity
+			//identitifier
+			AnimationShader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(i).GetTransform());
+			AnimationShader->SetUniformMatrix("u_Model", ECS::Get<Transform>(i).GetTransform());
+			//shader->SetUniformMatrix("u_ModelRotation", glm::toMat3(ECS::Get<Transform>(i).GetRotation()));
+			AnimationShader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
+
+			// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
+			AnimationShader->SetUniform("s_Diffuse", 0);
+			AnimationShader->SetUniform("s_Specular", 1);
+
+
+			ECS::Get<Material>(i).GetAlbedo()->Bind(0);
+
+			ECS::Get<Material>(i).GetSpecular()->Bind(1);
+
+
+
+			AnimationShader->SetUniform("u_Shininess", ECS::Get<Material>(i).GetShininess());
+			AnimationShader->SetUniform("t", ECS::Get<MorphAnimator>(i).GetAnimData().t);
+
+			ECS::Get<MorphAnimator>(i).GetVAO()->Render();
+			
 		}
 
 	}
