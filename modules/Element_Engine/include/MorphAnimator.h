@@ -14,7 +14,7 @@ struct AData//animation data
 {
 	std::vector<Frame> m_Frames;//contains position,color,normal & uv. This class basically just exists to organize that and
 	//send it to the shader to be LERP
-	float t = 0.5;//passed into the shader
+	float t = 1.f;//passed into the shader
 	float m_FrameDuration;//all frames have the same length
 	std::vector<int> m_Index;//just in case you want to index one of many vectors
 	int m_StartAt = 0;//first frame

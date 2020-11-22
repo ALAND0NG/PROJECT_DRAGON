@@ -13,13 +13,12 @@ void MorphAnimator::LoadFrame(std::string filePath, glm::vec4 color)
 void MorphAnimator::SendToVao()
 {
 	
-
 	uint32_t slot = 0;
 	m_vao->AddVertexBuffer(m_AnimData.m_Frames[0].m_Pos, { BufferAttribute(slot, 3,
 		GL_FLOAT, false, NULL,NULL) });
 	
 	slot = 1;
-	m_vao->AddVertexBuffer(m_AnimData.m_Frames[0].m_Col, { BufferAttribute(slot, 3,
+	m_vao->AddVertexBuffer(m_AnimData.m_Frames[0].m_Col, { BufferAttribute(slot, 4,
 	GL_FLOAT, false, NULL,NULL) });
 
 	slot = 2;
@@ -35,7 +34,7 @@ void MorphAnimator::SendToVao()
 		GL_FLOAT, false, NULL,NULL) });
 
 	slot = 5;
-	m_vao->AddVertexBuffer(m_AnimData.m_Frames[1].m_Col, { BufferAttribute(slot, 3,
+	m_vao->AddVertexBuffer(m_AnimData.m_Frames[1].m_Col, { BufferAttribute(slot, 4,
 	GL_FLOAT, false,NULL,NULL) });
 
 	slot = 6;
