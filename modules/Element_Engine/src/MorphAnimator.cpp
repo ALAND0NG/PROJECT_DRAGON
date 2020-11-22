@@ -49,6 +49,8 @@ void MorphAnimator::SendToVao()
 		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Normal, { BufferAttribute(slot,  3,
 		GL_FLOAT, false, NULL,NULL) });
 
+		m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames = false;
+
 	}
 	
 }
@@ -62,6 +64,25 @@ void MorphAnimator::Update()
 	anim.m_Timer += Timer::dt;
 
 	m_AnimData.t = anim.m_Timer / anim.m_TimeForFrame;
+	
+	if (m_AnimData.t >= 1.f)
+	{
+		m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames = true; //for the vao update
+		
+																				
+		//updates our frames
+
+		int newCurFrame = anim.m_NextFrame;
+		int newNextFrame = anim.m_NextFrame + 1;
+		if (newNextFrame > anim.m_LastFrame)
+		{
+			newNextFrame = anim.m_FirstFrame;
+		}
+		anim.m_CurrentFrame = newCurFrame;
+		anim.m_NextFrame = newNextFrame;
+	}
+
+	m_Animations[m_AnimData.m_ActiveAnimation] = anim;
 
 	
 	SendToVao();
