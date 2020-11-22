@@ -45,7 +45,6 @@ void PrefabMakeScene::InitScene()
 //	ECS::Get<Mesh>(2).LoadOBJ("models/anotherOne1.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<MorphAnimator>(2).LoadFrame("models/walk1.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<MorphAnimator>(2).LoadFrame("models/walk2.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<MorphAnimator>(2).SendToVao();
 
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");

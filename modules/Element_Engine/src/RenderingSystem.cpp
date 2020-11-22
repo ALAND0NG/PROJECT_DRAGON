@@ -183,7 +183,7 @@ void RenderingSystem::ECSUpdate()
 			AnimationShader->SetUniform("u_Shininess", ECS::Get<Material>(i).GetShininess());
 			AnimationShader->SetUniform("t", ECS::Get<MorphAnimator>(i).GetAnimData().t);
 
-			ECS::Get<MorphAnimator>(i).SendToVao();
+			ECS::Get<MorphAnimator>(i).Update();
 			ECS::Get<MorphAnimator>(i).GetVAO()->Render();
 			
 		}

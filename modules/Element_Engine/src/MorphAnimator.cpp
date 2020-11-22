@@ -1,5 +1,6 @@
 #include <MorphAnimator.h>
 #include <OBJLoader.h>
+#include <Timer.h>
 AData MorphAnimator::GetAnimData()
 {
 	return m_AnimData;
@@ -13,42 +14,76 @@ void MorphAnimator::LoadFrame(std::string filePath, glm::vec4 color)
 void MorphAnimator::SendToVao()
 {
 	
-	uint32_t slot = 0;
-	m_vao->AddVertexBuffer(m_AnimData.m_Frames[0].m_Pos, { BufferAttribute(slot, 3,
-		GL_FLOAT, false, NULL,NULL) });
-	
-	slot = 1;
-	m_vao->AddVertexBuffer(m_AnimData.m_Frames[0].m_Col, { BufferAttribute(slot, 4,
-	GL_FLOAT, false, NULL,NULL) });
+	//Get our indexes from our animation Data
+	int F1 = m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame;
+	int F2 = m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
 
-	slot = 2;
-	m_vao->AddVertexBuffer(m_AnimData.m_Frames[0].m_Normal, { BufferAttribute(slot, 3,
-	GL_FLOAT, false, NULL,NULL) });
+	if (m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames)
+	{
 
-	slot = 3;
-	m_vao->AddVertexBuffer(m_AnimData.m_Frames[0].m_UV, { BufferAttribute(slot, 2,
-	GL_FLOAT, false, NULL,NULL) });
-	
-	slot = 4;
-	m_vao->AddVertexBuffer(m_AnimData.m_Frames[1].m_Pos, { BufferAttribute(slot, 3,
+		uint32_t slot = 0;
+		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Pos, { BufferAttribute(slot, 3,
+			GL_FLOAT, false, NULL,NULL) });
+
+		slot = 1;
+		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Col, { BufferAttribute(slot, 3,
 		GL_FLOAT, false, NULL,NULL) });
 
-	slot = 5;
-	m_vao->AddVertexBuffer(m_AnimData.m_Frames[1].m_Col, { BufferAttribute(slot, 4,
-	GL_FLOAT, false,NULL,NULL) });
+		slot = 2;
+		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Normal, { BufferAttribute(slot, 3,
+		GL_FLOAT, false, NULL,NULL) });
 
-	slot = 6;
-	m_vao->AddVertexBuffer(m_AnimData.m_Frames[1].m_Normal, { BufferAttribute(slot,  3,
-	GL_FLOAT, false, NULL,NULL) });
+		slot = 3;
+		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_UV, { BufferAttribute(slot, 2,
+		GL_FLOAT, false, NULL,NULL) });
 
-	slot = 7;
-	m_vao->AddVertexBuffer(m_AnimData.m_Frames[1].m_UV, { BufferAttribute(slot, 2,
-	GL_FLOAT, false, NULL,NULL) });
+		slot = 4;
+		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Pos, { BufferAttribute(slot, 3,
+			GL_FLOAT, false, NULL,NULL) });
+
+		slot = 5;
+		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Col, { BufferAttribute(slot, 3,
+		GL_FLOAT, false,NULL,NULL) });
+
+		slot = 6;
+		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Normal, { BufferAttribute(slot,  3,
+		GL_FLOAT, false, NULL,NULL) });
+
+	}
 	
 }
 
 void MorphAnimator::Update()
 {
+	Animation anim;
+
+	anim = m_Animations[m_AnimData.m_ActiveAnimation];
+
+	anim.m_Timer += Timer::dt;
+
+	m_AnimData.t = anim.m_Timer / anim.m_TimeForFrame;
+
+	
+	SendToVao();
+}
+
+void MorphAnimator::SetActiveAnimation(int index)
+{
+	m_AnimData.m_ActiveAnimation = index;
+}
+
+void MorphAnimator::AddNewAnimation(int firstframe, int lastframe, float timeperframe, int numFrames)
+{
+	Animation newAnimation;
+	newAnimation.m_FirstFrame = firstframe;
+	newAnimation.m_LastFrame = lastframe;
+	newAnimation.m_TimeForFrame = timeperframe;
+	newAnimation.m_NumFrames = numFrames;
+
+
+
+	m_Animations.push_back(newAnimation);
+
 }
 
 void MorphAnimator::SetVAO(VertexArrayObject::sptr vao)

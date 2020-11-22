@@ -2,19 +2,18 @@
 
 //Keyframe 1
 layout(location = 0) in vec3 FramePos1;
-layout(location = 1) in vec4 Color1;
+layout(location = 1) in vec3 Color1;
 layout(location = 2) in vec3 inNormal1;
 layout(location = 3) in vec2 inUV1;
 
 //Keyframe 2
 layout(location = 4) in vec3 FramePos2;
-layout(location = 5) in vec4 Color2;
+layout(location = 5) in vec3 Color2;
 layout(location = 6) in vec3 inNormal2;
-layout(location = 7) in vec2 inUV2;
 
 //We only output the result from the lerp between frame 1 & 2
 layout(location = 0) out vec3 outPos;
-layout(location = 1) out vec4 outColor;
+layout(location = 1) out vec3 outColor;
 layout(location = 2) out vec3 outNormal;
 layout(location = 3) out vec2 outUV;
 
@@ -37,7 +36,7 @@ void main()
 	mixedNorms = mix(inNormal1, inNormal2, t);
 	outNormal = (mat3(u_Model) * mixedNorms);
 	outUV = inUV1;
-	outColor = mix(Color1, Color2, t);
+	outColor = Color1;
 	gl_Position = u_ModelViewProjection * vec4(outPos,1.0);
 	
 }

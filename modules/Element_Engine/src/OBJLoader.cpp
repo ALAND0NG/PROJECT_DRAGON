@@ -201,7 +201,7 @@ Frame OBJLoader::LoadFrame(std::string filename, glm::vec4 col)
 			ss >> tempVec3.x >> tempVec3.y >> tempVec3.z;
 			vertex_position.push_back(tempVec3);
 		}
-		else if (prefix == "vt")
+		else if (prefix == "vt") 
 		{
 			ss >> tempVec2.x >> tempVec2.y;
 			vertex_texture.push_back(tempVec2);
@@ -280,7 +280,7 @@ Frame OBJLoader::LoadFrame(std::string filename, glm::vec4 col)
 
 		colors.push_back(col.b);
 
-		colors.push_back(col.a);
+		//colors.push_back(col.a);
 
 		normals.push_back(vertex_normal[Norm_Ind[i] - 1].x);
 
