@@ -257,16 +257,16 @@ Frame OBJLoader::LoadFrame(std::string filename, glm::vec4 col)
 	//vbo needs a float array, managing an array is more annoying than a vector
 	//im lazy so I am adding to a vector then pushing to an array which is more work
 	//but im also dumb and this is easier
-	float** posarr = new float* [possize];
+	//float** posarr = new float* [possize];
 	std::vector<float> positions;
 
-	float** colarr = new float* [colSize];
+	//float** colarr = new float* [colSize];
 	std::vector<float> colors;
 
-	float** normarr = new float* [normsize];
+	//float** normarr = new float* [normsize];
 	std::vector<float> normals;
 
-	float** uvarr = new float* [uvsize];
+	//float** uvarr = new float* [uvsize];
 	std::vector<float> uvs;
 	
 	//writes all data loaded from our obj into vectors
@@ -297,23 +297,7 @@ Frame OBJLoader::LoadFrame(std::string filename, glm::vec4 col)
 		uvs.push_back(vertex_texture[Tex_Ind[i] - 1].x);
 		uvs.push_back(vertex_texture[Tex_Ind[i] - 1].y);
 	}
-	//takes vectors and writes them into arrays before we can pass them into a VBO
-	for (int i = 0; i < positions.size(); i++)
-	{
-		posarr[i] = &positions[i];//:)
-	}
-	for (int i = 0; i < colors.size(); i++)
-	{
-		colarr[i] = &colors[i];
-	}
-	for (int i = 0; i < normals.size(); i++)
-	{
-		normarr[i] = &normals[i];
-	}
-	for (int i = 0; i < uvs.size(); i++)
-	{
-		uvarr[i] = &uvs[i];
-	}
+	
 
 	frame.m_Pos = VertexBuffer::Create();
 	frame.m_Col = VertexBuffer::Create();
@@ -321,10 +305,10 @@ Frame OBJLoader::LoadFrame(std::string filename, glm::vec4 col)
 	frame.m_UV = VertexBuffer::Create();
 
 	//loads our arrays into data for a frame
-	frame.m_Pos->LoadData(posarr,sizeof(posarr), possize);
-	frame.m_Col->LoadData(colarr, sizeof(colarr), colSize);
-	frame.m_Normal->LoadData(normarr,sizeof(normarr), normsize);
-	frame.m_UV->LoadData(uvarr, sizeof(uvarr),uvsize);
+	frame.m_Pos->LoadData(positions.data(),positions.size());
+	frame.m_Col->LoadData(colors.data(), colors.size());
+	frame.m_Normal->LoadData(normals.data(), normals.size());
+	frame.m_UV->LoadData(uvs.data(), uvs.size());
 
 	return frame;
 	

@@ -36,8 +36,8 @@ void main()
 	vec3 mixedNorms;
 	mixedNorms = mix(inNormal1, inNormal2, t);
 	outNormal = (u_Model * vec4(mixedNorms,1.0)).xyz;
-	outUV = mix(inUV1, inUV2, t);
+	outUV = inUV1;
 	outColor = mix(Color1, Color2, t);
-	gl_Position = u_ModelViewProjection * vec4(outPos, 1.0);
+	gl_Position = u_ModelViewProjection * vec4(outPos,1.0);
 	
 }

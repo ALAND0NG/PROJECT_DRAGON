@@ -25,6 +25,11 @@ struct AData//animation data
 class MorphAnimator
 {
 public:
+	
+	MorphAnimator() //constructor
+	{
+		m_vao = VertexArrayObject::Create();
+	}
 	AData GetAnimData();
 	//adds a frame to the animation
 	void LoadFrame(std::string filePath, glm::vec4 color);

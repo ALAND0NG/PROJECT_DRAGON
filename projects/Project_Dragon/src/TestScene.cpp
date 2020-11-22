@@ -36,11 +36,11 @@ void TestScene::InitScene()
 	ECS::Add<Transform>(2);
 	ECS::Add<PhysicsBody>(2);
 	ECS::Add<LightSource>(2);
-	ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<Material>(2).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	ECS::Get<Mesh>(2).LoadOBJ("models/animations/FIRE_ENEMY/FE_WALK_1.obj", glm::vec4(1, 1, 1, 1));
+	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
-	ECS::Get<PhysicsBody>(2).AddBody(0.f,btVector3(0,3,0), btVector3(1,1,1));
+	ECS::Get<PhysicsBody>(2).AddBody(0.f,btVector3(0,0,0), btVector3(1,0,1));
 	ECS::Get<PhysicsBody>(2).m_Entity = 3;
 
 	/*

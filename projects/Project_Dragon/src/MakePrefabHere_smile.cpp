@@ -36,15 +36,15 @@ void PrefabMakeScene::InitScene()
 
 	//Enemy for animation test
 	ECS::Create(2);
-//	ECS::Add<Mesh>(2);
+	//ECS::Add<Mesh>(2);
 	ECS::Add<MorphAnimator>(2);
 	ECS::Add<Material>(2);
 	ECS::Add<Transform>(2);
-	ECS::Get<Transform>(2).SetPosition(glm::vec3(1, 2, 1));
+	ECS::Get<Transform>(2).SetPosition(glm::vec3(1, 3, 1));
 	ECS::Get<Transform>(2).SetScale(glm::vec3(5, 5, 5));
-//	ECS::Get<Mesh>(2).LoadOBJ("models/animations/FIRE_ENEMY/FE_WALK_1.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<MorphAnimator>(2).LoadFrame("models/animations/FIRE_ENEMY/FE_WALK_1.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<MorphAnimator>(2).LoadFrame("models/animations/FIRE_ENEMY/FE_WALK_2.obj", glm::vec4(1, 1, 1, 1));
+	//ECS::Get<Mesh>(2).LoadOBJ("models/animations/FIRE_ENEMY/FE_WALK_1.obj", glm::vec4(1, 1, 1, 1));
+	ECS::Get<MorphAnimator>(2).LoadFrame("models/smallcube.obj", glm::vec4(1, 1, 1, 1));
+	ECS::Get<MorphAnimator>(2).LoadFrame("models/bigcube.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<MorphAnimator>(2).SendToVao();
 
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
@@ -152,5 +152,8 @@ void PrefabMakeScene::Update()
 			ECS::Get<MorphAnimator>(2).SetT(0.01f);
 		}
 	}
+
+
+	//std::cout << ECS::Get<MorphAnimator>(2).GetAnimData().t << std::endl;
 	
 }
