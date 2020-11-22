@@ -15,11 +15,11 @@ void MorphAnimator::SendToVao()
 {
 	
 	//Get our indexes from our animation Data
-	int F1 = m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame;
-	int F2 = m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
+	int F1 = 0;//m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame;
+	int F2 = 1;//m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
 
-	if (m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames)
-	{
+	//if (m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames)
+	//{
 
 		uint32_t slot = 0;
 		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Pos, { BufferAttribute(slot, 3,
@@ -51,12 +51,13 @@ void MorphAnimator::SendToVao()
 
 		m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames = false;
 
-	}
+//	}
 	
 }
 
 void MorphAnimator::Update()
 {
+	/*
 	Animation anim;
 
 	anim = m_Animations[m_AnimData.m_ActiveAnimation];
@@ -83,7 +84,7 @@ void MorphAnimator::Update()
 	}
 
 	m_Animations[m_AnimData.m_ActiveAnimation] = anim;
-
+	*/
 	
 	SendToVao();
 }

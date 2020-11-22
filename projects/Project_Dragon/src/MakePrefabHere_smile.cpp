@@ -46,7 +46,7 @@ void PrefabMakeScene::InitScene()
 	ECS::Get<MorphAnimator>(2).LoadFrame("models/animations/FIRE_ENEMY/FE_WALK_1.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<MorphAnimator>(2).LoadFrame("models/animations/FIRE_ENEMY/FE_WALK_2.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<MorphAnimator>(2).AddNewAnimation(0,1,1,2);
-	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
+	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);  
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
