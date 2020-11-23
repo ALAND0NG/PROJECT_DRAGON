@@ -14,7 +14,7 @@ void RenderingSystem::Init()
 
 	AnimationShader = Shader::Create();
 	AnimationShader->LoadShaderPartFromFile("shader/morph_vert.glsl", GL_VERTEX_SHADER);
-	AnimationShader->LoadShaderPartFromFile("shader/frag_shader.glsl", GL_FRAGMENT_SHADER);
+	AnimationShader->LoadShaderPartFromFile("shader/morph_frag.glsl", GL_FRAGMENT_SHADER);
 	AnimationShader->Link();
 	
 

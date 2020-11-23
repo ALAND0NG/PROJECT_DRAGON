@@ -41,11 +41,16 @@ void PrefabMakeScene::InitScene()
 	ECS::Add<Material>(2);
 	ECS::Add<Transform>(2);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(1, 3, 1));
-	ECS::Get<Transform>(2).SetScale(glm::vec3(5, 5, 5));
+	ECS::Get<Transform>(2).SetScale(glm::vec3(0.5, 0.5, 0.5));
 //	ECS::Get<Mesh>(2).LoadOBJ("models/anotherOne1.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<MorphAnimator>(2).LoadFrame("models/animations/FIRE_ENEMY/FE_WALK_1.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<MorphAnimator>(2).LoadFrame("models/animations/FIRE_ENEMY/FE_WALK_2.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<MorphAnimator>(2).AddNewAnimation(0,1,1,2);
+	for (int i = 1; i <= 8; i++)
+	{
+		std::string path;
+		path = "models/animations/FIRE_ENEMY/FE_WALK_" + std::to_string(i);
+		path += ".obj";
+		ECS::Get<MorphAnimator>(2).LoadFrame(path, glm::vec4(1, 1, 1, 1));
+	}
+	ECS::Get<MorphAnimator>(2).AddNewAnimation(0,3,1,8);
 	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);  
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
@@ -126,32 +131,6 @@ void PrefabMakeScene::Update()
 		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 	
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_MINUS) == GLFW_PRESS)
-	{
-		if (ECS::Get<MorphAnimator>(2).GetAnimData().t < 1.f)
-		{
-			float newT;
-			newT = ECS::Get<MorphAnimator>(2).GetAnimData().t;
-			newT += 1.f * Timer::dt;
-			ECS::Get<MorphAnimator>(2).SetT(newT);
-		}
-		else {
-			ECS::Get<MorphAnimator>(2).SetT(0.95f);
-		}
-	}
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_EQUAL) == GLFW_PRESS)
-	{
-		if (ECS::Get<MorphAnimator>(2).GetAnimData().t > 0.f)
-		{
-			float newT;
-			newT = ECS::Get<MorphAnimator>(2).GetAnimData().t;
-			newT -= 1.f * Timer::dt;
-			ECS::Get<MorphAnimator>(2).SetT(newT);
-		}
-		else {
-			ECS::Get<MorphAnimator>(2).SetT(0.01f);
-		}
-	}
 
 
 	//std::cout << ECS::Get<MorphAnimator>(2).GetAnimData().t << std::endl;

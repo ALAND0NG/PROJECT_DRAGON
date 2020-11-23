@@ -1,6 +1,7 @@
 #include <MorphAnimator.h>
 #include <OBJLoader.h>
 #include <Timer.h>
+#include <iostream>
 AData MorphAnimator::GetAnimData()
 {
 	return m_AnimData;
@@ -15,11 +16,13 @@ void MorphAnimator::SendToVao()
 {
 	
 	//Get our indexes from our animation Data
-	int F1 = 0;// m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame;
-	int F2 = 1;// m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
+	int F1 =  m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame;
+	int F2 =  m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
 
-	//if (m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames)
-	//{
+	if (m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames)
+	{
+
+		std::cout << "Updated VAO\n";
 
 		uint32_t slot = 0;
 		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Pos, { BufferAttribute(slot, 3,
@@ -50,45 +53,47 @@ void MorphAnimator::SendToVao()
 		GL_FLOAT, false, NULL,NULL) });
 
 		m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames = false;
-
-//	}
-	
+	}
 }
 
 void MorphAnimator::Update()
 {
-/*
-	Animation anim;
 
-	anim = m_Animations[m_AnimData.m_ActiveAnimation];
 
-	anim.m_Timer += Timer::dt;
+	//m_Animations[m_AnimData.m_ActiveAnimation].m_Timer += Timer::dt;
 
-	m_AnimData.t = anim.m_Timer / anim.m_TimeForFrame;
+	
+	m_AnimData.t += Timer::dt * m_Animations[m_AnimData.m_ActiveAnimation].m_TimeForFrame;
+
 	
 	if (m_AnimData.t >= 1.f)
 	{
 		m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames = true; //for the vao update
 		
-																				
+		
 		//updates our frames
 
-		int newCurFrame = anim.m_NextFrame;
-		int newNextFrame = anim.m_NextFrame + 1;
-		if (newNextFrame > anim.m_LastFrame)
+		int newCurFrame = m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
+		int newNextFrame = m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame + 1;
+		if (newNextFrame > m_Animations[m_AnimData.m_ActiveAnimation].m_LastFrame)
 		{
-			newNextFrame = anim.m_FirstFrame;
+			newNextFrame = m_Animations[m_AnimData.m_ActiveAnimation].m_FirstFrame;
 		}
-		if (newCurFrame > anim.m_LastFrame)
-			newCurFrame = anim.m_FirstFrame;
+		if (newCurFrame > m_Animations[m_AnimData.m_ActiveAnimation].m_LastFrame)
+			newCurFrame = m_Animations[m_AnimData.m_ActiveAnimation].m_FirstFrame;
 
-		anim.m_CurrentFrame = newCurFrame;
-		anim.m_NextFrame = newNextFrame;
+		m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame = newCurFrame;
+		m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame = newNextFrame;
+
+		//resets timers
+		m_AnimData.t = 0.f;
+		m_Animations[m_AnimData.m_ActiveAnimation].m_Timer = 0.f;
+
+		std::cout << "Switched Frames to: " << m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame << "&" << m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame
+			<< std::endl;
 	}
-
-	m_Animations[m_AnimData.m_ActiveAnimation] = anim;
 	
-*/
+
 	SendToVao();
 }
 
@@ -104,6 +109,8 @@ void MorphAnimator::AddNewAnimation(int firstframe, int lastframe, float timeper
 	newAnimation.m_LastFrame = lastframe;
 	newAnimation.m_TimeForFrame = timeperframe;
 	newAnimation.m_NumFrames = numFrames;
+	newAnimation.m_CurrentFrame = firstframe;
+	newAnimation.m_NextFrame = firstframe + 1;
 
 
 
