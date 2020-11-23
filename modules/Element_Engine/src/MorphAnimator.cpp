@@ -57,7 +57,7 @@ void MorphAnimator::SendToVao()
 
 void MorphAnimator::Update()
 {
-	/*
+	
 	Animation anim;
 
 	anim = m_Animations[m_AnimData.m_ActiveAnimation];
@@ -79,12 +79,15 @@ void MorphAnimator::Update()
 		{
 			newNextFrame = anim.m_FirstFrame;
 		}
+		if (newCurFrame > anim.m_LastFrame)
+			newCurFrame = anim.m_FirstFrame;
+
 		anim.m_CurrentFrame = newCurFrame;
 		anim.m_NextFrame = newNextFrame;
 	}
 
 	m_Animations[m_AnimData.m_ActiveAnimation] = anim;
-	*/
+	
 	
 	SendToVao();
 }
