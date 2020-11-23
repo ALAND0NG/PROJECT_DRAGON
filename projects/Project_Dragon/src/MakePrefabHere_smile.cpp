@@ -48,80 +48,20 @@ void PrefabMakeScene::InitScene()
 		std::string path;
 		path = "models/animations/FIRE_ENEMY/FE_WALK_" + std::to_string(i);
 		path += ".obj";
-		ECS::Get<MorphAnimator>(2).LoadFrame(path, glm::vec4(1, 1, 1, 1));
+		ECS::Get<MorphAnimator>(2).LoadFrame(path, glm::vec4(0.1 * i, 0.2 * i, 0.3 * i, 1));
+		std::cout << "added frame " << i << std::endl;
 	}
-	ECS::Get<MorphAnimator>(2).AddNewAnimation(0,3,1,8);
+	ECS::Get<MorphAnimator>(2).AddNewAnimation(0,3,1);
+	ECS::Get<MorphAnimator>(2).AddNewAnimation(3, 6, 1);
+	ECS::Get<MorphAnimator>(2).AddNewAnimation(0, 7, 1);
 	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);  
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
-
-
-
-#pragma region asset_loading
-	/*
-	For now I am not using prefabs/proper model loading, I am just trying to get something up and running
-	Mesh pfb0;
-	pfb0.LoadOBJ("models/StraightTrack.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb0);
-
-	Mesh pfb1;
-	pfb1.LoadOBJ("models/SideTrack.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb1);
-
-	Mesh pfb2;
-	pfb2.LoadOBJ("models/RightTurn.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb2);
-
-	Mesh pfb3;
-	pfb3.LoadOBJ("models/RightOff.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb3);
-
-	Mesh pfb4;
-	pfb4.LoadOBJ("models/LeftTurn.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb4);
-
-	Mesh pfb5;
-	pfb5.LoadOBJ("models/LeftOff.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb5);
-
-	Material mat0;
-	mat0.LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
-	mat0.LoadSpecularFromFile("images/Stone_001_Specular.png");
-	mat0.SetAll(1.f);
-	AssetLoader::GetMat().push_back(mat0);
-
-#pragma endregion
-
-	InstantiatingSystem::AddPrefab(new TestPrefab()); //prefab 0
-	InstantiatingSystem::AddPrefab(new StraightTrack()); //prefab 1
-	InstantiatingSystem::AddPrefab(new SideTrack()); //prefab 2
-	InstantiatingSystem::AddPrefab(new RightTurn()); // prefab 3
-	InstantiatingSystem::AddPrefab(new RightOff()); // prefab 4
-	InstantiatingSystem::AddPrefab(new LeftTurn()); // prefab 5
-	InstantiatingSystem::AddPrefab(new LeftOff()); // prefab 6
-	*/
 }
 
 void PrefabMakeScene::Update()
 {
-	/*
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
-	{
-		//	ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
-		ECS::Get<PhysicsBody>(3).SetLinearVelocity(btVector3(5, 0, 0));
-	}
-
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_E) == GLFW_PRESS)
-	{
-
-		InstantiatingSystem::InitPrefab(0, ECS::Get<Transform>(0).GetPosition());
-
-		glm::vec3 f = ECS::Get<Camera>(0).GetForward() * 10.f;//agony
-		ECS::Get<PhysicsBody>(ECS::GetSize() - 1).SetLinearVelocity(btVector3(f.x, f.y, f.z));
-
-	}
-	*/
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_F) == GLFW_PRESS)
 	{
 		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -132,7 +72,13 @@ void PrefabMakeScene::Update()
 	}
 	
 
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_1) == GLFW_PRESS)
+		ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
 
-	//std::cout << ECS::Get<MorphAnimator>(2).GetAnimData().t << std::endl;
-	
+
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_2) == GLFW_PRESS)
+		ECS::Get<MorphAnimator>(2).SetActiveAnimation(1);
+
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_3) == GLFW_PRESS)
+		ECS::Get<MorphAnimator>(2).SetActiveAnimation(2);
 }

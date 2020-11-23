@@ -102,13 +102,13 @@ void MorphAnimator::SetActiveAnimation(int index)
 	m_AnimData.m_ActiveAnimation = index;
 }
 
-void MorphAnimator::AddNewAnimation(int firstframe, int lastframe, float timeperframe, int numFrames)
+void MorphAnimator::AddNewAnimation(int firstframe, int lastframe, float timeperframe)
 {
 	Animation newAnimation;
 	newAnimation.m_FirstFrame = firstframe;
 	newAnimation.m_LastFrame = lastframe;
 	newAnimation.m_TimeForFrame = timeperframe;
-	newAnimation.m_NumFrames = numFrames;
+
 	newAnimation.m_CurrentFrame = firstframe;
 	newAnimation.m_NextFrame = firstframe + 1;
 

@@ -56,7 +56,7 @@ public:
 
 	void SetActiveAnimation(int index);
 
-	void AddNewAnimation(int firstframe, int lastframe, float timeperframe, int numFrames);//pushes back a new animation into m_Animations
+	void AddNewAnimation(int firstframe, int lastframe, float timeperframe);//pushes back a new animation into m_Animations
 
 	void SetVAO(VertexArrayObject::sptr vao);
 	VertexArrayObject::sptr GetVAO();

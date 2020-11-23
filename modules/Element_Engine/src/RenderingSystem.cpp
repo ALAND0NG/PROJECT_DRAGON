@@ -53,44 +53,21 @@ void RenderingSystem::Init()
 
 	IMGUIManager::imGuiCallbacks.push_back([&]()
 		{		// We'll add some ImGui controls to control our shader
-			if (ImGui::CollapsingHeader("Scene Level Lighting Settings"))
-				{
-				if (ImGui::ColorPicker3("Ambient Color", glm::value_ptr(ambientCol))) {
-					shader->SetUniform("u_AmbientCol", ambientCol);
-				}
-				if (ImGui::SliderFloat("Fixed Ambient Power", &ambientPow, 0.01f, 1.0f)) {
-					shader->SetUniform("u_AmbientStrength", ambientPow);					}
-				}
-				if (ImGui::CollapsingHeader("Light Level Lighting Settings"))
-				{
-					if (ImGui::SliderFloat("Light Ambient Power", &lightAmbientPow, 0.0f, 1.0f)) {
-						shader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
-					}
-					if (ImGui::SliderFloat("Light Specular Power", &lightSpecularPow, 0.0f, 1.0f)) {
-						shader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
-					}
-					if (ImGui::DragFloat("Light Linear Falloff", &lightLinearFalloff, 0.01f, 0.0f, 1.0f)) {
-						shader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
-					}
-					if (ImGui::DragFloat("Light Quadratic Falloff", &lightQuadraticFalloff, 0.01f, 0.0f, 1.0f)) {
-						shader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
-					}
-				}
+		
+			if (ImGui::Button("Play Animation 1"))
+			{
+				ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
+			}
+			if (ImGui::Button("Play Animation 2"))
+			{
+				ECS::Get<MorphAnimator>(2).SetActiveAnimation(1);
+			}
+			if (ImGui::Button("Play Animation 3"))
+			{
+				ECS::Get<MorphAnimator>(2).SetActiveAnimation(2);
+			}
 
-
-				ImGui::Text("Q/E -> Yaw\nLeft/Right -> Roll\nUp/Down -> Pitch\nY -> Toggle Mode");
-
-				minFps = FLT_MAX;
-				maxFps = 0;
-				avgFps = 0;
-				for (int ix = 0; ix < 128; ix++) {
-					if (fpsBuffer[ix] < minFps) { minFps = fpsBuffer[ix]; }
-					if (fpsBuffer[ix] > maxFps) { maxFps = fpsBuffer[ix]; }
-					avgFps += fpsBuffer[ix];
-				}
-				ImGui::PlotLines("FPS", fpsBuffer, 128);
-				ImGui::Text("MIN: %f MAX: %f AVG: %f", minFps, maxFps, avgFps / 128.0f);
-				});
+		});
 }
 
 void RenderingSystem::Update()
