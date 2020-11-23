@@ -82,7 +82,7 @@ void BackEnd::InitWindow()
 	//glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	glfwSetWindowSizeCallback(BackEnd::m_Window, GlfwWindowResizedCallback);
-	glfwSetCursorPosCallback(BackEnd::m_Window, mouse_Callback);
+	//glfwSetCursorPosCallback(BackEnd::m_Window, mouse_Callback);
 
 	
 	//This initializes OpenGL via GLAD.

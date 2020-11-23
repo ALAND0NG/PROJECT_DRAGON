@@ -14,19 +14,58 @@ void MorphAnimator::LoadFrame(std::string filePath, glm::vec4 color)
 
 void MorphAnimator::SendToVao()
 {
-	
-	//Get our indexes from our animation Data
-	int F1 =  m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame;
-	int F2 =  m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
-
-	if (m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames)
+	if (m_AnimBlender.ShouldBlend == false)
 	{
+		//Get our indexes from our animation Data
+		int F1 = m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame;
+		int F2 = m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
 
-		std::cout << "Updated VAO\n";
+		if (m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames)
+		{
+
+			std::cout << "Updated VAO\n";
+
+			uint32_t slot = 0;
+			m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Pos, { BufferAttribute(slot, 3,
+				GL_FLOAT, false, NULL,NULL) });
+
+			slot = 1;
+			m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Col, { BufferAttribute(slot, 3,
+			GL_FLOAT, false, NULL,NULL) });
+
+			slot = 2;
+			m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Normal, { BufferAttribute(slot, 3,
+			GL_FLOAT, false, NULL,NULL) });
+
+			slot = 3;
+			m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_UV, { BufferAttribute(slot, 2,
+			GL_FLOAT, false, NULL,NULL) });
+
+			slot = 4;
+			m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Pos, { BufferAttribute(slot, 3,
+				GL_FLOAT, false, NULL,NULL) });
+
+			slot = 5;
+			m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Col, { BufferAttribute(slot, 3,
+			GL_FLOAT, false,NULL,NULL) });
+
+			slot = 6;
+			m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Normal, { BufferAttribute(slot,  3,
+			GL_FLOAT, false, NULL,NULL) });
+
+			m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames = false;
+		}
+	}
+	else
+	{
+		//Get our indexes from our animation Data
+		int F1 = m_AnimBlender.m_Frame1;
+		int F2 = m_AnimBlender.m_Frame2;
+
 
 		uint32_t slot = 0;
 		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Pos, { BufferAttribute(slot, 3,
-			GL_FLOAT, false, NULL,NULL) });
+		GL_FLOAT, false, NULL,NULL) });
 
 		slot = 1;
 		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Col, { BufferAttribute(slot, 3,
@@ -42,7 +81,7 @@ void MorphAnimator::SendToVao()
 
 		slot = 4;
 		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Pos, { BufferAttribute(slot, 3,
-			GL_FLOAT, false, NULL,NULL) });
+		GL_FLOAT, false, NULL,NULL) });
 
 		slot = 5;
 		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Col, { BufferAttribute(slot, 3,
@@ -52,7 +91,6 @@ void MorphAnimator::SendToVao()
 		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Normal, { BufferAttribute(slot,  3,
 		GL_FLOAT, false, NULL,NULL) });
 
-		m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames = false;
 	}
 }
 
@@ -62,37 +100,42 @@ void MorphAnimator::Update()
 
 	//m_Animations[m_AnimData.m_ActiveAnimation].m_Timer += Timer::dt;
 
-	
-	m_AnimData.t += Timer::dt * m_Animations[m_AnimData.m_ActiveAnimation].m_TimeForFrame;
-
-	
-	if (m_AnimData.t >= 1.f)
+	if (m_AnimBlender.ShouldBlend == false)
 	{
-		m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames = true; //for the vao update
-		
-		
-		//updates our frames
+		m_AnimData.t += Timer::dt * m_Animations[m_AnimData.m_ActiveAnimation].m_TimeForFrame;
 
-		int newCurFrame = m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
-		int newNextFrame = m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame + 1;
-		if (newNextFrame > m_Animations[m_AnimData.m_ActiveAnimation].m_LastFrame)
+
+		if (m_AnimData.t >= 1.f)
 		{
-			newNextFrame = m_Animations[m_AnimData.m_ActiveAnimation].m_FirstFrame;
+			m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames = true; //for the vao update
+
+
+			//updates our frames
+
+			int newCurFrame = m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
+			int newNextFrame = m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame + 1;
+			if (newNextFrame > m_Animations[m_AnimData.m_ActiveAnimation].m_LastFrame)
+			{
+				newNextFrame = m_Animations[m_AnimData.m_ActiveAnimation].m_FirstFrame;
+			}
+			if (newCurFrame > m_Animations[m_AnimData.m_ActiveAnimation].m_LastFrame)
+				newCurFrame = m_Animations[m_AnimData.m_ActiveAnimation].m_FirstFrame;
+
+			m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame = newCurFrame;
+			m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame = newNextFrame;
+
+			//resets timers
+			m_AnimData.t = 0.f;
+			m_Animations[m_AnimData.m_ActiveAnimation].m_Timer = 0.f;
+
+			std::cout << "Switched Frames to: " << m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame << "&" << m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame
+				<< std::endl;
 		}
-		if (newCurFrame > m_Animations[m_AnimData.m_ActiveAnimation].m_LastFrame)
-			newCurFrame = m_Animations[m_AnimData.m_ActiveAnimation].m_FirstFrame;
-
-		m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame = newCurFrame;
-		m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame = newNextFrame;
-
-		//resets timers
-		m_AnimData.t = 0.f;
-		m_Animations[m_AnimData.m_ActiveAnimation].m_Timer = 0.f;
-
-		std::cout << "Switched Frames to: " << m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame << "&" << m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame
-			<< std::endl;
 	}
-	
+	else
+	{
+		m_AnimData.t = m_AnimBlender.interpolation;
+	}
 
 	SendToVao();
 }

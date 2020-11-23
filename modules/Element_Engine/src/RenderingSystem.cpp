@@ -66,6 +66,11 @@ void RenderingSystem::Init()
 			{
 				ECS::Get<MorphAnimator>(2).SetActiveAnimation(2);
 			}
+			float v;
+			if (ImGui::SliderFloat("Entity 3 blender", &v, 0, 1, "%.3f", 1))
+			{
+				ECS::Get<MorphAnimator>(3).SetBlendInterpolation(v);
+			}
 
 		});
 }

@@ -58,6 +58,24 @@ void PrefabMakeScene::InitScene()
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
+
+	ECS::Create(3);
+	ECS::Add<Transform>(3);
+	ECS::Add<MorphAnimator>(3);
+	ECS::Add<Material>(3);
+	ECS::Get<Transform>(3).SetPosition(glm::vec3(15, 3, 15));
+	ECS::Get<Transform>(3).SetScale(glm::vec3(0.5, 0.5, 0.5));
+	ECS::Get<MorphAnimator>(3).SetShouldBlend(true);
+	ECS::Get<MorphAnimator>(3).LoadFrame("models/animations/FIRE_ENEMY/FE_WALK_1.obj", glm::vec4(1, 0, 0, 1));
+	ECS::Get<MorphAnimator>(3).LoadFrame("models/bigcube.obj", glm::vec4(0, 1, 0, 1));
+	ECS::Get<MorphAnimator>(3).SetBlenderFrames(0, 1);
+
+	ECS::Get<Material>(3).LoadDiffuseFromFile("images/FE_TEXTURE.png");
+	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(3).SetAll(1.f);
+
+
+
 }
 
 void PrefabMakeScene::Update()
