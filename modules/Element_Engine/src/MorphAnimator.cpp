@@ -15,8 +15,8 @@ void MorphAnimator::SendToVao()
 {
 	
 	//Get our indexes from our animation Data
-	int F1 = 0;//m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame;
-	int F2 = 1;//m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
+	int F1 = 0;// m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame;
+	int F2 = 1;// m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
 
 	//if (m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames)
 	//{
@@ -57,7 +57,7 @@ void MorphAnimator::SendToVao()
 
 void MorphAnimator::Update()
 {
-	
+/*
 	Animation anim;
 
 	anim = m_Animations[m_AnimData.m_ActiveAnimation];
@@ -88,7 +88,7 @@ void MorphAnimator::Update()
 
 	m_Animations[m_AnimData.m_ActiveAnimation] = anim;
 	
-	
+*/
 	SendToVao();
 }
 
