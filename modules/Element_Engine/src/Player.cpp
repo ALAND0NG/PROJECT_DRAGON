@@ -13,6 +13,8 @@ bool Player::Shoot(float range)
 
 	//std::cout << "Raycast ended at point: " << to.getX() << ", " << to.getY() << ", " << to.getZ() << std::endl;
 
+	ECS::Get<Transform>(3).SetPosition(BtToGlm::BTTOGLMV3(to));
+
 	if (Results.hasHit() && Results.m_collisionObject->getUserIndex() == 5)
 	{
 		return true;

@@ -47,15 +47,18 @@ void TestScene::InitScene()
 	ECS::Get<PhysicsBody>(2).AddBody(10, btVector3(0, 5, 0), btVector3(2, 2, 2));
 	ECS::Get<PhysicsBody>(2).SetUserData(5);
 
-	/*
-	ECS::Create(4); //for cubemap
-	ECS::Add<Skybox>(4);
-	ECS::Add<Transform>(4);
-	ECS::Get<Skybox>(4).skybox->Create();
-	ECS::Get<Skybox>(4).skybox->LoadShaderPartFromFile("shader/Skybox-vert.glsl", GL_VERTEX_SHADER);
-	ECS::Get<Skybox>(4).skybox->LoadShaderPartFromFile("shader/Skybox-frag.glsl", GL_FRAGMENT_SHADER);
-	ECS::Get<Skybox>(4).skybox->Link();
-	*/
+	//to help debug the ray cast
+	ECS::Create(3);
+	ECS::Add<Mesh>(3);
+	ECS::Add<Material>(3);
+	ECS::Add<Transform>(3);
+	ECS::Get<Transform>(3).SetPosition(glm::vec3(0, 5, 0));
+	ECS::Get<Transform>(3).SetScale(glm::vec3(1.f, 1.f, 1.f));
+	ECS::Get<Mesh>(3).LoadOBJ("models/cube.obj", glm::vec4(0, 1, 0, 1));
+	ECS::Get<Material>(3).LoadDiffuseFromFile("images/FE_TEXTURE.png");
+	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(3).SetAll(1.f);
+
 
 	
 
