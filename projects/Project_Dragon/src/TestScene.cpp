@@ -219,8 +219,8 @@ void TestScene::Update()
 
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_H) == GLFW_PRESS)
 	{
-		if (ECS::Get<Player>(0).Shoot())
-			std::cout << "raycast hit something lets gooooooo";
+		if (ECS::Get<Player>(0).Shoot(10.f))
+			std::cout << "raycast hit\n";
 	}
 
 

@@ -98,6 +98,9 @@ void Game::GameInput()
 		*/
 	//	ECS::Get<PhysicsBody>(0).GetBody()->setActivationState(1);
 		//ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(0, 10, 0));
+		ECS::Get<Player>(0).CheckJump();
+
+		if (ECS::Get<Player>(0).GetPlayerData().m_CanJump)
 		ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(0, 10, 0));
 	}
 	

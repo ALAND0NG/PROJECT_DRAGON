@@ -22,8 +22,6 @@ void MorphAnimator::SendToVao()
 		if (m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames)
 		{
 
-			std::cout << "Updated VAO\n";
-
 			uint32_t slot = 0;
 			m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Pos, { BufferAttribute(slot, 3,
 				GL_FLOAT, false, NULL,NULL) });
