@@ -81,6 +81,11 @@ void PhysicsBody::AddBody(float mass, btVector3 origin, btVector3 size, float fr
 
 }
 
+void PhysicsBody::SetUserData(int data)
+{
+	m_Body->setUserIndex(data);
+}
+
 void PhysicsBody::SetLinearVelocity(btVector3 direction)
 {
 	m_Body->setActivationState(1);

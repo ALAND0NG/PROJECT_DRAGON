@@ -11,9 +11,16 @@ bool Player::Shoot(float range)
 
 	PhysicsSystem::GetWorld()->rayTest(playerPosition, to, Results);
 
-	std::cout << "Raycast ended at point: " << to.getX() << ", " << to.getY() << ", " << to.getZ() << std::endl;
+	//std::cout << "Raycast ended at point: " << to.getX() << ", " << to.getY() << ", " << to.getZ() << std::endl;
 
-	return Results.hasHit();
+	if (Results.hasHit() && Results.m_collisionObject->getUserIndex() == 5)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void Player::Update()
@@ -28,6 +35,8 @@ void Player::CheckJump()
 	to.setY(to.getY() - 2.f);
 	//to += playerPosition;
 	btCollisionWorld::ClosestRayResultCallback Results(playerPosition, to);
+
+	
 
 	PhysicsSystem::GetWorld()->rayTest(playerPosition, to, Results);
 

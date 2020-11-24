@@ -33,28 +33,19 @@ void TestScene::InitScene()
 
 	//Test Enemy
 	ECS::Create(2);
-	//	ECS::Add<Mesh>(2);
-	ECS::Add<MorphAnimator>(2);
+	ECS::Add<Mesh>(2);
+	//ECS::Add<MorphAnimator>(2);
 	ECS::Add<Material>(2);
 	ECS::Add<PhysicsBody>(2);
 	ECS::Add<Transform>(2);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(0, 5, 0));
 	ECS::Get<Transform>(2).SetScale(glm::vec3(1.f, 1.f, 1.f));
-	for (int i = 1; i <= 8; i++)
-	{
-		std::string path;
-		path = "models/animations/FIRE_ENEMY/FE_WALK_" + std::to_string(i);
-		path += ".obj";
-		ECS::Get<MorphAnimator>(2).LoadFrame(path, glm::vec4(1,1,1,1));
-		std::cout << "added frame " << i << std::endl;
-	}
-	ECS::Get<MorphAnimator>(2).AddNewAnimation(0, 7, 10);
-
-	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
+	ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 0, 0, 1));
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
-	ECS::Get<PhysicsBody>(2).AddBody(0, btVector3(0, 5, 0), btVector3(2, 2, 2));
+	ECS::Get<PhysicsBody>(2).AddBody(10, btVector3(0, 5, 0), btVector3(2, 2, 2));
+	ECS::Get<PhysicsBody>(2).SetUserData(5);
 
 	/*
 	ECS::Create(4); //for cubemap
