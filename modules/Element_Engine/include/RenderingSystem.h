@@ -29,5 +29,6 @@ private:
 	//regular mesh shader
 	static Shader::sptr shader;
 	static Shader::sptr AnimationShader;
+	static Shader::sptr BlendShader;
 	static void ECSUpdate(); //Goes through any ECS component that needs a frame by frame update, and applies that
 };

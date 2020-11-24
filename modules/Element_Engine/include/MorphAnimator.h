@@ -79,22 +79,6 @@ public:
 		return m_AnimBlender;
 	}
 
-	void SetBlenderFrames(int frame1, int frame2)
-	{
-		m_AnimBlender.m_Frame1 = frame1;
-		m_AnimBlender.m_Frame2 = frame2;
-	}
-
-	void SetShouldBlend(bool shouldBlend)
-	{
-		m_AnimBlender.ShouldBlend = shouldBlend;
-	}
-
-	void SetBlendInterpolation(float t)
-	{
-		m_AnimBlender.interpolation = t;
-	}
-
 private:
 	AData m_AnimData;
 	VertexArrayObject::sptr m_vao; //this is used to render, making this a glorified mesh component
