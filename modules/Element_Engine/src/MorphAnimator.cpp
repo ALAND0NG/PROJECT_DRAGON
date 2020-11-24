@@ -91,8 +91,6 @@ void MorphAnimator::Update()
 			m_AnimData.t = 0.f;
 			m_Animations[m_AnimData.m_ActiveAnimation].m_Timer = 0.f;
 
-			std::cout << "Switched Frames to: " << m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame << "&" << m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame
-				<< std::endl;
 		}
 	
 

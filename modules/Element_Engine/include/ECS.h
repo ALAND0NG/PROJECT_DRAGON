@@ -14,7 +14,7 @@
 #include <Skybox.h>
 #include <MorphAnimator.h>
 #include <AnimationBlender.h>
-
+#include <Player.h>
 
 
 class ECS

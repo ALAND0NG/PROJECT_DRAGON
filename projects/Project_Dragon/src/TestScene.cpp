@@ -14,6 +14,7 @@ void TestScene::InitScene()
 	ECS::Add<Transform>(0);
 	ECS::Add<PhysicsBody>(0);  
 	ECS::Add<Camera>(0);
+	ECS::Add<Player>(0);
 	ECS::Get<Camera>(0).ResizeWindow(1920, 1080);
 	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 10, 3), btVector3(1,2,1));
 	ECS::Add<LightSource>(0);
@@ -38,7 +39,7 @@ void TestScene::InitScene()
 	ECS::Add<PhysicsBody>(2);
 	ECS::Add<Transform>(2);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(0, 5, 0));
-	ECS::Get<Transform>(2).SetScale(glm::vec3(0.5, 0.5, 0.5));
+	ECS::Get<Transform>(2).SetScale(glm::vec3(1.f, 1.f, 1.f));
 	for (int i = 1; i <= 8; i++)
 	{
 		std::string path;
@@ -53,7 +54,7 @@ void TestScene::InitScene()
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
-	ECS::Get<PhysicsBody>(2).AddBody(1, btVector3(0, 5, 0), btVector3(2, 2, 2));
+	ECS::Get<PhysicsBody>(2).AddBody(0, btVector3(0, 5, 0), btVector3(2, 2, 2));
 
 	/*
 	ECS::Create(4); //for cubemap
@@ -215,4 +216,12 @@ void TestScene::Update()
 	{
 		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
+
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_H) == GLFW_PRESS)
+	{
+		if (ECS::Get<Player>(0).Shoot())
+			std::cout << "raycast hit something lets gooooooo";
+	}
+
+
 }
