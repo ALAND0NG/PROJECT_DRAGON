@@ -9,12 +9,16 @@ struct PlayerData
 	int m_HP;
 	int m_XP;
 	int m_EntityId = 0; //defaulting to 0, because that is the convention we have
+	bool m_CanJump;
 };
 
 class Player
 {
 public:
-	bool Shoot();
+	//this is a raycast test and shoots from camera look at for a distance specified with range
+	bool Shoot(float range);
+	void Update();
+	void CheckJump();
 
 	PlayerData GetPlayerData();
 	void SetPlayerData(PlayerData playdata);
