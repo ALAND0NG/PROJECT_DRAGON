@@ -102,8 +102,8 @@ void Blender::Update()
 
 		//updates our frames
 
-		int newCurFrame = m_Animations[Clip2ID].m_NextFrame;
-		int newNextFrame = m_Animations[Clip2ID].m_NextFrame + 1;
+		 newCurFrame = m_Animations[Clip2ID].m_NextFrame;
+		 newNextFrame = m_Animations[Clip2ID].m_NextFrame + 1;
 		if (newNextFrame > m_Animations[Clip2ID].m_LastFrame)
 		{
 			newNextFrame = m_Animations[Clip2ID].m_FirstFrame;

@@ -29,14 +29,14 @@ uniform float t;
 
 void main() 
 {
-	vec3 mixedPos;
-	mixedPos = mix(FramePos1, FramePos2, t);
-	outPos = (u_Model * vec4(mixedPos,1.0)).xyz;
-	vec3 mixedNorms;
-	mixedNorms = mix(inNormal1, inNormal2, t);
-	outNormal = (u_Model * vec4(mixedNorms,1)).xyz;
+	//vec3 mixedPos;
+	//mixedPos = mix(FramePos1, FramePos2, t);
+	outPos = (u_Model *vec4(mix(FramePos1, FramePos2, t),1)).xyz;
+//	vec3 mixedNorms;
+//	mixedNorms =
+	outNormal = (u_Model * vec4( mix(inNormal1, inNormal2, t),1)).xyz;
 	outUV = inUV1;
-	outColor = mix(Color1, Color2, t);
+	outColor = Color1;
 	gl_Position = u_ModelViewProjection * vec4(outPos,1.0);
 	
 }

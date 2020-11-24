@@ -33,14 +33,6 @@ struct Animation //contains num of frames, first frame and last frame
 	float m_Timer;//timer for this animations specifically, can be seperate from T
 };
 
-struct Blender
-{
-	int m_Frame1;
-	int m_Frame2;
-	float interpolation = 0.5;
-	bool ShouldBlend = false;
-};
-
 //this is an object that has all the animation data
 //anything that has to be animated will have this component
 class MorphAnimator
@@ -74,16 +66,13 @@ public:
 	void SetVAO(VertexArrayObject::sptr vao);
 	VertexArrayObject::sptr GetVAO();
 
-	Blender GetBlender()
-	{
-		return m_AnimBlender;
-	}
+
+
 
 private:
 	AData m_AnimData;
 	VertexArrayObject::sptr m_vao; //this is used to render, making this a glorified mesh component
 	std::vector<Animation> m_Animations;
-	Blender m_AnimBlender;
 
 };
 

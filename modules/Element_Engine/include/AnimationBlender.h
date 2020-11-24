@@ -19,6 +19,21 @@ public:
 	}
 	void Update();
 
+	void AddNewAnimation(int firstframe, int lastframe, float timeperframe)
+	{
+		Animation newAnimation;
+		newAnimation.m_FirstFrame = firstframe;
+		newAnimation.m_LastFrame = lastframe;
+		newAnimation.m_TimeForFrame = timeperframe;
+
+		newAnimation.m_CurrentFrame = firstframe;
+		newAnimation.m_NextFrame = firstframe + 1;
+
+
+
+		m_Animations.push_back(newAnimation);
+	}
+
 	VertexArrayObject::sptr m_vao;
 	AData m_AnimData; //contains clip 1
 	int Clip2ID;

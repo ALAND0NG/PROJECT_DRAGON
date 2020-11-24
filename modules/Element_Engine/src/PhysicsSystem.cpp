@@ -64,7 +64,7 @@ void PhysicsSystem::Update()
 		}
 	}
 	drawer.SetMatrices(ECS::Get<Camera>(0).GetView(), ECS::Get<Camera>(0).GetProjection());
-//	m_World->debugDrawWorld();
+	m_World->debugDrawWorld();
 }
 
 btDiscreteDynamicsWorld* PhysicsSystem::GetWorld()

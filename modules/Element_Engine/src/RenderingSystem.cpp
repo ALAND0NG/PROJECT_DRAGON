@@ -3,6 +3,7 @@
 
 Shader::sptr RenderingSystem::shader = nullptr;
 Shader::sptr RenderingSystem::AnimationShader = nullptr;
+Shader::sptr RenderingSystem::BlendShader = nullptr;
 void RenderingSystem::Init()
 {
 	//Inits all shader constants
@@ -66,7 +67,7 @@ void RenderingSystem::Init()
 
 	IMGUIManager::imGuiCallbacks.push_back([&]()
 		{		// We'll add some ImGui controls to control our shader
-		
+			/*
 			if (ImGui::Button("Play Animation 1"))
 			{
 				ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
@@ -80,6 +81,22 @@ void RenderingSystem::Init()
 				ECS::Get<MorphAnimator>(2).SetActiveAnimation(2);
 			}
 
+			if (ImGui::Button("Make thing go into a box : )"))
+			{
+				ECS::Get<MorphAnimator>(2).SetActiveAnimation(3);
+			}
+		
+			//ImGui::DragFloat("Animation Blending", &ECS::Get<Blender>(3).shaderBlend, 1.f, 0.f, 1.f, "%.1f", 1.f);
+		
+			*/
+			if (ImGui::Button("Move ent 2"))
+			{
+				glm::vec3 pos = ECS::Get<Transform>(2).GetPosition();
+				pos.x += 1.f;
+				ECS::Get<Transform>(2).SetPosition(pos);
+			}
+
+			
 		});
 }
 
@@ -148,7 +165,8 @@ void RenderingSystem::ECSUpdate()
 
 		if (ECS::Has<Transform>(i) == 1 && ECS::Has<MorphAnimator>(i) == 1 && ECS::Has<Material>(i) == 1)
 		{
-			
+			ECS::Get<Transform>(i).ComputeGlobalMat();
+
 			AnimationShader->Bind();
 
 

@@ -47,10 +47,10 @@ void main()
 	frame1posres = mix(f1p1,f1p2, t);
 
 	vec3 frame1ColMix;
-	frame1ColMix = mix(f1c1, c1c2, t);
+	frame1ColMix = mix(f1c1, f1c2, t);
 
 	vec3 frame1normMix;
-	frame1normMix = mix(f1n1, f1n2);
+	frame1normMix = mix(f1n1, f1n2,t);
 
 	vec3 frame2posres;
 	frame1posres = mix(f2p1,f2p2, t);
@@ -59,7 +59,7 @@ void main()
 	frame1ColMix = mix(f2c1, f2c2, t);
 
 	vec3 frame2normMix;
-	frame1normMix = mix(f2n1, f2n2);
+	frame1normMix = mix(f2n1, f2n2,t);
 
 
 	outPos = (u_Model * vec4(mix(frame1posres,frame2posres, blend),1.0)).xyz;

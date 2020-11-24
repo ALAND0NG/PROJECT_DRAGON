@@ -7,6 +7,7 @@ void TestPrefab::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Add<Material>(startAt);
 	ECS::Add<Transform>(startAt);
 	ECS::Add<PhysicsBody>(startAt);
+	ECS::Add<LightSource>(startAt);
 	ECS::Get<Transform>(startAt).SetPosition(glm::vec3(origin));
 	ECS::Get<Mesh>(startAt).LoadOBJ("models/Cube.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<Material>(startAt) = AssetLoader::GetMat()[0];

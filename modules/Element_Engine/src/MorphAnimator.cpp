@@ -14,8 +14,7 @@ void MorphAnimator::LoadFrame(std::string filePath, glm::vec4 color)
 
 void MorphAnimator::SendToVao()
 {
-	if (m_AnimBlender.ShouldBlend == false)
-	{
+	
 		//Get our indexes from our animation Data
 		int F1 = m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame;
 		int F2 = m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame;
@@ -55,43 +54,8 @@ void MorphAnimator::SendToVao()
 
 			m_Animations[m_AnimData.m_ActiveAnimation].m_ShouldSwitchFrames = false;
 		}
-	}
-	else
-	{
-		//Get our indexes from our animation Data
-		int F1 = m_AnimBlender.m_Frame1;
-		int F2 = m_AnimBlender.m_Frame2;
-
-
-		uint32_t slot = 0;
-		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Pos, { BufferAttribute(slot, 3,
-		GL_FLOAT, false, NULL,NULL) });
-
-		slot = 1;
-		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Col, { BufferAttribute(slot, 3,
-		GL_FLOAT, false, NULL,NULL) });
-
-		slot = 2;
-		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_Normal, { BufferAttribute(slot, 3,
-		GL_FLOAT, false, NULL,NULL) });
-
-		slot = 3;
-		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F1].m_UV, { BufferAttribute(slot, 2,
-		GL_FLOAT, false, NULL,NULL) });
-
-		slot = 4;
-		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Pos, { BufferAttribute(slot, 3,
-		GL_FLOAT, false, NULL,NULL) });
-
-		slot = 5;
-		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Col, { BufferAttribute(slot, 3,
-		GL_FLOAT, false,NULL,NULL) });
-
-		slot = 6;
-		m_vao->AddVertexBuffer(m_AnimData.m_Frames[F2].m_Normal, { BufferAttribute(slot,  3,
-		GL_FLOAT, false, NULL,NULL) });
-
-	}
+	
+	
 }
 
 void MorphAnimator::Update()
@@ -100,8 +64,7 @@ void MorphAnimator::Update()
 
 	//m_Animations[m_AnimData.m_ActiveAnimation].m_Timer += Timer::dt;
 
-	if (m_AnimBlender.ShouldBlend == false)
-	{
+	
 		m_AnimData.t += Timer::dt * m_Animations[m_AnimData.m_ActiveAnimation].m_TimeForFrame;
 
 
@@ -131,11 +94,8 @@ void MorphAnimator::Update()
 			std::cout << "Switched Frames to: " << m_Animations[m_AnimData.m_ActiveAnimation].m_CurrentFrame << "&" << m_Animations[m_AnimData.m_ActiveAnimation].m_NextFrame
 				<< std::endl;
 		}
-	}
-	else
-	{
-		m_AnimData.t = m_AnimBlender.interpolation;
-	}
+	
+
 
 	SendToVao();
 }
