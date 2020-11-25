@@ -39,6 +39,7 @@ void TestScene::InitScene()
 	ECS::Add<PhysicsBody>(2);
 	ECS::Add<Enemy>(2);
 	ECS::Add<Transform>(2);
+	ECS::Add<LightSource>(2);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(0, 5, 0));
 	ECS::Get<Transform>(2).SetScale(glm::vec3(1.f, 1.f, 1.f));
 	ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 0, 0, 1));
@@ -54,6 +55,7 @@ void TestScene::InitScene()
 	ECS::Add<Mesh>(3);
 	ECS::Add<Material>(3);
 	ECS::Add<Transform>(3);
+	ECS::Add<LightSource>(3);
 	ECS::Get<Transform>(3).SetPosition(glm::vec3(0, 5, 0));
 	ECS::Get<Transform>(3).SetScale(glm::vec3(1.f, 1.f, 1.f));
 	ECS::Get<Mesh>(3).LoadOBJ("models/cube.obj", glm::vec4(0, 1, 0, 1));

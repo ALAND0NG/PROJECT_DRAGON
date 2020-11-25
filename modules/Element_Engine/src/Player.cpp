@@ -26,6 +26,7 @@ bool Weapon::Shoot(float range)
 		{
 			//std::cout << Results.m_collisionObject->getUserIndex2();
 			ECS::Get<Enemy>(Results.m_collisionObject->getUserIndex2()).m_hp = ECS::Get<Enemy>(Results.m_collisionObject->getUserIndex2()).m_hp - m_Damage;
+			ECS::Get<Transform>(3).SetPosition(BtToGlm::BTTOGLMV3(Results.m_collisionObject->getWorldTransform().getOrigin()) + BtToGlm::BTTOGLMV3(playerPosition) * 0.2f);
 			return true;
 		}
 		else
@@ -45,7 +46,7 @@ void Weapon::Update()
 {
 	m_Timer += Timer::dt;
 	
-	if (m_Timer > m_FireDelay)
+	if (m_Timer >= m_FireDelay)
 		m_CanShoot = true;
 	else
 		m_CanShoot = false;

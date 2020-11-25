@@ -19,7 +19,7 @@ public:
 	void Update();//basically just updates a timer
 	float m_FireDelay = 1.5f; //after shooting, gun needs 0.2 seconds before you can fire again;
 	int m_Damage = 1;
-	float m_Timer;
+	float m_Timer = 1.5f;
 	bool m_CanShoot = true;
 };
 
