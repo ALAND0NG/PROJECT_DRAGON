@@ -157,7 +157,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
-		if (ECS::Get<Player>(0).Shoot(15.f))
-			std::cout << "Hit an enemy";
+		if (ECS::Get<Player>(0).FireWeapon(0))
+			std::cout << "Hit an enemy\n";
 	}
 }

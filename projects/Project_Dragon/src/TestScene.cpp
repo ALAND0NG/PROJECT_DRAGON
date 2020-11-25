@@ -221,4 +221,6 @@ void TestScene::Update()
 		transform.setOrigin(btVector3(0, 10, 0));
 		ECS::Get<PhysicsBody>(2).GetBody()->setCenterOfMassTransform(transform);
 	}
+
+	ECS::Get<Player>(0).Update();
 }
