@@ -26,9 +26,9 @@ void RenderingSystem::Init()
 
 
 	//Set these values to your liking
-	float     lightAmbientPow = 0.1f;
+	float     lightAmbientPow = 0.5f;
 	float     lightSpecularPow = 1.0f;
-	glm::vec3 ambientCol = glm::vec3(0.1f, 0.1f, 0.1f);
+	glm::vec3 ambientCol = glm::vec3(1.f, 1.f, 1.f);
 	float     ambientPow = 0.1f;
 	float     shininess = 1.0f;
 	float     lightLinearFalloff = 0.09f;
