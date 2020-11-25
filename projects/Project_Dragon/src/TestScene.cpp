@@ -37,6 +37,7 @@ void TestScene::InitScene()
 	//ECS::Add<MorphAnimator>(2);
 	ECS::Add<Material>(2);
 	ECS::Add<PhysicsBody>(2);
+	ECS::Add<Enemy>(2);
 	ECS::Add<Transform>(2);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(0, 5, 0));
 	ECS::Get<Transform>(2).SetScale(glm::vec3(1.f, 1.f, 1.f));
@@ -46,6 +47,7 @@ void TestScene::InitScene()
 	ECS::Get<Material>(2).SetAll(1.f);
 	ECS::Get<PhysicsBody>(2).AddBody(10, btVector3(0, 5, 0), btVector3(2, 2, 2));
 	ECS::Get<PhysicsBody>(2).SetUserData(5);
+	ECS::Get<PhysicsBody>(2).SetUserData2(2);//this basically keeps track of what entity this is, used in order to keep track of which enemy is which
 
 	//to help debug the ray cast
 	ECS::Create(3);
@@ -211,11 +213,12 @@ void TestScene::Update()
 		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_H) == GLFW_PRESS)
+	if (ECS::Get<Enemy>(2).m_hp <= 0)
 	{
-		if (ECS::Get<Player>(0).Shoot(10.f))
-			std::cout << "raycast hit\n";
+		ECS::Get<Enemy>(2).m_hp = 3;
+		btTransform transform;
+		transform = ECS::Get<PhysicsBody>(2).GetBody()->getCenterOfMassTransform();
+		transform.setOrigin(btVector3(0, 10, 0));
+		ECS::Get<PhysicsBody>(2).GetBody()->setCenterOfMassTransform(transform);
 	}
-
-
 }

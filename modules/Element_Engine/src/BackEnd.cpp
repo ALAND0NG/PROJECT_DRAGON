@@ -10,6 +10,8 @@ int BackEnd::m_WindowWidth = 0;
 
 void mouse_Callback(GLFWwindow* window, double xpos, double ypos);
 
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+
 
 void BackEnd::Init()
 {
@@ -82,6 +84,7 @@ void BackEnd::InitWindow()
 
 	glfwSetWindowSizeCallback(BackEnd::m_Window, GlfwWindowResizedCallback);
 	glfwSetCursorPosCallback(BackEnd::m_Window, mouse_Callback);
+	glfwSetMouseButtonCallback(BackEnd::m_Window, mouse_button_callback);
 
 	
 	//This initializes OpenGL via GLAD.
@@ -148,4 +151,13 @@ void mouse_Callback(GLFWwindow* window, double xpos, double ypos)
 	ECS::Get<Camera>(0).SetForward(glm::normalize(front));
 	
 
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+	{
+		if (ECS::Get<Player>(0).Shoot(15.f))
+			std::cout << "Hit an enemy";
+	}
 }

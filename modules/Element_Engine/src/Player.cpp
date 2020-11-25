@@ -17,6 +17,9 @@ bool Player::Shoot(float range)
 
 	if (Results.hasHit() && Results.m_collisionObject->getUserIndex() == 5)
 	{
+		//std::cout << Results.m_collisionObject->getUserIndex2();
+		ECS::Get<Enemy>(Results.m_collisionObject->getUserIndex2()).m_hp = ECS::Get<Enemy>(Results.m_collisionObject->getUserIndex2()).m_hp - 1;
+		std::cout << ECS::Get<Enemy>(Results.m_collisionObject->getUserIndex2()).m_hp;
 		return true;
 	}
 	else

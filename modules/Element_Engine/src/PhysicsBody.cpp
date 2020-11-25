@@ -86,6 +86,11 @@ void PhysicsBody::SetUserData(int data)
 	m_Body->setUserIndex(data);
 }
 
+void PhysicsBody::SetUserData2(int data)
+{
+	m_Body->setUserIndex2(data);
+}
+
 void PhysicsBody::SetLinearVelocity(btVector3 direction)
 {
 	m_Body->setActivationState(1);

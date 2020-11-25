@@ -15,6 +15,7 @@
 #include <MorphAnimator.h>
 #include <AnimationBlender.h>
 #include <Player.h>
+#include <Enemy.h>
 
 
 class ECS
