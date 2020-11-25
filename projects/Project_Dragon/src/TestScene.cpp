@@ -51,8 +51,8 @@ void TestScene::InitScene()
 	*/
 	//Enemy for animation test
 	ECS::Create(2);
-	ECS::Add<Mesh>(2);
-	//ECS::Add<MorphAnimator>(2);
+	//ECS::Add<Mesh>(2);
+	ECS::Add<MorphAnimator>(2);
 	ECS::Add<LightSource>(2);
 	ECS::Add<Material>(2);
 	ECS::Add<Transform>(2);
@@ -60,10 +60,6 @@ void TestScene::InitScene()
 	ECS::Add<Enemy>(2);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(1, 3, 1));
 	ECS::Get<Transform>(2).SetScale(glm::vec3(0.5, 0.5, 0.5));
-//	ECS::Get<MorphAnimator>(2).LoadFrame("models/smallcube.obj", glm::vec4(1, 1, 1, 1));
-//	ECS::Get<MorphAnimator>(2).LoadFrame("models/smallcube.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<Mesh>(2).LoadOBJ("models/jaja.obj", glm::vec4(1, 1, 1, 1));
-	/*
 	for (int i = 1; i <= 8; i++)
 	{
 		std::string path;
@@ -90,11 +86,10 @@ void TestScene::InitScene()
 		ECS::Get<MorphAnimator>(2).LoadFrame(path, glm::vec4(0.1 * i, 0.2 * i, 0.3 * i, 1));
 		std::cout << "added frame " << i << std::endl;
 	}
-	*/
-//	ECS::Get<MorphAnimator>(2).AddNewAnimation(0, 1, 0.1);
+	ECS::Get<MorphAnimator>(2).AddNewAnimation(0, 7, 0.1);
 	//ECS::Get<MorphAnimator>(2).AddNewAnimation(8, 15, 2);
 	//ECS::Get<MorphAnimator>(2).AddNewAnimation(16, 18, 1);
-//	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
+	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
