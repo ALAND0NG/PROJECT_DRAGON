@@ -2,7 +2,8 @@
 #include <IMGUIManager.h>
 
 Shader::sptr RenderingSystem::shader = nullptr;
-
+Shader::sptr RenderingSystem::AnimationShader = nullptr;
+Shader::sptr RenderingSystem::BlendShader = nullptr;
 void RenderingSystem::Init()
 {
 	//Inits all shader constants
@@ -12,11 +13,22 @@ void RenderingSystem::Init()
 	shader->LoadShaderPartFromFile("shader/frag_shader.glsl", GL_FRAGMENT_SHADER);
 	shader->Link();
 
+	AnimationShader = Shader::Create();
+	AnimationShader->LoadShaderPartFromFile("shader/morph_vert.glsl", GL_VERTEX_SHADER);
+	AnimationShader->LoadShaderPartFromFile("shader/frag_shader.glsl", GL_FRAGMENT_SHADER);
+	AnimationShader->Link();
+	
+	BlendShader = Shader::Create();
+	BlendShader->LoadShaderPartFromFile("shader/blending_vert.glsl", GL_VERTEX_SHADER);
+	BlendShader->LoadShaderPartFromFile("shader/morph_frag.glsl", GL_FRAGMENT_SHADER);
+	BlendShader->Link();
+
+
 
 	//Set these values to your liking
-	float     lightAmbientPow = 0.1f;
+	float     lightAmbientPow = 0.5f;
 	float     lightSpecularPow = 1.0f;
-	glm::vec3 ambientCol = glm::vec3(0.1f, 0.1f, 0.1f);
+	glm::vec3 ambientCol = glm::vec3(1.f, 1.f, 1.f);
 	float     ambientPow = 0.1f;
 	float     shininess = 1.0f;
 	float     lightLinearFalloff = 0.09f;
@@ -31,6 +43,22 @@ void RenderingSystem::Init()
 	shader->SetUniform("u_Shininess", shininess);
 	shader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
 	shader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
+
+	AnimationShader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
+	AnimationShader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
+	AnimationShader->SetUniform("u_AmbientCol", ambientCol);
+	AnimationShader->SetUniform("u_AmbientStrength", ambientPow);
+	AnimationShader->SetUniform("u_Shininess", shininess);
+	AnimationShader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
+	AnimationShader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
+
+	BlendShader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
+	BlendShader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
+	BlendShader->SetUniform("u_AmbientCol", ambientCol);
+	BlendShader->SetUniform("u_AmbientStrength", ambientPow);
+	BlendShader->SetUniform("u_Shininess", shininess);
+	BlendShader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
+	BlendShader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
 	
 	int frameIx = 0;
 	float fpsBuffer[128];
@@ -39,44 +67,37 @@ void RenderingSystem::Init()
 
 	IMGUIManager::imGuiCallbacks.push_back([&]()
 		{		// We'll add some ImGui controls to control our shader
-			if (ImGui::CollapsingHeader("Scene Level Lighting Settings"))
-				{
-				if (ImGui::ColorPicker3("Ambient Color", glm::value_ptr(ambientCol))) {
-					shader->SetUniform("u_AmbientCol", ambientCol);
-				}
-				if (ImGui::SliderFloat("Fixed Ambient Power", &ambientPow, 0.01f, 1.0f)) {
-					shader->SetUniform("u_AmbientStrength", ambientPow);					}
-				}
-				if (ImGui::CollapsingHeader("Light Level Lighting Settings"))
-				{
-					if (ImGui::SliderFloat("Light Ambient Power", &lightAmbientPow, 0.0f, 1.0f)) {
-						shader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
-					}
-					if (ImGui::SliderFloat("Light Specular Power", &lightSpecularPow, 0.0f, 1.0f)) {
-						shader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
-					}
-					if (ImGui::DragFloat("Light Linear Falloff", &lightLinearFalloff, 0.01f, 0.0f, 1.0f)) {
-						shader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
-					}
-					if (ImGui::DragFloat("Light Quadratic Falloff", &lightQuadraticFalloff, 0.01f, 0.0f, 1.0f)) {
-						shader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
-					}
-				}
+			/*
+			if (ImGui::Button("Play Animation 1"))
+			{
+				ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
+			}
+			if (ImGui::Button("Play Animation 2"))
+			{
+				ECS::Get<MorphAnimator>(2).SetActiveAnimation(1);
+			}
+			if (ImGui::Button("Play Animation 3"))
+			{
+				ECS::Get<MorphAnimator>(2).SetActiveAnimation(2);
+			}
 
+			if (ImGui::Button("Make thing go into a box : )"))
+			{
+				ECS::Get<MorphAnimator>(2).SetActiveAnimation(3);
+			}
+		
+			//ImGui::DragFloat("Animation Blending", &ECS::Get<Blender>(3).shaderBlend, 1.f, 0.f, 1.f, "%.1f", 1.f);
+		
+			*/
+			if (ImGui::Button("Move ent 2"))
+			{
+				glm::vec3 pos = ECS::Get<Transform>(2).GetPosition();
+				pos.x += 1.f;
+				ECS::Get<Transform>(2).SetPosition(pos);
+			}
 
-				ImGui::Text("Q/E -> Yaw\nLeft/Right -> Roll\nUp/Down -> Pitch\nY -> Toggle Mode");
-
-				minFps = FLT_MAX;
-				maxFps = 0;
-				avgFps = 0;
-				for (int ix = 0; ix < 128; ix++) {
-					if (fpsBuffer[ix] < minFps) { minFps = fpsBuffer[ix]; }
-					if (fpsBuffer[ix] > maxFps) { maxFps = fpsBuffer[ix]; }
-					avgFps += fpsBuffer[ix];
-				}
-				ImGui::PlotLines("FPS", fpsBuffer, 128);
-				ImGui::Text("MIN: %f MAX: %f AVG: %f", minFps, maxFps, avgFps / 128.0f);
-				});
+			
+		});
 }
 
 void RenderingSystem::Update()
@@ -142,7 +163,40 @@ void RenderingSystem::ECSUpdate()
 			ECS::Get<Mesh>(i).GetVAO()->Render();
 		}
 
+		if (ECS::Has<Transform>(i) == 1 && ECS::Has<MorphAnimator>(i) == 1 && ECS::Has<Material>(i) == 1)
+		{
+			ECS::Get<Transform>(i).ComputeGlobalMat();
+
+			AnimationShader->Bind();
+
+
+			//I know that I could properly get the camera, but as a convention we will simply always declare it as entity 0 to avoid coding an entity
+			//identitifier
+			AnimationShader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(i).GetTransform());
+			AnimationShader->SetUniformMatrix("u_Model", ECS::Get<Transform>(i).GetTransform());
+			//shader->SetUniformMatrix("u_ModelRotation", glm::toMat3(ECS::Get<Transform>(i).GetRotation()));
+			AnimationShader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
+
+			// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
+			AnimationShader->SetUniform("s_Diffuse", 0);
+			AnimationShader->SetUniform("s_Specular", 1);
+
+
+			ECS::Get<Material>(i).GetAlbedo()->Bind(0);
+
+			ECS::Get<Material>(i).GetSpecular()->Bind(1);
+
+
+
+			AnimationShader->SetUniform("u_Shininess", ECS::Get<Material>(i).GetShininess());
+			AnimationShader->SetUniform("t", ECS::Get<MorphAnimator>(i).GetAnimData().t);
+
+			ECS::Get<MorphAnimator>(i).Update();
+			ECS::Get<MorphAnimator>(i).GetVAO()->Render();
+			
+		}
 	}
 
 	shader->SetUniform("u_LightCount", LightCount);
+	AnimationShader->SetUniform("u_LightCount", LightCount);
 }

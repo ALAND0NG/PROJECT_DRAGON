@@ -31,71 +31,81 @@ void PrefabMakeScene::InitScene()
 	ECS::Get<Material>(1).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
 	ECS::Get<Material>(1).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(1).SetAll(1.f);
-	ECS::Get<PhysicsBody>(1).AddBody(0.f, btVector3(0, 1, 0), btVector3(10000, 1, 100000));
+	ECS::Get<PhysicsBody>(1).AddBody(0.f, btVector3(0, 0, 0), btVector3(10000, 0, 100000));
 	ECS::Get<PhysicsBody>(1).m_Entity = 1;
 
-#pragma region asset_loading
 
-	Mesh pfb0;
-	pfb0.LoadOBJ("models/StraightTrack.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb0);
+	
+	//Enemy for animation test
+	ECS::Create(2);
+	//	ECS::Add<Mesh>(2);
+	ECS::Add<MorphAnimator>(2);
+	ECS::Add<Material>(2);
+	ECS::Add<Transform>(2);
+	ECS::Get<Transform>(2).SetPosition(glm::vec3(1, 3, 1));
+	ECS::Get<Transform>(2).SetScale(glm::vec3(0.5, 0.5, 0.5));
+	//	ECS::Get<Mesh>(2).LoadOBJ("models/anotherOne1.obj", glm::vec4(1, 1, 1, 1));
+	for (int i = 1; i <= 8; i++)
+	{
+		std::string path;
+		path = "models/animations/FIRE_ENEMY/FE_WALK_" + std::to_string(i);
+		path += ".obj";
+		ECS::Get<MorphAnimator>(2).LoadFrame(path, glm::vec4(0.1 * i, 0.2 * i, 0.3 * i, 1));
+		std::cout << "added frame " << i << std::endl;
+	}
 
-	Mesh pfb1;
-	pfb1.LoadOBJ("models/SideTrack.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb1);
+	for (int i = 1; i <= 8; i++)
+	{
+		std::string path;
+		path = "models/animations/FIRE_ENEMY/FE_H_" + std::to_string(i);
+		path += ".obj";
+		ECS::Get<MorphAnimator>(2).LoadFrame(path, glm::vec4(0.1 * i, 0.2 * i, 0.3 * i, 1));
+		std::cout << "added frame " << i << std::endl;
+	}
 
-	Mesh pfb2;
-	pfb2.LoadOBJ("models/RightTurn.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb2);
+	for (int i = 1; i <= 3; i++)
+	{
+		std::string path;
+		path = "models/animations/FIRE_ENEMY/FE_D_" + std::to_string(i);
+		path += ".obj";
+		ECS::Get<MorphAnimator>(2).LoadFrame(path, glm::vec4(0.1 * i, 0.2 * i, 0.3 * i, 1));
+		std::cout << "added frame " << i << std::endl;
+	}
 
-	Mesh pfb3;
-	pfb3.LoadOBJ("models/RightOff.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb3);
+	ECS::Get<MorphAnimator>(2).AddNewAnimation(0, 7, 1);
+	ECS::Get<MorphAnimator>(2).AddNewAnimation(8, 15, 2);
+	ECS::Get<MorphAnimator>(2).AddNewAnimation(16, 18, 1);
+	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
+	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
+	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(2).SetAll(1.f);
+	
 
-	Mesh pfb4;
-	pfb4.LoadOBJ("models/LeftTurn.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb4);
+	/*
+	ECS::Create(3);
+	ECS::Add<Material>(3);
+	ECS::Add<Transform>(3);
+	ECS::Add<PhysicsBody>(3);
+	ECS::Get<Transform>(3).SetPosition(glm::vec3(5, 3, 5));
+	ECS::Get<Transform>(3).SetScale(glm::vec3(0.5, 0.5, 0.5));
+	ECS::Add<Blender>(3);
+	ECS::Get<Blender>(3).m_AnimData.m_Frames = ECS::Get<MorphAnimator>(2).GetAnimData().m_Frames;
+	ECS::Get<Blender>(3).AddNewAnimation(0, 7, 1);
+	ECS::Get<Blender>(3).AddNewAnimation(8, 15, 2);
+	ECS::Get<Blender>(3).m_AnimData.m_ActiveAnimation = 0;
+	ECS::Get<Blender>(3).Clip2ID = 1;
+	ECS::Get<Material>(3).LoadDiffuseFromFile("images/FE_TEXTURE.png");
+	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(3).SetAll(1.f);
+	ECS::Get<PhysicsBody>(3).AddBody(0.f, btVector3(10, 0, 0), btVector3(1, 1, 1));
+	ECS::Get<PhysicsBody>(3).m_Entity = 3;
 
-	Mesh pfb5;
-	pfb5.LoadOBJ("models/LeftOff.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb5);
-
-	Material mat0;
-	mat0.LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
-	mat0.LoadSpecularFromFile("images/Stone_001_Specular.png");
-	mat0.SetAll(1.f);
-	AssetLoader::GetMat().push_back(mat0);
-
-#pragma endregion
-
-	InstantiatingSystem::AddPrefab(new TestPrefab()); //prefab 0
-	InstantiatingSystem::AddPrefab(new StraightTrack()); //prefab 1
-	InstantiatingSystem::AddPrefab(new SideTrack()); //prefab 2
-	InstantiatingSystem::AddPrefab(new RightTurn()); // prefab 3
-	InstantiatingSystem::AddPrefab(new RightOff()); // prefab 4
-	InstantiatingSystem::AddPrefab(new LeftTurn()); // prefab 5
-	InstantiatingSystem::AddPrefab(new LeftOff()); // prefab 6
+	*/
 
 }
 
 void PrefabMakeScene::Update()
 {
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
-	{
-		//	ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
-		ECS::Get<PhysicsBody>(3).SetLinearVelocity(btVector3(5, 0, 0));
-	}
-
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_E) == GLFW_PRESS)
-	{
-
-		InstantiatingSystem::InitPrefab(0, ECS::Get<Transform>(0).GetPosition());
-
-		glm::vec3 f = ECS::Get<Camera>(0).GetForward() * 10.f;//agony
-		ECS::Get<PhysicsBody>(ECS::GetSize() - 1).SetLinearVelocity(btVector3(f.x, f.y, f.z));
-
-	}
-
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_F) == GLFW_PRESS)
 	{
 		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -104,4 +114,15 @@ void PrefabMakeScene::Update()
 	{
 		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
+	
+
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_1) == GLFW_PRESS)
+		ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
+
+
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_2) == GLFW_PRESS)
+		ECS::Get<MorphAnimator>(2).SetActiveAnimation(1);
+
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_3) == GLFW_PRESS)
+		ECS::Get<MorphAnimator>(2).SetActiveAnimation(2);
 }

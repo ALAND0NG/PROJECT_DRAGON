@@ -39,7 +39,7 @@ void PhysicsBody::AddBody(float mass, btVector3 origin, btVector3 size)
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 	m_Body= new btRigidBody(rbInfo);
 
-	m_Body->setAngularFactor(btVector3(0.0f, 1.0f, 0.0f));
+	m_Body->setAngularFactor(btVector3(0.0f, 0.0f, 0.0f));
 	
 	PhysicsSystem::m_World->addRigidBody(m_Body);
 	PhysicsSystem::m_bodies.push_back(m_Body);
@@ -71,6 +71,7 @@ void PhysicsBody::AddBody(float mass, btVector3 origin, btVector3 size, float fr
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 	m_Body = new btRigidBody(rbInfo);
 
+	m_Body->setAngularFactor(btVector3(0.0f, 0.0f, 0.0f));
 
 	PhysicsSystem::m_World->addRigidBody(m_Body);
 	PhysicsSystem::m_bodies.push_back(m_Body);
@@ -78,6 +79,16 @@ void PhysicsBody::AddBody(float mass, btVector3 origin, btVector3 size, float fr
 	m_Body->setFriction(friction);
 
 
+}
+
+void PhysicsBody::SetUserData(int data)
+{
+	m_Body->setUserIndex(data);
+}
+
+void PhysicsBody::SetUserData2(int data)
+{
+	m_Body->setUserIndex2(data);
 }
 
 void PhysicsBody::SetLinearVelocity(btVector3 direction)

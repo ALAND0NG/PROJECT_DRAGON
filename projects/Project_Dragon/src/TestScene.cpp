@@ -12,12 +12,14 @@ void TestScene::InitScene()
 	
 	ECS::Create(0); //please please please always have camera be entity 0 it will break otherwise
 	ECS::Add<Transform>(0);
-	ECS::Add<PhysicsBody>(0);
+	ECS::Add<PhysicsBody>(0);  
 	ECS::Add<Camera>(0);
+	ECS::Add<Player>(0);
 	ECS::Get<Camera>(0).ResizeWindow(1920, 1080);
-	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 100, 3), btVector3(1,2,1));
+	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 10, 3), btVector3(1,2,1));
 	ECS::Add<LightSource>(0);
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
+	ECS::Get<Player>(0).SetMovementSpeed(10.f);
 
 	//Drunk Walker - - - Important For World Generation
 	ECS::Create(1);
@@ -30,36 +32,55 @@ void TestScene::InitScene()
 	ECS::Get<Material>(1).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(1).SetAll(1.f);
 
+	/*
+	//Test Enemy
 	ECS::Create(2);
 	ECS::Add<Mesh>(2);
+	//ECS::Add<MorphAnimator>(2);
+	ECS::Add<Material>(2);
+
+	
+	ECS::Add<Transform>(2);
+	ECS::Add<LightSource>(2);
+	ECS::Get<Transform>(2).SetPosition(glm::vec3(0, 5, 0));
+	ECS::Get<Transform>(2).SetScale(glm::vec3(1.f, 1.f, 1.f));
+	ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 0, 0, 1));
+	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
+	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(2).SetAll(1.f);
+	
+	*/
+	//Enemy for animation test
+	ECS::Create(2);
+	ECS::Add<Mesh>(2);
+	ECS::Add<LightSource>(2);
 	ECS::Add<Material>(2);
 	ECS::Add<Transform>(2);
 	ECS::Add<PhysicsBody>(2);
-	ECS::Add<LightSource>(2);
-	ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<Material>(2).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	ECS::Add<Enemy>(2);
+	ECS::Get<Transform>(2).SetPosition(glm::vec3(1, 3, 1));
+	ECS::Get<Transform>(2).SetScale(glm::vec3(0.5, 0.5, 0.5));
+	ECS::Get<Mesh>(2).LoadOBJ("models/animations/FIRE_ENEMY/FW_W_1.obj", glm::vec4(1, 1, 1, 1));
+	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
-	ECS::Get<PhysicsBody>(2).AddBody(0.f,btVector3(0,3,0), btVector3(1,1,1));
-	ECS::Get<PhysicsBody>(2).m_Entity = 3;
+	ECS::Get<PhysicsBody>(2).AddBody(10, btVector3(1, 1, 1), btVector3(2, 2, 2));
+	ECS::Get<PhysicsBody>(2).SetUserData(5);
+	ECS::Get<PhysicsBody>(2).SetUserData2(2);//this basically keeps track of what entity this is, used in order to keep track of which enemy is which
+	ECS::Get<PhysicsBody>(2).m_Entity = 2;
 
-	/*
-	ECS::Create(4); //for cubemap
-	ECS::Add<Skybox>(4);
-	ECS::Add<Transform>(4);
-	ECS::Get<Skybox>(4).skybox->Create();
-	ECS::Get<Skybox>(4).skybox->LoadShaderPartFromFile("shader/Skybox-vert.glsl", GL_VERTEX_SHADER);
-	ECS::Get<Skybox>(4).skybox->LoadShaderPartFromFile("shader/Skybox-frag.glsl", GL_FRAGMENT_SHADER);
-	ECS::Get<Skybox>(4).skybox->Link();
-	*/
-
-	
-
-
-	
-
-
-
+	//to help debug the ray cast
+	ECS::Create(3);
+	ECS::Add<Mesh>(3);
+	ECS::Add<Material>(3);
+	ECS::Add<Transform>(3);
+	ECS::Add<LightSource>(3);
+	ECS::Get<Transform>(3).SetPosition(glm::vec3(0, 5, 0));
+	ECS::Get<Transform>(3).SetScale(glm::vec3(1.f, 1.f, 1.f));
+	ECS::Get<Mesh>(3).LoadOBJ("models/cube.obj", glm::vec4(0, 1, 0, 1));
+	ECS::Get<Material>(3).LoadDiffuseFromFile("images/FE_TEXTURE.png");
+	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(3).SetAll(1.f);
 
 
 #pragma region asset_loading
@@ -137,7 +158,7 @@ void TestScene::InitScene()
 					ECS::Get<Transform>(1).GetPosition().y,
 					ECS::Get<Transform>(1).GetPosition().z + 40.f));
 				InstantiatingSystem::InitPrefab(2, ECS::Get<Transform>(1).GetPosition());
-			}
+			} 
 			isRight = false;
 			isForward = true;
 			ECS::Get<Transform>(1).SetPosition(glm::vec3(
@@ -176,23 +197,13 @@ int projId = 0;
 
 void TestScene::Update()
 {
-	
+
 
 
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
 	{
-	//	ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
+		//	ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
 		ECS::Get<PhysicsBody>(3).SetLinearVelocity(btVector3(5, 0, 0));
-	}
-
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_E) == GLFW_PRESS)
-	{
-		
-		InstantiatingSystem::InitPrefab(0, ECS::Get<Transform>(0).GetPosition());
-
-		glm::vec3 f = ECS::Get<Camera>(0).GetForward() * 10.f;//agony
-		ECS::Get<PhysicsBody>(ECS::GetSize()-1).SetLinearVelocity(btVector3(f.x,f.y,f.z));
-
 	}
 
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_F) == GLFW_PRESS)
@@ -203,4 +214,15 @@ void TestScene::Update()
 	{
 		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
+
+	if (ECS::Get<Enemy>(2).m_hp <= 0)
+	{
+		ECS::Get<Enemy>(2).m_hp = 3;
+		btTransform transform;
+		transform = ECS::Get<PhysicsBody>(2).GetBody()->getCenterOfMassTransform();
+		transform.setOrigin(btVector3(0, 10, 0));
+		ECS::Get<PhysicsBody>(2).GetBody()->setCenterOfMassTransform(transform);
+	}
+
+	ECS::Get<Player>(0).Update();
 }
