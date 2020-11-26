@@ -21,7 +21,7 @@ void RightTurn::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Create(startAt + 1);
 	ECS::Add<PhysicsBody>(startAt + 1);
 	ECS::Add<Transform>(startAt + 1);
-	ECS::Get<PhysicsBody>(startAt + 1).AddBody(0, btVector3(physBodOrigin.getX() + 21, physBodOrigin.getY(), physBodOrigin.getZ()), btVector3(1, 25, 25));
+	ECS::Get<PhysicsBody>(startAt + 1).AddBody(0, btVector3(physBodOrigin.getX() - 21, physBodOrigin.getY(), physBodOrigin.getZ()), btVector3(1, 25, 25));
 	ECS::Get<PhysicsBody>(startAt + 1).m_Entity = startAt + 1;
 	m_EntityIds.push_back(startAt + 1);
 

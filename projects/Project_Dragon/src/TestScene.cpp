@@ -19,7 +19,7 @@ void TestScene::InitScene()
 	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 10, 3), btVector3(1,2,1));
 	ECS::Add<LightSource>(0);
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
-	ECS::Get<Player>(0).SetMovementSpeed(100.f);
+	ECS::Get<Player>(0).SetMovementSpeed(10.f);
 
 	//Drunk Walker - - - Important For World Generation
 	ECS::Create(1);
@@ -60,7 +60,7 @@ void TestScene::InitScene()
 	ECS::Add<Enemy>(2);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(1, 3, 1));
 	ECS::Get<Transform>(2).SetScale(glm::vec3(0.5, 0.5, 0.5));
-	ECS::Get<Mesh>(2).LoadOBJ("models/animations/FIRE_ENEMY/FE_WALK_1.obj", glm::vec4(1, 1, 1, 1));
+	ECS::Get<Mesh>(2).LoadOBJ("models/animations/FIRE_ENEMY/FW_W_1.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
