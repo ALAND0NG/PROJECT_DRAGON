@@ -59,7 +59,7 @@ void TestScene::InitScene()
 	ECS::Add<Enemy>(2);
 	ECS::Get<Transform>(2).SetPosition(glm::vec3(1, 3, 1));
 	ECS::Get<Transform>(2).SetScale(glm::vec3(0.5, 0.5, 0.5));
-	ECS::Get<Mesh>(2).LoadOBJ("models/animations/FIRE_ENEMY/FW_W_1.obj", glm::vec4(1, 1, 1, 1));
+	ECS::Get<Mesh>(2).LoadOBJ("models/animations/FIRE_ENEMY/FE_WALK_1.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
