@@ -93,7 +93,7 @@ void TestScene::InitScene()
 	pfb1.LoadOBJ("models/SideTrack.obj", glm::vec4(1, 1, 1, 1));
 	AssetLoader::GetMesh().push_back(pfb1);
 
-	Mesh pfb2;
+	Mesh pfb2; //
 	pfb2.LoadOBJ("models/RightTurn.obj", glm::vec4(1, 1, 1, 1));
 	AssetLoader::GetMesh().push_back(pfb2);
 
