@@ -158,7 +158,7 @@ void TestScene::InitScene()
 					ECS::Get<Transform>(1).GetPosition().y,
 					ECS::Get<Transform>(1).GetPosition().z + 40.f));
 				InstantiatingSystem::InitPrefab(2, ECS::Get<Transform>(1).GetPosition());
-			}
+			} 
 			isRight = false;
 			isForward = true;
 			ECS::Get<Transform>(1).SetPosition(glm::vec3(
