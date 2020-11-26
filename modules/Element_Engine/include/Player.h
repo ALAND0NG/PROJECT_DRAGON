@@ -21,6 +21,7 @@ public:
 	int m_Damage = 1;
 	float m_Timer = 1.5f;
 	bool m_CanShoot = true;
+
 };
 
 
@@ -52,10 +53,19 @@ public:
 	void SetActiveWeapon(int activeweapon);
 	int GetActiveWeapon();
 
+	float GetMovementSpeed()
+	{
+		return m_MovementSpeed;
+	}
 
+	void SetMovementSpeed(float speed)
+	{
+		m_MovementSpeed = speed;
+	}
 private:
 	PlayerData m_PlayerData;
 	std::vector<Weapon> m_Weapons;
 	int m_ActiveWeapon = 0;
+	float m_MovementSpeed = 8.f;
 
 };
