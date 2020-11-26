@@ -51,52 +51,20 @@ void TestScene::InitScene()
 	*/
 	//Enemy for animation test
 	ECS::Create(2);
-	//ECS::Add<Mesh>(2);
-	ECS::Add<MorphAnimator>(2);
+	ECS::Add<Mesh>(2);
 	ECS::Add<LightSource>(2);
 	ECS::Add<Material>(2);
 	ECS::Add<Transform>(2);
 	ECS::Add<PhysicsBody>(2);
 	ECS::Add<Enemy>(2);
-	ECS::Get<Transform>(2).SetPosition(glm::vec3(1, 3, 1));
-	ECS::Get<Transform>(2).SetScale(glm::vec3(0.5, 0.5, 0.5));
-	for (int i = 1; i <= 8; i++)
-	{
-		std::string path;
-		path = "models/animations/FIRE_ENEMY/FE_WALK_" + std::to_string(i);
-		path += ".obj";
-		ECS::Get<MorphAnimator>(2).LoadFrame(path, glm::vec4(0.1 * i, 0.2 * i, 0.3 * i, 1));
-		std::cout << "added frame " << i << std::endl;
-	}
-	
-	for (int i = 1; i <= 8; i++)
-	{
-		std::string path;
-		path = "models/animations/FIRE_ENEMY/FE_H_" + std::to_string(i);
-		path += ".obj";
-		ECS::Get<MorphAnimator>(2).LoadFrame(path, glm::vec4(0.1 * i, 0.2 * i, 0.3 * i, 1));
-		std::cout << "added frame " << i << std::endl;
-	}
-
-	for (int i = 1; i <= 3; i++)
-	{
-		std::string path;
-		path = "models/animations/FIRE_ENEMY/FE_D_" + std::to_string(i);
-		path += ".obj";
-		ECS::Get<MorphAnimator>(2).LoadFrame(path, glm::vec4(0.1 * i, 0.2 * i, 0.3 * i, 1));
-		std::cout << "added frame " << i << std::endl;
-	}
-	ECS::Get<MorphAnimator>(2).AddNewAnimation(0, 7, 0.1);
-	//ECS::Get<MorphAnimator>(2).AddNewAnimation(8, 15, 2);
-	//ECS::Get<MorphAnimator>(2).AddNewAnimation(16, 18, 1);
-	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
+	ECS::Get<Mesh>(2).LoadOBJ("models/animations/FIRE_ENEMY/FW_W_1.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
-	ECS::Get<PhysicsBody>(2).AddBody(10, btVector3(0, 5, 0), btVector3(2, 2, 2));
+	ECS::Get<PhysicsBody>(2).AddBody(10, btVector3(1, 1, 1), btVector3(2, 2, 2));
 	ECS::Get<PhysicsBody>(2).SetUserData(5);
 	ECS::Get<PhysicsBody>(2).SetUserData2(2);//this basically keeps track of what entity this is, used in order to keep track of which enemy is which
-
+	ECS::Get<PhysicsBody>(2).m_Entity = 2;
 
 	//to help debug the ray cast
 	ECS::Create(3);
@@ -111,6 +79,20 @@ void TestScene::InitScene()
 	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(3).SetAll(1.f);
 
+	//to help debug the ray cast
+	ECS::Create(4);
+	ECS::Add<Mesh>(4);
+	ECS::Add<Material>(4);
+	ECS::Add<Transform>(4);
+	ECS::Add<PhysicsBody>(4);
+	ECS::Add<LightSource>(4);
+	ECS::Get<Transform>(4).SetPosition(glm::vec3(10, 5, 0));
+	ECS::Get<Transform>(4).SetScale(glm::vec3(1.f, 1.f, 1.f));
+	ECS::Get<Mesh>(4).LoadOBJ("models/cube.obj", glm::vec4(0, 1, 0, 1));
+	ECS::Get<Material>(4).LoadDiffuseFromFile("images/FE_TEXTURE.png");
+	ECS::Get<Material>(4).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(4).SetAll(1.f);
+	ECS::Get<PhysicsBody>(4).AddBody(15, btVector3(10, 5, 0), btVector3(1, 1, 1));
 
 	
 
@@ -235,23 +217,13 @@ int projId = 0;
 
 void TestScene::Update()
 {
-	
+
 
 
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
 	{
-	//	ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
+		//	ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
 		ECS::Get<PhysicsBody>(3).SetLinearVelocity(btVector3(5, 0, 0));
-	}
-
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_E) == GLFW_PRESS)
-	{
-		
-		InstantiatingSystem::InitPrefab(0, ECS::Get<Transform>(0).GetPosition());
-
-		glm::vec3 f = ECS::Get<Camera>(0).GetForward() * 10.f;//agony
-		ECS::Get<PhysicsBody>(ECS::GetSize()-1).SetLinearVelocity(btVector3(f.x,f.y,f.z));
-
 	}
 
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_F) == GLFW_PRESS)
@@ -273,4 +245,7 @@ void TestScene::Update()
 	}
 
 	ECS::Get<Player>(0).Update();
+
+	//debug
+	ECS::Get<PhysicsBody>(2).SetLinearVelocity(btVector3(1, 0, 0));
 }
