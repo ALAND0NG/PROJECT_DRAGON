@@ -1,7 +1,8 @@
 #pragma once
 //basically playerdata but for the enemy
-struct Enemy
+class Enemy
 {
+public:
 	int m_hp = 5;
 
 };
