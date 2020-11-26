@@ -1,6 +1,6 @@
 #pragma once
 //basically playerdata but for the enemy
-struct Enemy
+class Enemy
 {
 	int m_hp = 5;
 
