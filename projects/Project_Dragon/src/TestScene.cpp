@@ -82,29 +82,6 @@ void TestScene::InitScene()
 	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(3).SetAll(1.f);
 
-	//to help debug the ray cast
-	ECS::Create(4);
-	ECS::Add<Mesh>(4);
-	ECS::Add<Material>(4);
-	ECS::Add<Transform>(4);
-	ECS::Add<PhysicsBody>(4);
-	ECS::Add<LightSource>(4);
-	ECS::Get<Transform>(4).SetPosition(glm::vec3(10, 5, 0));
-	ECS::Get<Transform>(4).SetScale(glm::vec3(1.f, 1.f, 1.f));
-	ECS::Get<Mesh>(4).LoadOBJ("models/cube.obj", glm::vec4(0, 1, 0, 1));
-	ECS::Get<Material>(4).LoadDiffuseFromFile("images/FE_TEXTURE.png");
-	ECS::Get<Material>(4).LoadSpecularFromFile("images/Stone_001_Specular.png");
-	ECS::Get<Material>(4).SetAll(1.f);
-	ECS::Get<PhysicsBody>(4).AddBody(15, btVector3(10, 5, 0), btVector3(1, 1, 1));
-
-	
-
-
-	
-
-
-
-
 
 #pragma region asset_loading
 
