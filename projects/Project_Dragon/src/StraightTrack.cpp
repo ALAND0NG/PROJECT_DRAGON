@@ -34,20 +34,19 @@ void StraightTrack::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Get<PhysicsBody>(startAt + 2).m_Entity = startAt + 2;
 	m_EntityIds.push_back(startAt + 2);
 
-	ECS::Create(startAt + 3);
+	/*ECS::Create(startAt + 3);
 	ECS::Add<PhysicsBody>(startAt + 3);
 	ECS::Add<Transform>(startAt + 3);
 	ECS::Add<Mesh>(startAt + 3);
 	ECS::Add<Material>(startAt + 3);
 
-	ECS::Get<Mesh>(startAt + 3).LoadOBJ("Models/pillar.obj", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	ECS::Get<Mesh>(startAt + 3).LoadOBJ("Models/jaja.obj", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	ECS::Get<Transform>(startAt + 3).SetPosition(glm::vec3(0.f, 0.f, 0.f));
 	ECS::Get<Transform>(startAt + 3).SetScale(glm::vec3(5.f, 5.f, 5.f));
-	//ECS::Add<Material>(startAt + 3);
 	ECS::Get<Material>(startAt + 3).LoadDiffuseFromFile("images/red.jpg");
 	ECS::Get<Material>(startAt + 3).LoadSpecularFromFile("images/red.jpg");
 	ECS::Get<Material>(startAt + 3).SetAll(1.f);
 	//ECS::Get<PhysicsBody>(startAt + 3).AddBody(1000000000, btVector3(0, 5, 0), btVector3(2, 2, 2));
 	//ECS::Get<PhysicsBody>(startAt + 3).m_Entity = startAt + 3;
-	m_EntityIds.push_back(startAt + 3);
+	m_EntityIds.push_back(startAt + 3);*/
 }
