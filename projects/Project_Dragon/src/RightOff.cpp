@@ -9,12 +9,12 @@ void RightOff::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Get<Transform>(startAt).SetPosition(glm::vec3(origin));
 	ECS::Get<Mesh>(startAt).SetVAO(AssetLoader::GetMesh()[3].GetVAO());
 	ECS::Get<Material>(startAt) = AssetLoader::GetMat()[0];
-	ECS::Add<PhysicsBody>(startAt);
+	//ECS::Add<PhysicsBody>(startAt);
 	btVector3 physBodOrigin;
 	physBodOrigin.setX(origin.x);
 	physBodOrigin.setY(origin.y);
 	physBodOrigin.setZ(origin.z);
-	ECS::Get<PhysicsBody>(startAt).AddBody(0, physBodOrigin, btVector3(25, 0, 25));
+//	ECS::Get<PhysicsBody>(startAt).AddBody(0, physBodOrigin, btVector3(25, 0, 25));
 	m_EntityIds.push_back(startAt);
 	std::cout << "Loaded a prefab, starting at: " << startAt << std::endl;
 
@@ -31,4 +31,13 @@ void RightOff::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Get<PhysicsBody>(startAt + 2).AddBody(0, btVector3(physBodOrigin.getX(), physBodOrigin.getY(), physBodOrigin.getZ() - 21), btVector3(25, 25, 1));
 	ECS::Get<PhysicsBody>(startAt + 2).m_Entity = startAt + 2;
 	m_EntityIds.push_back(startAt + 2);
+
+	ECS::Create(startAt + 3);
+	ECS::Add<Transform>(startAt + 3);
+	ECS::Add<PhysicsBody>(startAt + 3);
+
+
+	ECS::Get<PhysicsBody>(startAt + 3).AddBody(0, btVector3(physBodOrigin.getX(), physBodOrigin.getY() - 7.f, physBodOrigin.getZ()), btVector3(25, 0, 25));
+	ECS::Get<PhysicsBody>(startAt + 3).m_Entity = startAt + 3;
+	m_EntityIds.push_back(startAt + 3);
 }
