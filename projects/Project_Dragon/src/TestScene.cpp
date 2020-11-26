@@ -19,7 +19,7 @@ void TestScene::InitScene()
 	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 10, 3), btVector3(1,2,1));
 	ECS::Add<LightSource>(0);
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
-	ECS::Get<Player>(0).SetMovementSpeed(10.f);
+	ECS::Get<Player>(0).SetMovementSpeed(100.f);
 
 	//Drunk Walker - - - Important For World Generation
 	ECS::Create(1);
