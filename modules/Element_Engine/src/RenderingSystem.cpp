@@ -107,95 +107,90 @@ void RenderingSystem::Update()
 
 void RenderingSystem::ECSUpdate()
 {
+
+
+	//Just updates camera stuff with tranform stuff to keep it consistent
+	ECS::Get<Camera>(0).SetPosition(ECS::Get<Transform>(0).GetPosition());
+
+	shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
+	AnimationShader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
+
+
+	// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
+	shader->SetUniform("s_Diffuse", 0);
+	shader->SetUniform("s_Specular", 1);
+	
 	auto reg = ECS::GetReg();
 	int LightCount = 0;
 
-	for (int i = 0; i < reg->size(); i++)
+	//view for Mesh
+	auto view = reg->view<Mesh, Transform, Material>();
+	for (auto entity : view)
 	{
 		shader->Bind();
-		
-		if (ECS::Has<Parent>(i))
-		{
-			ECS::Get<Transform>(i).SetPosition(ECS::Get<Transform>(ECS::Get<Parent>(i).GetParent()).GetPosition() + ECS::Get<Transform>(i).GetPosition());
-		}
 
-		
-		if (ECS::Has<LightSource>(i) && ECS::Has<Transform>(i))
-		{
+		auto& mesh = view.get<Mesh>(entity);
+		auto& trns = view.get<Transform>(entity);
+		auto& mat = view.get<Material>(entity);
 
-			shader->SetUniform("LightPositions[" + std::to_string(LightCount) + "]", ECS::Get<Transform>(i).GetPosition());
-			shader->SetUniform("u_LightCol", ECS::Get<LightSource>(i).m_Colour);
-			LightCount++;
-		}
+		trns.ComputeGlobalMat();
 
-		if (ECS::Has<Transform>(i) && ECS::Has<Camera>(i))
-		{
-			//Just updates camera stuff with tranform stuff to keep it consistent
-			ECS::Get<Camera>(i).SetPosition(ECS::Get<Transform>(i).GetPosition());
-			
-		}
+		shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * trns.GetTransform());
+		shader->SetUniformMatrix("u_Model", trns.GetTransform());
 
-		if (ECS::Has<Transform>(i) == 1 && ECS::Has<Mesh>(i) == 1 && ECS::Has<Material>(i) == 1)
-		{
-			ECS::Get<Transform>(i).ComputeGlobalMat();
+		mat.GetAlbedo()->Bind(0);
 
+		mat.GetSpecular()->Bind(1);
 
-			//I know that I could properly get the camera, but as a convention we will simply always declare it as entity 0 to avoid coding an entity
-			//identitifier
-			shader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(i).GetTransform());
-			shader->SetUniformMatrix("u_Model", ECS::Get<Transform>(i).GetTransform());
-			//shader->SetUniformMatrix("u_ModelRotation", glm::toMat3(ECS::Get<Transform>(i).GetRotation()));
-			shader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
+		shader->SetUniform("u_Shininess", mat.GetShininess());
 
-			// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
-			shader->SetUniform("s_Diffuse", 0);
-			shader->SetUniform("s_Specular", 1);
-			
-
-			ECS::Get<Material>(i).GetAlbedo()->Bind(0);
-
-			ECS::Get<Material>(i).GetSpecular()->Bind(1);
-
-		
-
-			shader->SetUniform("u_Shininess", ECS::Get<Material>(i).GetShininess());
-
-			ECS::Get<Mesh>(i).GetVAO()->Render();
-		}
-
-		if (ECS::Has<Transform>(i) == 1 && ECS::Has<MorphAnimator>(i) == 1 && ECS::Has<Material>(i) == 1)
-		{
-			ECS::Get<Transform>(i).ComputeGlobalMat();
-
-			AnimationShader->Bind();
-
-
-			//I know that I could properly get the camera, but as a convention we will simply always declare it as entity 0 to avoid coding an entity
-			//identitifier
-			AnimationShader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * ECS::Get<Transform>(i).GetTransform());
-			AnimationShader->SetUniformMatrix("u_Model", ECS::Get<Transform>(i).GetTransform());
-			//shader->SetUniformMatrix("u_ModelRotation", glm::toMat3(ECS::Get<Transform>(i).GetRotation()));
-			AnimationShader->SetUniform("u_CamPos", ECS::Get<Camera>(0).GetPosition());
-
-			// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
-			AnimationShader->SetUniform("s_Diffuse", 0);
-			AnimationShader->SetUniform("s_Specular", 1);
-
-
-			ECS::Get<Material>(i).GetAlbedo()->Bind(0);
-
-			ECS::Get<Material>(i).GetSpecular()->Bind(1);
-
-
-
-			AnimationShader->SetUniform("u_Shininess", ECS::Get<Material>(i).GetShininess());
-			AnimationShader->SetUniform("t", ECS::Get<MorphAnimator>(i).GetAnimData().t);
-
-			ECS::Get<MorphAnimator>(i).Update();
-			ECS::Get<MorphAnimator>(i).GetVAO()->Render();
-			
-		}
+		mesh.GetVAO()->Render();
 	}
+	
+	//view for lightsource
+	auto lview = reg->view<LightSource, Transform>();
+	for (auto entity : lview)
+	{
+
+		auto& trns = lview.get<Transform>(entity);
+		auto& lsrc = lview.get<LightSource>(entity);
+
+		shader->SetUniform("LightPositions[" + std::to_string(LightCount) + "]", trns.GetPosition());
+		shader->SetUniform("u_LightCol", lsrc.m_Colour);
+		AnimationShader->SetUniform("LightPositions[" + std::to_string(LightCount) + "]", trns.GetPosition());
+		AnimationShader->SetUniform("u_LightCol", lsrc.m_Colour);
+		LightCount++;
+	}
+	
+	//view for morph animator
+	auto mview = reg->view<MorphAnimator, Transform, Material>();
+	for (auto entity : mview)
+	{
+		AnimationShader->Bind();
+
+		auto& manim = mview.get<MorphAnimator>(entity);
+		auto& trns = mview.get<Transform>(entity);
+		auto& mat = mview.get<Material>(entity);
+
+		trns.ComputeGlobalMat();
+
+		AnimationShader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * trns.GetTransform());
+		AnimationShader->SetUniformMatrix("u_Model", trns.GetTransform());
+
+	
+		// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
+		AnimationShader->SetUniform("s_Diffuse", 0);
+		AnimationShader->SetUniform("s_Specular", 1);
+
+		mat.GetAlbedo()->Bind(0);
+		mat.GetSpecular()->Bind(1);
+
+
+		AnimationShader->SetUniform("u_Shininess", mat.GetShininess());
+		AnimationShader->SetUniform("t", manim.GetAnimData().t);
+	}
+	
+
 
 	shader->SetUniform("u_LightCount", LightCount);
 	AnimationShader->SetUniform("u_LightCount", LightCount);
