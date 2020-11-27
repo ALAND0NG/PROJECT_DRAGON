@@ -1,12 +1,13 @@
 #include <RenderingSystem.h>
 #include <IMGUIManager.h>
+#include <string>
 
 Shader::sptr RenderingSystem::shader = nullptr;
 Shader::sptr RenderingSystem::AnimationShader = nullptr;
 Shader::sptr RenderingSystem::BlendShader = nullptr;
 void RenderingSystem::Init()
 {
-	//Inits all shader constants
+	//Inits all shaders
 	
 	shader = Shader::Create();
 	shader->LoadShaderPartFromFile("shader/vertex_shader.glsl", GL_VERTEX_SHADER);
@@ -17,59 +18,24 @@ void RenderingSystem::Init()
 	AnimationShader->LoadShaderPartFromFile("shader/morph_vert.glsl", GL_VERTEX_SHADER);
 	AnimationShader->LoadShaderPartFromFile("shader/frag_shader.glsl", GL_FRAGMENT_SHADER);
 	AnimationShader->Link();
-	
-	BlendShader = Shader::Create();
-	BlendShader->LoadShaderPartFromFile("shader/blending_vert.glsl", GL_VERTEX_SHADER);
-	BlendShader->LoadShaderPartFromFile("shader/morph_frag.glsl", GL_FRAGMENT_SHADER);
-	BlendShader->Link();
 
-
-
-	//Set these values to your liking
-	float     lightAmbientPow = 0.5f;
-	float     lightSpecularPow = 1.0f;
-	glm::vec3 ambientCol = glm::vec3(1.f, 1.f, 1.f);
-	float     ambientPow = 0.1f;
-	float     shininess = 1.0f;
-	float     lightLinearFalloff = 0.09f;
-	float     lightQuadraticFalloff = 0.032f;
-
-
-
-	shader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
-	shader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
-	shader->SetUniform("u_AmbientCol", ambientCol);
-	shader->SetUniform("u_AmbientStrength", ambientPow);
-	shader->SetUniform("u_Shininess", shininess);
-	shader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
-	shader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
-
-	AnimationShader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
-	AnimationShader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
-	AnimationShader->SetUniform("u_AmbientCol", ambientCol);
-	AnimationShader->SetUniform("u_AmbientStrength", ambientPow);
-	AnimationShader->SetUniform("u_Shininess", shininess);
-	AnimationShader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
-	AnimationShader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
-
-	BlendShader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
-	BlendShader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
-	BlendShader->SetUniform("u_AmbientCol", ambientCol);
-	BlendShader->SetUniform("u_AmbientStrength", ambientPow);
-	BlendShader->SetUniform("u_Shininess", shininess);
-	BlendShader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
-	BlendShader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
-	
-	int frameIx = 0;
-	float fpsBuffer[128];
-	float minFps, maxFps, avgFps;
-	int selectedVao = 0; // select cube by default
+	//init attenuation
+	shader->SetUniform("u_LightAttenuationConstant", 1.f);
+	shader->SetUniform("u_LightAttenuationLinear", 0.08f);
+	shader->SetUniform("u_LightAttenuationQuadratic", 0.032f);
 
 	IMGUIManager::imGuiCallbacks.push_back([&]()
 		{		// We'll add some ImGui controls to control our shader
 
 			
 		});
+
+	//initialize primary fragment shader DirLight & spotlight
+	shader->SetUniform("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+	shader->SetUniform("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+	shader->SetUniform("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+	shader->SetUniform("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+
 }
 
 void RenderingSystem::Update()
@@ -101,9 +67,9 @@ void RenderingSystem::ECSUpdate()
 	{
 		shader->Bind();
 
-		auto& mesh = view.get<Mesh>(entity);
-		auto& trns = view.get<Transform>(entity);
-		auto& mat = view.get<Material>(entity);
+		Mesh& mesh = view.get<Mesh>(entity);
+		Transform& trns = view.get<Transform>(entity);
+		Material& mat = view.get<Material>(entity);
 
 		trns.ComputeGlobalMat();
 
@@ -123,14 +89,25 @@ void RenderingSystem::ECSUpdate()
 	auto lview = reg->view<LightSource, Transform>();
 	for (auto entity : lview)
 	{
+		shader->Bind();
+		Transform& trns = view.get<Transform>(entity);
+		LightSource& lsrc = view.get<LightSource>(entity);
 
-		auto& trns = lview.get<Transform>(entity);
-		auto& lsrc = lview.get<LightSource>(entity);
-
-		shader->SetUniform("LightPositions[" + std::to_string(LightCount) + "]", trns.GetPosition());
-		shader->SetUniform("u_LightCol", lsrc.m_Colour);
-		AnimationShader->SetUniform("LightPositions[" + std::to_string(LightCount) + "]", trns.GetPosition());
-		AnimationShader->SetUniform("u_LightCol", lsrc.m_Colour);
+		if (LightCount <= 50)
+		{
+			//create the string to send to the shader
+			std::string uniformName;
+			uniformName = "pointLights[";
+			uniformName + std::to_string(LightCount);
+			uniformName + "].";
+			//this will be the begining, now we just need to add the part of the struct we want to set
+			shader->SetUniform(uniformName + "position", trns.GetPosition());
+			shader->SetUniform(uniformName + "ambient", lsrc.m_Ambient);
+			shader->SetUniform(uniformName + "diffuse", lsrc.m_Diffuse);
+			shader->SetUniform(uniformName + "specular", lsrc.m_Specular);
+			shader->SetUniform("u_LightCount", LightCount);
+		}
+		
 		LightCount++;
 	}
 	
@@ -140,9 +117,9 @@ void RenderingSystem::ECSUpdate()
 	{
 		AnimationShader->Bind();
 
-		auto& manim = mview.get<MorphAnimator>(entity);
-		auto& trns = mview.get<Transform>(entity);
-		auto& mat = mview.get<Material>(entity);
+		MorphAnimator& manim = mview.get<MorphAnimator>(entity);
+		Transform& trns = mview.get<Transform>(entity);
+		Material& mat = mview.get<Material>(entity);
 
 		trns.ComputeGlobalMat();
 
