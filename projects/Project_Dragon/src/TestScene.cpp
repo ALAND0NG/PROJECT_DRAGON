@@ -19,7 +19,7 @@ void TestScene::InitScene()
 	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 10, 3), btVector3(1,2,1));
 	ECS::Add<LightSource>(0);
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
-	ECS::Get<Player>(0).SetMovementSpeed(10.f);
+	ECS::Get<Player>(0).SetMovementSpeed(50.f);
 
 	//Drunk Walker - - - Important For World Generation
 	ECS::Create(1);
@@ -93,7 +93,7 @@ void TestScene::InitScene()
 	pfb1.LoadOBJ("models/SideTrack.obj", glm::vec4(1, 1, 1, 1));
 	AssetLoader::GetMesh().push_back(pfb1);
 
-	Mesh pfb2;//
+	Mesh pfb2; //
 	pfb2.LoadOBJ("models/RightTurn.obj", glm::vec4(1, 1, 1, 1));
 	AssetLoader::GetMesh().push_back(pfb2);
 
@@ -110,7 +110,7 @@ void TestScene::InitScene()
 	AssetLoader::GetMesh().push_back(pfb5);
 
 	Material mat0;
-	mat0.LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	mat0.LoadDiffuseFromFile("images/STR_HW_T.png");
 	mat0.LoadSpecularFromFile("images/Stone_001_Specular.png");
 	mat0.SetAll(1.f);
 	AssetLoader::GetMat().push_back(mat0);
@@ -128,14 +128,17 @@ void TestScene::InitScene()
 	//WORLD GENERATOR - - - WIP
 	bool isForward = true, isRight = false, isLeft = false;
 	InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition()); //Creates a block on spawn for the player
-	for (int i = 0; i < 10; i++) { //Creates a drunk walker of 25 length
+	for (int i = 0; i < 5; i++) { //Creates a drunk walker of 25 length
 		if (isForward) {
 			for (int i = 0; i < rand() % 3 + 1; i++) {
 				ECS::Get<Transform>(1).SetPosition(glm::vec3(
 					ECS::Get<Transform>(1).GetPosition().x + 40.f,
 					ECS::Get<Transform>(1).GetPosition().y,
 					ECS::Get<Transform>(1).GetPosition().z));
-				InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition());
+				glm::vec3 temp;
+				temp = ECS::Get<Transform>(1).GetPosition();
+
+				InstantiatingSystem::InitPrefab(1, glm::vec3(temp.x, temp.y, temp.z));
 			}
 			isForward = false;
 			int temp = rand() % 2;
@@ -157,7 +160,8 @@ void TestScene::InitScene()
 					ECS::Get<Transform>(1).GetPosition().x,
 					ECS::Get<Transform>(1).GetPosition().y,
 					ECS::Get<Transform>(1).GetPosition().z + 40.f));
-				InstantiatingSystem::InitPrefab(2, ECS::Get<Transform>(1).GetPosition());
+				glm::vec3 temp = ECS::Get<Transform>(1).GetPosition();
+				InstantiatingSystem::InitPrefab(2, glm::vec3(temp.x, temp.y - 8.2f, temp.z ));
 			} 
 			isRight = false;
 			isForward = true;
@@ -178,7 +182,8 @@ void TestScene::InitScene()
 					ECS::Get<Transform>(1).GetPosition().x,
 					ECS::Get<Transform>(1).GetPosition().y,
 					ECS::Get<Transform>(1).GetPosition().z - 40.f));
-				InstantiatingSystem::InitPrefab(2, ECS::Get<Transform>(1).GetPosition());
+				glm::vec3 temp = ECS::Get<Transform>(1).GetPosition();
+				InstantiatingSystem::InitPrefab(2, glm::vec3(temp.x, temp.y - 8.2f, temp.z));
 			}
 			isLeft = false;
 			isForward = true;
