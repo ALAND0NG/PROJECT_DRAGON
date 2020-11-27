@@ -36,8 +36,8 @@ void BackEnd::Update()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	PhysicsSystem::Update();
-	IMGUIManager::Update();
 	RenderingSystem::Update();
+	IMGUIManager::Update();
 	
 	glfwSwapBuffers(BackEnd::m_Window);
 	glfwPollEvents();

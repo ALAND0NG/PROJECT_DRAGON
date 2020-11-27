@@ -27,7 +27,7 @@ void RenderingSystem::Init()
 	IMGUIManager::imGuiCallbacks.push_back([&]()
 		{		// We'll add some ImGui controls to control our shader
 
-			
+			ImGui::ShowDemoWindow();
 		});
 
 	//initialize primary fragment shader DirLight & spotlight

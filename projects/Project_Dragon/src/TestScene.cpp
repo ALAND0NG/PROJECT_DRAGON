@@ -54,6 +54,7 @@ void TestScene::InitScene()
 	ECS::Create(2);
 	ECS::Add<Mesh>(2);
 	ECS::Add<LightSource>(2);
+	ECS::Get<LightSource>(2).m_Diffuse = glm::vec3(1, 0, 0);
 	ECS::Add<Material>(2);
 	ECS::Add<Transform>(2);
 	ECS::Add<PhysicsBody>(2);
