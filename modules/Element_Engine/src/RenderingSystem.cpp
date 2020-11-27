@@ -90,16 +90,16 @@ void RenderingSystem::ECSUpdate()
 	for (auto entity : lview)
 	{
 		shader->Bind();
-		Transform& trns = view.get<Transform>(entity);
-		LightSource& lsrc = view.get<LightSource>(entity);
+		Transform& trns = lview.get<Transform>(entity);
+		LightSource& lsrc = lview.get<LightSource>(entity);
 
 		if (LightCount <= 50)
 		{
 			//create the string to send to the shader
 			std::string uniformName;
 			uniformName = "pointLights[";
-			uniformName + std::to_string(LightCount);
-			uniformName + "].";
+			uniformName += std::to_string(LightCount);
+			uniformName += "].";
 			//this will be the begining, now we just need to add the part of the struct we want to set
 			shader->SetUniform(uniformName + "position", trns.GetPosition());
 			shader->SetUniform(uniformName + "ambient", lsrc.m_Ambient);
