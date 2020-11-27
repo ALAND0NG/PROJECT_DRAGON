@@ -78,42 +78,9 @@ void TestScene::InitScene()
 	ECS::Get<Transform>(3).SetPosition(glm::vec3(0, 5, 0));
 	ECS::Get<Transform>(3).SetScale(glm::vec3(1.f, 1.f, 1.f));
 	ECS::Get<Mesh>(3).LoadOBJ("models/cube.obj", glm::vec4(0, 1, 0, 1));
-	ECS::Get<Material>(3).LoadDiffuseFromFile("images/FE_TEXTURE.png");
-	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
-	ECS::Get<Material>(3).SetAll(1.f);
+	ECS::Get<Material>(3) = AssetLoader::GetMatFromStr("StraightPathTexture");
 
-
-#pragma region asset_loading
-
-	Mesh pfb0;
-	pfb0.LoadOBJ("models/StraightTrack.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb0);
-
-	Mesh pfb1;
-	pfb1.LoadOBJ("models/SideTrack.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb1);
-
-	Mesh pfb2; //
-	pfb2.LoadOBJ("models/RightTurn.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb2);
-
-	Mesh pfb3;
-	pfb3.LoadOBJ("models/RightOff.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb3);
-
-	Mesh pfb4;
-	pfb4.LoadOBJ("models/LeftTurn.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb4);
-
-	Mesh pfb5;
-	pfb5.LoadOBJ("models/LeftOff.obj", glm::vec4(1, 1, 1, 1));
-	AssetLoader::GetMesh().push_back(pfb5);
-
-	Material mat0;
-	mat0.LoadDiffuseFromFile("images/STR_HW_T.png");
-	mat0.LoadSpecularFromFile("images/Stone_001_Specular.png");
-	mat0.SetAll(1.f);
-	AssetLoader::GetMat().push_back(mat0);
+	
 
 #pragma endregion
 

@@ -67,34 +67,6 @@ void RenderingSystem::Init()
 
 	IMGUIManager::imGuiCallbacks.push_back([&]()
 		{		// We'll add some ImGui controls to control our shader
-			/*
-			if (ImGui::Button("Play Animation 1"))
-			{
-				ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
-			}
-			if (ImGui::Button("Play Animation 2"))
-			{
-				ECS::Get<MorphAnimator>(2).SetActiveAnimation(1);
-			}
-			if (ImGui::Button("Play Animation 3"))
-			{
-				ECS::Get<MorphAnimator>(2).SetActiveAnimation(2);
-			}
-
-			if (ImGui::Button("Make thing go into a box : )"))
-			{
-				ECS::Get<MorphAnimator>(2).SetActiveAnimation(3);
-			}
-		
-			//ImGui::DragFloat("Animation Blending", &ECS::Get<Blender>(3).shaderBlend, 1.f, 0.f, 1.f, "%.1f", 1.f);
-		
-			*/
-			if (ImGui::Button("Move ent 2"))
-			{
-				glm::vec3 pos = ECS::Get<Transform>(2).GetPosition();
-				pos.x += 1.f;
-				ECS::Get<Transform>(2).SetPosition(pos);
-			}
 
 			
 		});

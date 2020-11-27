@@ -1,7 +1,7 @@
 #include <BackEnd.h>
 #include <PhysicsSystem.h>
 #include <iostream>
-
+#include <AssetLoader.h>
 GLFWwindow* BackEnd::m_Window = glfwCreateWindow(1920, 1080, "The funny game", nullptr, nullptr); //Initializing outside of class because its a static
 
 int BackEnd::m_WindowHeight = 0;
@@ -20,6 +20,7 @@ void BackEnd::Init()
 	RenderingSystem::Init();
 	PhysicsSystem::Init();
 	IMGUIManager::Init();
+	AssetLoader::Init();
 
 	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_CULL_FACE);
@@ -34,17 +35,10 @@ void BackEnd::Update()
 	glClearColor(0.01f, 0.1f, 0.1f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-	
 	PhysicsSystem::Update();
 	IMGUIManager::Update();
 	RenderingSystem::Update();
 	
-	
-
-	
-
-
 	glfwSwapBuffers(BackEnd::m_Window);
 	glfwPollEvents();
 }
