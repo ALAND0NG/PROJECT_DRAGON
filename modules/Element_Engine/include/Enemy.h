@@ -1,8 +1,8 @@
 #pragma once
-#include <ECS.h>
 #include <ElementEngine.h>
 #include <AssetLoader.h>
 #include <Timer.h>
+#include <ECS.h>
 //basically playerdata but for the enemy
 class Enemy
 {
@@ -34,7 +34,10 @@ public:
 			distance.setY(powf(thisPosition.getY() - playerPosition.getY(), 2.0f));
 			distance.setZ(powf(thisPosition.getZ() - playerPosition.getZ(), 2.0f));
 
-			std::cout << "\nX: " << distance.getX() << "\nY: " << distance.getY() << "\nZ: " << distance.getZ() << "\n\n";
+			std::cout << "\nX: " << distance.getX()
+				<< "\nY: " << distance.getY()
+				<< "\nZ: " << distance.getZ()
+				<< "\n\n";
 			distanceNorm = sqrtf(distance.getX() + distance.getY() + distance.getZ());
 
 			//Chance behavior of enemy based on distance
