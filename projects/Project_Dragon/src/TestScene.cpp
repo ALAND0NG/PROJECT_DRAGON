@@ -180,6 +180,8 @@ float t = 0;
 void TestScene::Update()
 {
 
+	ECS::Get<Enemy>(2).Update();
+
 	ECS::Get<Player>(0).DrawUI();
 
 	ECS::Get<Transform>(4).SetPosition(ECS::Get<Camera>(0).GetPosition() + ECS::Get<Camera>(0).GetForward());
