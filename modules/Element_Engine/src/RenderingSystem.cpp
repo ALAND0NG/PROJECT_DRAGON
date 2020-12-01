@@ -24,6 +24,11 @@ void RenderingSystem::Init()
 	shader->SetUniform("u_LightAttenuationLinear", 0.08f);
 	shader->SetUniform("u_LightAttenuationQuadratic", 0.032f);
 
+	//init attenuation
+	AnimationShader->SetUniform("u_LightAttenuationConstant", 1.f);
+	AnimationShader->SetUniform("u_LightAttenuationLinear", 0.08f);
+	AnimationShader->SetUniform("u_LightAttenuationQuadratic", 0.032f);
+
 	IMGUIManager::imGuiCallbacks.push_back([&]()
 		{		// We'll add some ImGui controls to control our shader
 
@@ -36,7 +41,14 @@ void RenderingSystem::Init()
 	shader->SetUniform("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
 	shader->SetUniform("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
 
+	//initialize primary fragment shader DirLight & spotlight
+	AnimationShader->SetUniform("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+	AnimationShader->SetUniform("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+	AnimationShader->SetUniform("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+	AnimationShader->SetUniform("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+
 }
+
 
 void RenderingSystem::Update()
 {
@@ -57,6 +69,9 @@ void RenderingSystem::ECSUpdate()
 	// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
 	shader->SetUniform("s_Diffuse", 0);
 	shader->SetUniform("s_Specular", 1);
+
+	AnimationShader->SetUniform("s_Diffuse", 0);
+	AnimationShader->SetUniform("s_Specular", 1);
 	
 	auto reg = ECS::GetReg();
 	int LightCount = 0;
@@ -85,11 +100,36 @@ void RenderingSystem::ECSUpdate()
 		mesh.GetVAO()->Render();
 	}
 	
+	//view for morph animator
+	auto mview = reg->view<MorphAnimator, Transform, Material>();
+	for (auto entity : mview)
+	{
+		AnimationShader->Bind();
+
+		MorphAnimator& manim = mview.get<MorphAnimator>(entity);
+		Transform& trns = mview.get<Transform>(entity);
+		Material& mat = mview.get<Material>(entity);
+
+		trns.ComputeGlobalMat();
+
+		AnimationShader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * trns.GetTransform());
+		AnimationShader->SetUniformMatrix("u_Model", trns.GetTransform());
+
+
+		mat.GetAlbedo()->Bind(0);
+		mat.GetSpecular()->Bind(1);
+
+
+		AnimationShader->SetUniform("u_Shininess", mat.GetShininess());
+		AnimationShader->SetUniform("t", manim.GetAnimData().t);
+		manim.Update();
+		manim.GetVAO()->Render();
+	}
 	//view for lightsource
 	auto lview = reg->view<LightSource, Transform>();
 	for (auto entity : lview)
 	{
-		shader->Bind();
+
 		Transform& trns = lview.get<Transform>(entity);
 		LightSource& lsrc = lview.get<LightSource>(entity);
 
@@ -107,37 +147,28 @@ void RenderingSystem::ECSUpdate()
 			shader->SetUniform(uniformName + "specular", lsrc.m_Specular);
 			shader->SetUniform("u_LightCount", LightCount);
 		}
+
+		if (LightCount <= 50)
+		{
+			//create the string to send to the shader
+			std::string uniformName;
+			uniformName = "pointLights[";
+			uniformName += std::to_string(LightCount);
+			uniformName += "].";
+			//this will be the begining, now we just need to add the part of the struct we want to set
+			AnimationShader->SetUniform(uniformName + "position", trns.GetPosition());
+			AnimationShader->SetUniform(uniformName + "ambient", lsrc.m_Ambient);
+			AnimationShader->SetUniform(uniformName + "diffuse", lsrc.m_Diffuse);
+			AnimationShader->SetUniform(uniformName + "specular", lsrc.m_Specular);
+			AnimationShader->SetUniform("u_LightCount", LightCount);
+		}
+
+
 		
 		LightCount++;
 	}
 	
-	//view for morph animator
-	auto mview = reg->view<MorphAnimator, Transform, Material>();
-	for (auto entity : mview)
-	{
-		AnimationShader->Bind();
 
-		MorphAnimator& manim = mview.get<MorphAnimator>(entity);
-		Transform& trns = mview.get<Transform>(entity);
-		Material& mat = mview.get<Material>(entity);
-
-		trns.ComputeGlobalMat();
-
-		AnimationShader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * trns.GetTransform());
-		AnimationShader->SetUniformMatrix("u_Model", trns.GetTransform());
-
-	
-		// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
-		AnimationShader->SetUniform("s_Diffuse", 0);
-		AnimationShader->SetUniform("s_Specular", 1);
-
-		mat.GetAlbedo()->Bind(0);
-		mat.GetSpecular()->Bind(1);
-
-
-		AnimationShader->SetUniform("u_Shininess", mat.GetShininess());
-		AnimationShader->SetUniform("t", manim.GetAnimData().t);
-	}
 	
 
 

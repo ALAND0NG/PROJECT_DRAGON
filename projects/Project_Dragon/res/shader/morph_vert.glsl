@@ -31,7 +31,7 @@ void main()
 {
 	//vec3 mixedPos;
 	//mixedPos = mix(FramePos1, FramePos2, t);
-	outPos = (u_Model *vec4(mix(FramePos1, FramePos2, t),1)).xyz;
+	outPos = mix(FramePos1, FramePos2, t);
 //	vec3 mixedNorms;
 //	mixedNorms =
 	outNormal = (u_Model * vec4(mix(inNormal1, inNormal2, t),1)).xyz;

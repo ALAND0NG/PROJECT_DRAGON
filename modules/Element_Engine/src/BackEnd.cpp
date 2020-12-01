@@ -23,7 +23,9 @@ void BackEnd::Init()
 	AssetLoader::Init();
 
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
+	
+
+
 
 }
 bool spacePressed = false;

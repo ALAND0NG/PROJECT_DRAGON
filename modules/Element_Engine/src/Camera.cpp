@@ -14,10 +14,24 @@ Camera::Camera() :
 	_view(glm::mat4(1.0f)),
 	_projection(glm::mat4(1.0f)),
 	_viewProjection(glm::mat4(1.0f)),
+	_isOrtho(false),
+	_orthoHeight(10),
 	_isDirty(true)
 {
 	__CalculateProjection();
 }
+
+
+void Camera::SetIsOrtho(bool isOrtho) {
+	_isOrtho = isOrtho;
+	__CalculateProjection();
+}
+
+void Camera::SetOrthoHeight(float orthoHeight) {
+	_orthoHeight = orthoHeight;
+	__CalculateProjection();
+}
+
 
 void Camera::SetPosition(const glm::vec3& position) {
 	_position = position;
@@ -61,12 +75,39 @@ const glm::mat4& Camera::GetViewProjection() const {
 	return _viewProjection;
 }
 
-void Camera::__CalculateProjection()
+void Camera::SetNear(float near)
+{
+
+	_nearPlane = near;
+	__CalculateProjection();
+}
+
+void Camera::SetFar(float far)
 {
 	
-	_projection = glm::perspective(_fovRadians, _aspectRatio, _nearPlane, _farPlane);
+		_farPlane = far;
+		__CalculateProjection();
+	
+}
 
-		
+void Camera::SetProjection(glm::mat4 proj)
+{
+	_projection = proj;
+
+	_isDirty = true;
+}
+
+void Camera::__CalculateProjection()
+{
+	if (_isOrtho) {
+		_projection = glm::ortho(
+			-_orthoHeight * _aspectRatio, _orthoHeight * _aspectRatio,
+			-_orthoHeight, _orthoHeight,
+			_nearPlane, _farPlane);
+	}
+	else {
+		_projection = glm::perspective(_fovRadians, _aspectRatio, _nearPlane, _farPlane);
+	}
 	_isDirty = true;
 }
 

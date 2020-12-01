@@ -2,6 +2,7 @@
 #include <Timer.h>
 #include <GLM/gtc/type_ptr.hpp>
 #include <BackEnd.h> //I hope this doesn't break it :)
+#include <BtToGlm.h>
 
 btDiscreteDynamicsWorld* PhysicsSystem::m_World;
 
@@ -36,10 +37,6 @@ void PhysicsSystem::Init()
 
 	m_World->setGravity(btVector3(0, -10, 0));
 
-	
-	drawer.Init();
-
-	m_World->setDebugDrawer(&drawer);
 
 	
 }
@@ -53,18 +50,16 @@ void PhysicsSystem::Update()
 
 	
 	m_World->stepSimulation(Timer::dt, 10);
-	for (int i = 0; i < reg->size(); i++)
+	auto view = reg->view<PhysicsBody, Transform>();
+
+	for (auto entity : view)
 	{
-		if (ECS::Has<PhysicsBody>(i))
-		{
-			btTransform trans = m_bodies[ECS::Get<PhysicsBody>(i).m_BodyId]->getWorldTransform();
+		PhysicsBody& physBod = view.get<PhysicsBody>(entity);
+		Transform& Trans = view.get<Transform>(entity);
 
-			ECS::Get<Transform>(i).SetPosition(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
-
-		}
+		Trans.SetPosition(BtToGlm::BTTOGLMV3(physBod.GetBody()->getCenterOfMassTransform().getOrigin()));
 	}
-	drawer.SetMatrices(ECS::Get<Camera>(0).GetView(), ECS::Get<Camera>(0).GetProjection());
-	m_World->debugDrawWorld();
+	
 }
 
 btDiscreteDynamicsWorld* PhysicsSystem::GetWorld()

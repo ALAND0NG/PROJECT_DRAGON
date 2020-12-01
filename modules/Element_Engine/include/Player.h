@@ -3,6 +3,8 @@
 //Will also contain some functions that will be frequiently used in gameplay, such as gunplay, taking damage, etc
 #pragma once
 #include <PhysicsSystem.h>
+#include <SpriteRendering.h>
+#include <Camera.h>
 struct PlayerData
 {
 	//this contains data such as hp, xp and so on
@@ -36,9 +38,33 @@ public:
 	{
 		Weapon weapon;
 		m_Weapons.push_back(weapon);
+		m_Camera.SetIsOrtho(1);
+		m_Camera.SetOrthoHeight(10);
+		m_Camera.SetPosition(glm::vec3(0, 0, 0));
+		m_Camera.SetNear(-10);
+		m_Camera.SetFar(10);
+		m_Camera.ResizeWindow(16, 9);
+
+		Texture2DData::sptr TexData = Texture2DData::LoadFromFile("images/box.bmp");
+		m_UI.m_Texture = Texture2D::Create();
+		m_UI.m_Texture->LoadData(TexData);
+
+		
+		
+	}
+
+	void Init()
+	{
+		m_SpriteRenderer.initRenderData();
 	}
 	void Update();
 	void CheckJump();
+
+	void DrawUI()
+	{
+
+		m_SpriteRenderer.DrawSprite(m_UI);
+	}
 
 	PlayerData GetPlayerData();
 	void SetPlayerData(PlayerData playdata);
@@ -67,5 +93,7 @@ private:
 	std::vector<Weapon> m_Weapons;
 	int m_ActiveWeapon = 0;
 	float m_MovementSpeed = 8.f;
-
+	Camera m_Camera; //ortho camera
+	SpriteRenderer m_SpriteRenderer;
+	Sprite m_UI;
 };
