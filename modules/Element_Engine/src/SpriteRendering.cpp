@@ -1,11 +1,11 @@
 #include <SpriteRendering.h>
 
 Shader::sptr SpriteRenderer::shader = nullptr;
+VertexArrayObject::sptr SpriteRenderer::quadVAO = nullptr;
 
 
 
-
-void SpriteRenderer::DrawSprite(Sprite sprite)
+void SpriteRenderer::DrawSprite(Sprite sprite, glm::mat4 VP)
 {
     shader->Bind();
 
@@ -18,16 +18,14 @@ void SpriteRenderer::DrawSprite(Sprite sprite)
 
     model = glm::scale(model, glm::vec3(sprite.m_Size, 1.0f)); // last scale
 
-    shader->SetUniformMatrix("model", model);
+    shader->SetUniformMatrix("MVP", VP * model);
 
     shader->SetUniform("image", 0);
 
     sprite.m_Texture->Bind(0);
 
 
-    glBindVertexArray(this->quadVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glBindVertexArray(0);
+    quadVAO->Render();
 }
 
 void SpriteRenderer::initRenderData()
@@ -38,7 +36,7 @@ void SpriteRenderer::initRenderData()
     shader->Link();
 
     // configure VAO/VBO
-    unsigned int VBO;
+   
     float vertices[] = {
       -0.5f, -0.5f, 0.f, 0, 0,
         -0.5f, 0.5f, 0.f, 0, 1,
@@ -48,4 +46,12 @@ void SpriteRenderer::initRenderData()
         0.5f, -0.5f, 0.f, 1, 0
     };
 
+    VertexBuffer::sptr VBO = VertexBuffer::Create();
+    VBO->LoadData(vertices, 30);
+    quadVAO = VertexArrayObject::Create();
+    quadVAO->AddVertexBuffer(VBO, {
+        BufferAttribute (0,3,GL_FLOAT, false, sizeof(float) * 5, 0),
+        BufferAttribute (1,2,GL_FLOAT, false, sizeof(float) * 5, sizeof(float)*3)
+        });
+   
 }

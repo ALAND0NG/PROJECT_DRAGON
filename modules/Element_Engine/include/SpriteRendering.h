@@ -6,6 +6,7 @@
 #include <Shader.h>
 #include <Texture2D.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <VertexArrayObject.h>
 
 
 struct Sprite
@@ -16,22 +17,22 @@ struct Sprite
     float m_Rotation = 0.f;
     glm::vec3 m_Color = glm::vec3(1, 1, 1);
 };
-class SpriteRenderer
+class SpriteRenderer abstract
 {
 public:
 
 
-    void initRenderData();
+    static void initRenderData();
 
-    void DrawSprite(Sprite sprite);
+    static void DrawSprite(Sprite sprite, glm::mat4 VP);
 
-    Shader::sptr GetShader()
+    static Shader::sptr GetShader()
     {
         return shader;
     }
 private:
     static Shader::sptr shader;
-    unsigned int quadVAO;
+    static VertexArrayObject::sptr quadVAO;
 
 };
 

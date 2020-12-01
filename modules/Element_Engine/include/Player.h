@@ -48,22 +48,19 @@ public:
 		Texture2DData::sptr TexData = Texture2DData::LoadFromFile("images/box.bmp");
 		m_UI.m_Texture = Texture2D::Create();
 		m_UI.m_Texture->LoadData(TexData);
-
+		
 		
 		
 	}
 
-	void Init()
-	{
-		m_SpriteRenderer.initRenderData();
-	}
+
 	void Update();
 	void CheckJump();
 
 	void DrawUI()
 	{
 
-		m_SpriteRenderer.DrawSprite(m_UI);
+		SpriteRenderer::DrawSprite(m_UI, m_Camera.GetViewProjection());
 	}
 
 	PlayerData GetPlayerData();
@@ -94,6 +91,6 @@ private:
 	int m_ActiveWeapon = 0;
 	float m_MovementSpeed = 8.f;
 	Camera m_Camera; //ortho camera
-	SpriteRenderer m_SpriteRenderer;
+	
 	Sprite m_UI;
 };
