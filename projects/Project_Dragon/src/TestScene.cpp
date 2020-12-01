@@ -1,6 +1,8 @@
 #include <TestScene.h>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <AssetLoader.h>
+#include <Interpolation.h>
+#include <SpriteRendering.h>
 
 void TestScene::InitScene()
 {
@@ -18,8 +20,10 @@ void TestScene::InitScene()
 	ECS::Get<Camera>(0).ResizeWindow(1920, 1080);
 	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 10, 3), btVector3(1, 2, 1));
 	ECS::Add<LightSource>(0);
+	ECS::Get<LightSource>(0).m_Ambient = glm::vec3(0.1, 1, 0.1);
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
-	ECS::Get<Player>(0).SetMovementSpeed(50.f);
+	ECS::Get<Player>(0).SetMovementSpeed(10.f);
+
 
 	//Drunk Walker - - - Important For World Generation
 	ECS::Create(1);
@@ -32,41 +36,33 @@ void TestScene::InitScene()
 	ECS::Get<Material>(1).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(1).SetAll(1.f);
 
-	/*
-	//Test Enemy
-	ECS::Create(2);
-	ECS::Add<Mesh>(2);
-	//ECS::Add<MorphAnimator>(2);
-	ECS::Add<Material>(2);
 
-	ECS::Add<Transform>(2);
-	ECS::Add<LightSource>(2);
-	ECS::Get<Transform>(2).SetPosition(glm::vec3(0, 5, 0));
-	ECS::Get<Transform>(2).SetScale(glm::vec3(1.f, 1.f, 1.f));
-	ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 0, 0, 1));
-	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
-	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
-	ECS::Get<Material>(2).SetAll(1.f);
 
-	*/
+
 	//Enemy for animation test
 	ECS::Create(2);
-	ECS::Add<Mesh>(2);
+	ECS::Add<MorphAnimator>(2);
 	ECS::Add<LightSource>(2);
 	ECS::Get<LightSource>(2).m_Diffuse = glm::vec3(1, 0, 0);
-	ECS::Get<LightSource>(2).m_Ambient = glm::vec3(1, 1, 1);
+	ECS::Get<LightSource>(2).m_Ambient = glm::vec3(1, 0, 0);
 	ECS::Add<Material>(2);
 	ECS::Add<Transform>(2);
 	ECS::Add<PhysicsBody>(2);
 	ECS::Add<Enemy>(2);
-	ECS::Get<Enemy>(2).entityNumber = 2;
-	ECS::Get<Transform>(2).SetPosition(glm::vec3(1, 3, 1));
-	ECS::Get<Transform>(2).SetScale(glm::vec3(0.5, 0.5, 0.5));
-	ECS::Get<Mesh>(2).LoadOBJ("models/animations/FIRE_ENEMY/FW_W_1.obj", glm::vec4(1, 1, 1, 1));
+	for (int i = 1; i <= 8; i++)
+	{
+		std::string fileName = "models/animations/FIRE_ENEMY/FW_W_";
+		ECS::Get<MorphAnimator>(2).LoadFrame(fileName + std::to_string(i) + ".obj", glm::vec4(1, 1, 1, 1));
+	}
+	
+	ECS::Get<MorphAnimator>(2).AddNewAnimation(0,7,1);
+	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
+	
+	//ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
-	ECS::Get<PhysicsBody>(2).AddBody(10, btVector3(1, 1, 1), btVector3(2, 2, 2));
+	ECS::Get<PhysicsBody>(2).AddBody(10, btVector3(1, 5, 1), btVector3(3, 3, 3));
 	ECS::Get<PhysicsBody>(2).SetUserData(5);
 	ECS::Get<PhysicsBody>(2).SetUserData2(2);//this basically keeps track of what entity this is, used in order to keep track of which enemy is which
 	ECS::Get<PhysicsBody>(2).m_Entity = 2;
@@ -81,6 +77,20 @@ void TestScene::InitScene()
 	ECS::Get<Transform>(3).SetScale(glm::vec3(1.f, 1.f, 1.f));
 	ECS::Get<Mesh>(3).LoadOBJ("models/cube.obj", glm::vec4(0, 1, 0, 1));
 	ECS::Get<Material>(3) = AssetLoader::GetMatFromStr("StraightPathTexture");
+
+
+	//to help debug the ray cast
+	ECS::Create(4);
+	ECS::Add<Mesh>(4);
+	ECS::Add<Material>(4);
+	ECS::Add<Transform>(4);
+	ECS::Add<LightSource>(4);
+	ECS::Get<Transform>(4).SetPosition(glm::vec3(0, 5, 0));
+	ECS::Get<Transform>(4).SetScale(glm::vec3(1.f, 1.f, 1.f));
+	ECS::Get<Mesh>(4).LoadOBJ("models/hand.obj", glm::vec4(0, 1, 0, 1));
+	ECS::Get<Material>(4) = AssetLoader::GetMatFromStr("StraightPathTexture");
+
+
 
 #pragma endregion
 
@@ -166,9 +176,16 @@ void TestScene::InitScene()
 
 //please change this later
 int projId = 0;
-
+float t = 0;
 void TestScene::Update()
 {
+
+	ECS::Get<Enemy>(2).Update();
+
+	ECS::Get<Player>(0).DrawUI();
+
+	ECS::Get<Transform>(4).SetPosition(ECS::Get<Camera>(0).GetPosition() + ECS::Get<Camera>(0).GetForward());
+
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
 	{
 		//	ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
@@ -194,5 +211,26 @@ void TestScene::Update()
 	}
 
 	ECS::Get<Player>(0).Update();
-	ECS::Get<Enemy>(2).Update(); //Temp, we will fix this for multiple enemies
+
+	//lerp for light for algo demo
+
+	float LightVal1 = 0.4;
+	float LightVal2 = 1;
+	bool isForward = true;
+
+	if (t >= 1 && t > 0)
+		isForward = false;
+	if (t <= 0)
+		isForward = true;
+
+	if (isForward)
+		t += Timer::dt;
+	else
+		t -= Timer::dt;
+
+	std::cout << t << std::endl;
+
+	ECS::Get<LightSource>(2).m_Diffuse.z = Interpolation::LERP(LightVal1, LightVal2, t);
+
+
 }

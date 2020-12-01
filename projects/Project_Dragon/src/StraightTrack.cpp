@@ -38,12 +38,14 @@ void StraightTrack::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Get<PhysicsBody>(startAt + 2).m_Entity = startAt + 2;
 	m_EntityIds.push_back(startAt + 2);
 
+	
 	ECS::Create(startAt + 3);
 	ECS::Add<PhysicsBody>(startAt + 3);
 	ECS::Add<Transform>(startAt + 3);
 	ECS::Add<Mesh>(startAt + 3);
 	ECS::Add<Material>(startAt + 3);
 
+	
 	ECS::Get<Mesh>(startAt + 3).LoadOBJ("Models/pillar.obj", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	ECS::Get<Transform>(startAt + 3).SetPosition(glm::vec3(0.f, 0.f, 0.f));
 	ECS::Get<Transform>(startAt + 3).SetScale(glm::vec3(1.f, 1.f, 1.f));

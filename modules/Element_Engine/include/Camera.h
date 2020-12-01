@@ -20,6 +20,30 @@ public:
 	Camera();
 	virtual ~Camera() = default;
 
+
+
+	/// <summary>
+	/// Gets whether this camera is in orthographic projection mode
+	/// </summary>
+	bool GetIsOrtho() const { return _isOrtho; }
+	/// <summary>
+	/// Sets whether this camera is in orthographic projection mode
+	/// </summary>
+	/// <param name="isOrtho">True if the camera is in orthographic mode, false for perspective</param>
+	void SetIsOrtho(bool isOrtho);
+	/// <summary>
+	/// Toggles the camera's orthographic state, enabling it if it' disabled and disabling it if it is enabled
+	/// </summary>
+	inline void ToggleOrtho() { SetIsOrtho(!_isOrtho); }
+	/// <summary>
+	/// Gets the distance from the camera to the top/bottom of the orthographic box when in ortho mode
+	/// </summary>
+	float GetOrthoHeight() const { return _orthoHeight; }
+	/// <summary>
+	/// Sets the distance from the camera to the top/bottom of the orthographic box when in ortho mode
+	/// </summary>
+	/// <param name="orthoHeight">The distance from the camera to the top/bottom of the orthographic box when in ortho mode</param>
+	void SetOrthoHeight(float orthoHeight);
 	/// <summary>
 	/// Sets this camera's position in world space
 	/// </summary>
@@ -78,15 +102,21 @@ public:
 	/// </summary>
 	const glm::mat4& GetViewProjection() const;
 
-	void SetProjection(glm::mat4 proj)//true for proj, false for ortho
-	{
-		_projection = proj;
+	void SetNear(float near);
 
-		_isDirty = true;
-	}
+
+	void SetFar(float far);
+	
+
+	void SetProjection(glm::mat4 proj);//true for proj, false for ortho
+
 
 
 protected:
+
+	bool _isOrtho;
+	float _orthoHeight;
+
 	float _nearPlane;
 	float _farPlane;
 	float _fovRadians;

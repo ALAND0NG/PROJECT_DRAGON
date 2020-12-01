@@ -21,9 +21,12 @@ void BackEnd::Init()
 	PhysicsSystem::Init();
 	IMGUIManager::Init();
 	AssetLoader::Init();
+	SpriteRenderer::initRenderData();
 
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
+	
+
+
 
 }
 bool spacePressed = false;
