@@ -32,7 +32,7 @@ void RenderingSystem::Init()
 	IMGUIManager::imGuiCallbacks.push_back([&]()
 		{		// We'll add some ImGui controls to control our shader
 
-			ImGui::ShowDemoWindow();
+			//ImGui::DragFloat("Enemy Light Ambient R", &ECS::Get<LightSource>(2).m_Diffuse.x, 1.f, 0.f, 3.f, "%.1f", 1.f);
 		});
 
 	//initialize primary fragment shader DirLight & spotlight

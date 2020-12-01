@@ -20,6 +20,7 @@ void TestScene::InitScene()
 	ECS::Get<Camera>(0).ResizeWindow(1920, 1080);
 	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 10, 3), btVector3(1, 2, 1));
 	ECS::Add<LightSource>(0);
+	ECS::Get<LightSource>(0).m_Ambient = glm::vec3(0.1, 1, 0.1);
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
 	ECS::Get<Player>(0).SetMovementSpeed(10.f);
 
@@ -45,17 +46,19 @@ void TestScene::InitScene()
 	ECS::Get<LightSource>(2).m_Diffuse = glm::vec3(1, 0, 0);
 	ECS::Get<LightSource>(2).m_Ambient = glm::vec3(1, 0, 0);
 	ECS::Add<Material>(2);
-	ECS::Add<Mesh>(2);
 	ECS::Add<Transform>(2);
 	ECS::Add<PhysicsBody>(2);
 	ECS::Add<Enemy>(2);
+	for (int i = 1; i <= 8; i++)
+	{
+		std::string fileName = "models/animations/FIRE_ENEMY/FW_W_";
+		ECS::Get<MorphAnimator>(2).LoadFrame(fileName + std::to_string(i) + ".obj", glm::vec4(1, 1, 1, 1));
+	}
 	
-	ECS::Get<MorphAnimator>(2).LoadFrame("models/animations/FIRE_ENEMY/FW_W_1.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<MorphAnimator>(2).LoadFrame("models/animations/FIRE_ENEMY/FW_W_2.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<MorphAnimator>(2).AddNewAnimation(0,1,1);
+	ECS::Get<MorphAnimator>(2).AddNewAnimation(0,7,1);
 	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
 	
-	ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
+	//ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
@@ -75,7 +78,17 @@ void TestScene::InitScene()
 	ECS::Get<Mesh>(3).LoadOBJ("models/cube.obj", glm::vec4(0, 1, 0, 1));
 	ECS::Get<Material>(3) = AssetLoader::GetMatFromStr("StraightPathTexture");
 
-	
+
+	//to help debug the ray cast
+	ECS::Create(4);
+	ECS::Add<Mesh>(4);
+	ECS::Add<Material>(4);
+	ECS::Add<Transform>(4);
+	ECS::Add<LightSource>(4);
+	ECS::Get<Transform>(4).SetPosition(glm::vec3(0, 5, 0));
+	ECS::Get<Transform>(4).SetScale(glm::vec3(1.f, 1.f, 1.f));
+	ECS::Get<Mesh>(4).LoadOBJ("models/hand.obj", glm::vec4(0, 1, 0, 1));
+	ECS::Get<Material>(4) = AssetLoader::GetMatFromStr("StraightPathTexture");
 
 
 
@@ -168,6 +181,8 @@ void TestScene::Update()
 {
 
 	ECS::Get<Player>(0).DrawUI();
+
+	ECS::Get<Transform>(4).SetPosition(ECS::Get<Camera>(0).GetPosition() + ECS::Get<Camera>(0).GetForward());
 
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
 	{
