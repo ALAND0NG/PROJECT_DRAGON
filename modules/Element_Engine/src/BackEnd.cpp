@@ -2,6 +2,7 @@
 #include <PhysicsSystem.h>
 #include <iostream>
 #include <AssetLoader.h>
+#include <AudioEngine.h>
 GLFWwindow* BackEnd::m_Window = glfwCreateWindow(1920, 1080, "The funny game", nullptr, nullptr); //Initializing outside of class because its a static
 
 int BackEnd::m_WindowHeight = 0;
@@ -22,6 +23,7 @@ void BackEnd::Init()
 	//IMGUIManager::Init();
 	AssetLoader::Init();
 	SpriteRenderer::initRenderData();
+	SoundManager::init("", 512);
 
 	glEnable(GL_DEPTH_TEST);
 	

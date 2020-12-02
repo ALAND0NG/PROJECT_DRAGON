@@ -3,6 +3,7 @@
 #include <AssetLoader.h>
 #include <Interpolation.h>
 #include <SpriteRendering.h>
+#include <AudioEngine.h>
 
 void TestScene::InitScene()
 {
@@ -11,6 +12,13 @@ void TestScene::InitScene()
 	//Player Camera - - - Need This For A Game To Run
 	m_sceneReg = new entt::registry;
 	ECS::AttachRegistry(m_sceneReg);
+
+
+	Sound2D _Music("sounds/song.mp3", "group1");
+	_Music.setLoopCount(-1);
+	_Music.play();
+
+
 
 	ECS::Create(0); //please please please always have camera be entity 0 it will break otherwise
 	ECS::Add<Transform>(0);
@@ -111,8 +119,6 @@ void TestScene::InitScene()
 	ECS::Get<Material>(5).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(5).SetAll(0.1f);
 	ECS::Get<PhysicsBody>(5).AddBody(0.f, btVector3(-10, 0, 5), btVector3(1.f, 25.f, 25.f));
-
-
 
 
 #pragma endregion
