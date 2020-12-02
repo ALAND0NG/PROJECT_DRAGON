@@ -23,7 +23,11 @@ void TestScene::InitScene()
 	ECS::Get<LightSource>(0).m_Ambient = glm::vec3(0.1, 1, 0.1);
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
 	ECS::Get<Player>(0).SetMovementSpeed(10.f);
-
+	ECS::Add<UI>(0);
+	ECS::Get<UI>(0).mesh.LoadOBJ("models/plane.obj", glm::vec4(1, 1, 1, 1));
+	ECS::Get<UI>(0).material.LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	ECS::Get<UI>(0).material.LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<UI>(0).material.SetAll(1.f);
 	//Drunk Walker - - - Important For World Generation
 	ECS::Create(1);
 	ECS::Add<Transform>(1);
@@ -45,13 +49,13 @@ void TestScene::InitScene()
 	ECS::Add<Transform>(2);
 	ECS::Add<PhysicsBody>(2);
 	ECS::Add<Enemy>(2);
-	for (int i = 1; i <= 8; i++)
+	for (int i = 1; i <= 2; i++)
 	{
 		std::string fileName = "models/animations/FIRE_ENEMY/FW_W_";
 		ECS::Get<MorphAnimator>(2).LoadFrame(fileName + std::to_string(i) + ".obj", glm::vec4(1, 1, 1, 1));
 	}
 
-	ECS::Get<MorphAnimator>(2).AddNewAnimation(0, 7, 1);
+	ECS::Get<MorphAnimator>(2).AddNewAnimation(0, 1, 1);
 	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
 
 	//ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
@@ -201,7 +205,7 @@ void TestScene::Update()
 {
 	
 	//output an FPS
-	std::cout << 1/ Timer::dt << std::endl;
+	//  std::cout << 1/ Timer::dt << std::endl;
 
 
 	ECS::Get<Enemy>(2).Update();

@@ -22,4 +22,7 @@ public:
 	btVector3 playerPosition;
 
 	void Update();
+
+	//to check if the player should take damage
+
 };

@@ -5,6 +5,7 @@
 Shader::sptr RenderingSystem::shader = nullptr;
 Shader::sptr RenderingSystem::AnimationShader = nullptr;
 Shader::sptr RenderingSystem::BlendShader = nullptr;
+Shader::sptr RenderingSystem::UIShader = nullptr;
 void RenderingSystem::Init()
 {
 	//Inits all shaders
@@ -19,6 +20,10 @@ void RenderingSystem::Init()
 	AnimationShader->LoadShaderPartFromFile("shader/frag_shader.glsl", GL_FRAGMENT_SHADER);
 	AnimationShader->Link();
 
+	UIShader = Shader::Create();
+	UIShader->LoadShaderPartFromFile("shader/ui_vert.glsl", GL_VERTEX_SHADER);
+	UIShader->LoadShaderPartFromFile("shader/ui_frag.glsl", GL_FRAGMENT_SHADER);
+	UIShader->Link();
 	//init attenuation
 	shader->SetUniform("u_LightAttenuationConstant", 1.f);
 	shader->SetUniform("u_LightAttenuationLinear", 0.08f);
@@ -75,6 +80,9 @@ void RenderingSystem::ECSUpdate()
 
 	AnimationShader->SetUniform("s_Diffuse", 0);
 	AnimationShader->SetUniform("s_Specular", 1);
+
+	UIShader->SetUniform("s_Specular", 0);
+	UIShader->SetUniform("s_Diffuse", 1);
 	
 	auto reg = ECS::GetReg();
 	int LightCount = 0;
@@ -147,6 +155,29 @@ void RenderingSystem::ECSUpdate()
 		manim.Update();
 		manim.GetVAO()->Render();
 	}
+
+	//view for UI
+	auto UIview = reg->view<UI>();
+	for (auto entity : UIview)
+	{
+		UIShader->Bind();
+
+		UI& ui = UIview.get<UI>(entity);
+
+		
+
+
+		UIShader->SetUniform("u_Scale", 0.5f);
+		UIShader->SetUniform("u_Offset", glm::vec2(0, -1));
+		
+		ui.material.GetAlbedo()->Bind(0);
+		ui.material.GetSpecular()->Bind(1);
+
+
+		ui.mesh.GetVAO()->Render();
+
+	}
+
 	//view for lightsource
 	auto lview = reg->view<LightSource, Transform>();
 	for (auto entity : lview)
