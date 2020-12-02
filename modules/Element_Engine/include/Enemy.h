@@ -13,9 +13,10 @@ public:
 	btVector3 thisPosition;
 	btVector3 distance;
 	int entityNumber = 2;
-	int lookRange = 20;
+	int lookRange = 5;
 	float distanceNorm = 100.0f;
 	float mTimer = 0.0f;
+	float m_MovementSpeed = 5.f;
 
 	//External Values
 	btVector3 playerPosition;

@@ -58,7 +58,7 @@ void TestScene::InitScene()
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(2).SetAll(1.f);
-	ECS::Get<PhysicsBody>(2).AddBody(10, btVector3(1, 5, 1), btVector3(3, 3, 3));
+	ECS::Get<PhysicsBody>(2).AddBody(10, btVector3(10, 1, 1), btVector3(3, 3, 3));
 	ECS::Get<PhysicsBody>(2).SetUserData(5);
 	ECS::Get<PhysicsBody>(2).SetUserData2(2);//this basically keeps track of what entity this is, used in order to keep track of which enemy is which
 	ECS::Get<PhysicsBody>(2).m_Entity = 2;
@@ -203,6 +203,8 @@ void TestScene::Update()
 	//output an FPS
 	std::cout << 1/ Timer::dt << std::endl;
 
+
+	ECS::Get<Enemy>(2).Update();
 	ECS::Get<Player>(0).Update();
 
 	//lerp for light for algo demo

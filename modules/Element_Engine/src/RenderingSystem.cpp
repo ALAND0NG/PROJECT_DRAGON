@@ -59,6 +59,9 @@ void RenderingSystem::ECSUpdate()
 {
 
 
+
+
+
 	//Just updates camera stuff with tranform stuff to keep it consistent
 	ECS::Get<Camera>(0).SetPosition(ECS::Get<Transform>(0).GetPosition());
 
@@ -86,7 +89,14 @@ void RenderingSystem::ECSUpdate()
 		trans.SetModelMat(trans.GetTransform() * ECS::Get<Transform>(parent.GetParent()).GetTransform());
 		trans.ComputeGlobalMat();
 	}
-
+	
+	//updates the enemies
+	auto enemyView = reg->view<Enemy>();
+	for (auto entity : enemyView)
+	{
+		Enemy& enemy = enemyView.get<Enemy>(entity);
+		enemy.Update();
+	}
 
 	//view for Mesh
 	auto view = reg->view<Mesh, Transform, Material>();

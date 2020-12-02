@@ -69,7 +69,7 @@ void BackEnd::InitWindow()
 
 	glfwWindowHint(GLFW_RESIZABLE, true);
 
-	BackEnd::m_Window = glfwCreateWindow(1920, 1080, "Project Dragon", glfwGetPrimaryMonitor(), nullptr);
+	BackEnd::m_Window = glfwCreateWindow(1920, 1080, "Project Dragon", nullptr, nullptr);
 
 	BackEnd::m_WindowHeight = 1080;
 	BackEnd::m_WindowWidth = 1920;

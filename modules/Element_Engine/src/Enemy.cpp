@@ -52,5 +52,12 @@ void Enemy::Update()
 		distanceNorm = sqrtf(distance.getX() + distance.getY() + distance.getZ());
 		std::cout << "\nDistance: " << distanceNorm << "\n\n\n\n";
 	}
-	ECS::Get<PhysicsBody>(entityNumber).SetLinearVelocity(btVector3(movementDirection.x * 2, 0, movementDirection.z * 2));
+	ECS::Get<PhysicsBody>(entityNumber).SetLinearVelocity(btVector3(movementDirection.x * m_MovementSpeed, 0, movementDirection.z * m_MovementSpeed));
+
+	//check for death
+	btTransform trns;
+	trns = ECS::Get<PhysicsBody>(entityNumber).GetBody()->getCenterOfMassTransform();
+	trns.setOrigin(btVector3(0, -100, 0));
+	if (m_hp == 0)
+		ECS::Get<PhysicsBody>(entityNumber).GetBody()->setWorldTransform(trns);
 }
