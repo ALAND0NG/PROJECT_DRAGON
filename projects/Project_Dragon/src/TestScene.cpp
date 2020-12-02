@@ -18,7 +18,7 @@ void TestScene::InitScene()
 	ECS::Add<Camera>(0);
 	ECS::Add<Player>(0);
 	ECS::Get<Camera>(0).ResizeWindow(1920, 1080);
-	ECS::Get<PhysicsBody>(0).AddBody(15, btVector3(3, 10, 3), btVector3(1, 2, 1));
+	ECS::Get<PhysicsBody>(0).AddBody(100, btVector3(3, 10, 3), btVector3(1, 2, 1), 3.0f);
 	ECS::Add<LightSource>(0);
 	ECS::Get<LightSource>(0).m_Ambient = glm::vec3(0.1, 1, 0.1);
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
@@ -88,7 +88,10 @@ void TestScene::InitScene()
 	ECS::Get<Transform>(4).SetPosition(glm::vec3(0, 5, 0));
 	ECS::Get<Transform>(4).SetScale(glm::vec3(1.f, 1.f, 1.f));
 	ECS::Get<Mesh>(4).LoadOBJ("models/hand.obj", glm::vec4(0, 1, 0, 1));
-	ECS::Get<Material>(4) = AssetLoader::GetMatFromStr("StraightPathTexture");
+	ECS::Get<Material>(4).LoadDiffuseFromFile("images/handtexture.png");
+	ECS::Get<Material>(4).LoadSpecularFromFile("images/handtexture.png");
+	ECS::Get<Material>(4).SetAll(0.1f);
+
 
 
 
@@ -138,7 +141,7 @@ void TestScene::InitScene()
 					ECS::Get<Transform>(1).GetPosition().y,
 					ECS::Get<Transform>(1).GetPosition().z + 40.f));
 				glm::vec3 temp = ECS::Get<Transform>(1).GetPosition();
-				InstantiatingSystem::InitPrefab(2, glm::vec3(temp.x, temp.y - 8.2f, temp.z));
+				InstantiatingSystem::InitPrefab(2, glm::vec3(temp.x, temp.y - 8.25f, temp.z));
 			}
 			isRight = false;
 			isForward = true;
@@ -160,7 +163,7 @@ void TestScene::InitScene()
 					ECS::Get<Transform>(1).GetPosition().y,
 					ECS::Get<Transform>(1).GetPosition().z - 40.f));
 				glm::vec3 temp = ECS::Get<Transform>(1).GetPosition();
-				InstantiatingSystem::InitPrefab(2, glm::vec3(temp.x, temp.y - 8.2f, temp.z));
+				InstantiatingSystem::InitPrefab(2, glm::vec3(temp.x, temp.y - 8.25f, temp.z));
 			}
 			isLeft = false;
 			isForward = true;
@@ -184,7 +187,10 @@ void TestScene::Update()
 
 	ECS::Get<Player>(0).DrawUI();
 
-	ECS::Get<Transform>(4).SetPosition(ECS::Get<Camera>(0).GetPosition() + ECS::Get<Camera>(0).GetForward());
+
+	glm::vec3 playerPos = ECS::Get<Transform>(0).GetPosition();
+	playerPos.y -= 15.f;
+	ECS::Get<Transform>(4).SetPosition(playerPos);
 
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
 	{
@@ -228,7 +234,6 @@ void TestScene::Update()
 	else
 		t -= Timer::dt;
 
-	std::cout << t << std::endl;
 
 	ECS::Get<LightSource>(2).m_Diffuse.z = Interpolation::LERP(LightVal1, LightVal2, t);
 

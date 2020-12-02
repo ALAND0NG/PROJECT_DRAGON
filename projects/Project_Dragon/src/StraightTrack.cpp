@@ -24,7 +24,7 @@ void StraightTrack::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Create(startAt + 1);
 	ECS::Add<PhysicsBody>(startAt + 1);
 	ECS::Add<Transform>(startAt + 1);
-	ECS::Get<PhysicsBody>(startAt + 1).AddBody(0, btVector3(physBodOrigin.getX(), physBodOrigin.getY(), physBodOrigin.getZ() + 21), btVector3(25, 25, 1));
+	ECS::Get<PhysicsBody>(startAt + 1).AddBody(0, btVector3(physBodOrigin.getX(), physBodOrigin.getY(), physBodOrigin.getZ() + 21), btVector3(21, 21, 1));
 	ECS::Get<PhysicsBody>(startAt + 1).m_Entity = startAt + 1;
 	m_EntityIds.push_back(startAt + 1);
 
@@ -34,7 +34,7 @@ void StraightTrack::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Create(startAt + 2);
 	ECS::Add<PhysicsBody>(startAt + 2);
 	ECS::Add<Transform>(startAt + 2);
-	ECS::Get<PhysicsBody>(startAt + 2).AddBody(0, btVector3(physBodOrigin.getX(), physBodOrigin.getY(), physBodOrigin.getZ() - 21), btVector3(25, 25, 1));
+	ECS::Get<PhysicsBody>(startAt + 2).AddBody(0, btVector3(physBodOrigin.getX(), physBodOrigin.getY(), physBodOrigin.getZ() - 21), btVector3(21, 21, 1));
 	ECS::Get<PhysicsBody>(startAt + 2).m_Entity = startAt + 2;
 	m_EntityIds.push_back(startAt + 2);
 
