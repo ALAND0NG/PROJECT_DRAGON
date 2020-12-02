@@ -36,8 +36,8 @@ void RenderingSystem::Init()
 		});
 
 	//initialize primary fragment shader DirLight & spotlight
-	shader->SetUniform("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
-	shader->SetUniform("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+	shader->SetUniform("dirLight.direction", glm::vec3(-0.0f, -1.0f, -0.0f));
+	shader->SetUniform("dirLight.ambient", glm::vec3(0.5f, 0.5f, 0.5f));
 	shader->SetUniform("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
 	shader->SetUniform("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
 
@@ -75,6 +75,18 @@ void RenderingSystem::ECSUpdate()
 	
 	auto reg = ECS::GetReg();
 	int LightCount = 0;
+
+	
+	auto Parentingview = reg->view<Parent, Transform>();
+	for (auto entity : Parentingview)
+	{
+		Parent& parent = Parentingview.get<Parent>(entity);
+		Transform& trans = Parentingview.get<Transform>(entity);
+
+		trans.SetModelMat(trans.GetTransform() * ECS::Get<Transform>(parent.GetParent()).GetTransform());
+		trans.ComputeGlobalMat();
+	}
+
 
 	//view for Mesh
 	auto view = reg->view<Mesh, Transform, Material>();

@@ -12,7 +12,7 @@ void Enemy::Update()
 		distance.setY(powf(thisPosition.getY() - playerPosition.getY(), 2.0f));
 		distance.setZ(powf(thisPosition.getZ() - playerPosition.getZ(), 2.0f));
 
-		std::cout << "\nX: " << distance.getX() << "\nY: " << distance.getY() << "\nZ: " << distance.getZ() << "\n\n";
+		//std::cout << "\nX: " << distance.getX() << "\nY: " << distance.getY() << "\nZ: " << distance.getZ() << "\n\n";
 		distanceNorm = sqrtf(distance.getX() + distance.getY() + distance.getZ());
 
 		//Chance behavior of enemy based on distance

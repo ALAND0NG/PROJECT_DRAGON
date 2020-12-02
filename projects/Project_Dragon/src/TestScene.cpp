@@ -75,22 +75,42 @@ void TestScene::InitScene()
 	ECS::Add<LightSource>(3);
 	ECS::Get<Transform>(3).SetPosition(glm::vec3(0, 5, 0));
 	ECS::Get<Transform>(3).SetScale(glm::vec3(1.f, 1.f, 1.f));
-	ECS::Get<Mesh>(3).LoadOBJ("models/cube.obj", glm::vec4(0, 1, 0, 1));
-	ECS::Get<Material>(3) = AssetLoader::GetMatFromStr("StraightPathTexture");
+	ECS::Get<Mesh>(3).LoadOBJ("models/other/ice_projectile.obj", glm::vec4(0, 1, 0, 1));
+	ECS::Get<Material>(3).LoadDiffuseFromFile("images/ice_tex.png");
+	ECS::Get<Material>(3).LoadSpecularFromFile("images/ice_tex.png");
+	ECS::Get<Material>(3).SetAll(1.f);
 
 
-	//to help debug the ray cast
+
+	//hand
 	ECS::Create(4);
 	ECS::Add<Mesh>(4);
 	ECS::Add<Material>(4);
 	ECS::Add<Transform>(4);
 	ECS::Add<LightSource>(4);
+	ECS::Add<Parent>(4);
+	ECS::Get<Parent>(4).SetParent(0);
 	ECS::Get<Transform>(4).SetPosition(glm::vec3(0, 5, 0));
 	ECS::Get<Transform>(4).SetScale(glm::vec3(1.f, 1.f, 1.f));
 	ECS::Get<Mesh>(4).LoadOBJ("models/hand.obj", glm::vec4(0, 1, 0, 1));
 	ECS::Get<Material>(4).LoadDiffuseFromFile("images/handtexture.png");
 	ECS::Get<Material>(4).LoadSpecularFromFile("images/handtexture.png");
 	ECS::Get<Material>(4).SetAll(0.1f);
+
+	//Wall to prevent player from walking off the end
+	ECS::Create(5);
+	ECS::Add<Mesh>(5);
+	ECS::Add<Material>(5);
+	ECS::Add<Transform>(5);
+	ECS::Add<PhysicsBody>(5);
+	ECS::Get<Transform>(5).SetPosition(glm::vec3(-10, 0, 5));
+	ECS::Get<Transform>(5).SetRotation(glm::vec3(0, 0, 1), glm::radians(90.f));
+	ECS::Get<Transform>(5).SetScale(glm::vec3(10.f, 1.f, 25.f));
+	ECS::Get<Mesh>(5).LoadOBJ("models/other/plane.obj", glm::vec4(0, 1, 0, 1));
+	ECS::Get<Material>(5).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	ECS::Get<Material>(5).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(5).SetAll(0.1f);
+	ECS::Get<PhysicsBody>(5).AddBody(0.f, btVector3(-10, 0, 5), btVector3(1.f, 25.f, 25.f));
 
 
 
@@ -108,7 +128,7 @@ void TestScene::InitScene()
 	//WORLD GENERATOR - - - WIP
 	bool isForward = true, isRight = false, isLeft = false;
 	InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition()); //Creates a block on spawn for the player
-	for (int i = 0; i < 5; i++) { //Creates a drunk walker of 25 length
+	for (int i = 0; i < 25; i++) { //Creates a drunk walker of 25 length
 		if (isForward) {
 			for (int i = 0; i < rand() % 3 + 1; i++) {
 				ECS::Get<Transform>(1).SetPosition(glm::vec3(
@@ -180,41 +200,12 @@ void TestScene::InitScene()
 //please change this later
 int projId = 0;
 float t = 0;
+bool isForward = true;
 void TestScene::Update()
 {
-
-	ECS::Get<Enemy>(2).Update();
-
-	ECS::Get<Player>(0).DrawUI();
-
-
-	glm::vec3 playerPos = ECS::Get<Transform>(0).GetPosition();
-	playerPos.y -= 15.f;
-	ECS::Get<Transform>(4).SetPosition(playerPos);
-
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_I) == GLFW_PRESS)
-	{
-		//	ECS::Get<PhysicsBody>(3).GetBody()->setActivationState(1);
-		ECS::Get<PhysicsBody>(3).SetLinearVelocity(btVector3(5, 0, 0));
-	}
-
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_F) == GLFW_PRESS)
-	{
-		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	}
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_G) == GLFW_PRESS)
-	{
-		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	}
-
-	if (ECS::Get<Enemy>(2).m_hp <= 0)
-	{
-		ECS::Get<Enemy>(2).m_hp = 3;
-		btTransform transform;
-		transform = ECS::Get<PhysicsBody>(2).GetBody()->getCenterOfMassTransform();
-		transform.setOrigin(btVector3(0, 10, 0));
-		ECS::Get<PhysicsBody>(2).GetBody()->setCenterOfMassTransform(transform);
-	}
+	
+	//output an FPS
+	std::cout << 1/ Timer::dt << std::endl;
 
 	ECS::Get<Player>(0).Update();
 
@@ -222,7 +213,7 @@ void TestScene::Update()
 
 	float LightVal1 = 0.4;
 	float LightVal2 = 1;
-	bool isForward = true;
+
 
 	if (t >= 1 && t > 0)
 		isForward = false;
