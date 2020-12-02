@@ -24,7 +24,6 @@ void TestScene::InitScene()
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
 	ECS::Get<Player>(0).SetMovementSpeed(10.f);
 
-
 	//Drunk Walker - - - Important For World Generation
 	ECS::Create(1);
 	ECS::Add<Transform>(1);
@@ -35,9 +34,6 @@ void TestScene::InitScene()
 	ECS::Get<Material>(1).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
 	ECS::Get<Material>(1).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(1).SetAll(1.f);
-
-
-
 
 	//Enemy for animation test
 	ECS::Create(2);
@@ -54,10 +50,10 @@ void TestScene::InitScene()
 		std::string fileName = "models/animations/FIRE_ENEMY/FW_W_";
 		ECS::Get<MorphAnimator>(2).LoadFrame(fileName + std::to_string(i) + ".obj", glm::vec4(1, 1, 1, 1));
 	}
-	
-	ECS::Get<MorphAnimator>(2).AddNewAnimation(0,7,1);
+
+	ECS::Get<MorphAnimator>(2).AddNewAnimation(0, 7, 1);
 	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
-	
+
 	//ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
@@ -78,7 +74,6 @@ void TestScene::InitScene()
 	ECS::Get<Mesh>(3).LoadOBJ("models/cube.obj", glm::vec4(0, 1, 0, 1));
 	ECS::Get<Material>(3) = AssetLoader::GetMatFromStr("StraightPathTexture");
 
-
 	//to help debug the ray cast
 	ECS::Create(4);
 	ECS::Add<Mesh>(4);
@@ -89,8 +84,6 @@ void TestScene::InitScene()
 	ECS::Get<Transform>(4).SetScale(glm::vec3(1.f, 1.f, 1.f));
 	ECS::Get<Mesh>(4).LoadOBJ("models/hand.obj", glm::vec4(0, 1, 0, 1));
 	ECS::Get<Material>(4) = AssetLoader::GetMatFromStr("StraightPathTexture");
-
-
 
 #pragma endregion
 
@@ -179,7 +172,6 @@ int projId = 0;
 float t = 0;
 void TestScene::Update()
 {
-
 	ECS::Get<Enemy>(2).Update();
 
 	ECS::Get<Player>(0).DrawUI();
@@ -228,9 +220,5 @@ void TestScene::Update()
 	else
 		t -= Timer::dt;
 
-	std::cout << t << std::endl;
-
 	ECS::Get<LightSource>(2).m_Diffuse.z = Interpolation::LERP(LightVal1, LightVal2, t);
-
-
 }
