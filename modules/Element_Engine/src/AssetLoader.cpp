@@ -7,32 +7,32 @@ std::vector<std::string> AssetLoader::m_MeshNames;
 void AssetLoader::Init()
 {
 	Mesh pfb0;
-	pfb0.LoadOBJ("models/StraightTrack.obj", glm::vec4(1, 1, 1, 1));
+	pfb0.LoadOBJ("models/Straight_Nodes/StraightTrack.obj", glm::vec4(1, 1, 1, 1));
 	AssetLoader::GetMesh().push_back(pfb0);
 	AssetLoader::m_MeshNames.push_back("StraightTrack");
 
 	Mesh pfb1;
-	pfb1.LoadOBJ("models/SideTrack.obj", glm::vec4(1, 1, 1, 1));
+	pfb1.LoadOBJ("models/other/SideTrack.obj", glm::vec4(1, 1, 1, 1));
 	AssetLoader::GetMesh().push_back(pfb1);
 	AssetLoader::m_MeshNames.push_back("SideTrack");
 
 	Mesh pfb2; //
-	pfb2.LoadOBJ("models/RightTurn.obj", glm::vec4(1, 1, 1, 1));
+	pfb2.LoadOBJ("models/RightTurn_Nodes/RightTurn.obj", glm::vec4(1, 1, 1, 1));
 	AssetLoader::GetMesh().push_back(pfb2);
 	AssetLoader::m_MeshNames.push_back("RightTurn");
 
 	Mesh pfb3;
-	pfb3.LoadOBJ("models/RightOff.obj", glm::vec4(1, 1, 1, 1));
+	pfb3.LoadOBJ("models/RightOff_Nodes/RightOff.obj", glm::vec4(1, 1, 1, 1));
 	AssetLoader::GetMesh().push_back(pfb3);
 	AssetLoader::m_MeshNames.push_back("RightOff");
 
 	Mesh pfb4;
-	pfb4.LoadOBJ("models/LeftTurn.obj", glm::vec4(1, 1, 1, 1));
+	pfb4.LoadOBJ("models/LeftTurn_Nodes/LeftTurn.obj", glm::vec4(1, 1, 1, 1));
 	AssetLoader::GetMesh().push_back(pfb4);
 	AssetLoader::m_MeshNames.push_back("LeftTurn");
 
 	Mesh pfb5;
-	pfb5.LoadOBJ("models/LeftOff.obj", glm::vec4(1, 1, 1, 1));
+	pfb5.LoadOBJ("models/LeftOff_Nodes/LeftOff.obj", glm::vec4(1, 1, 1, 1));
 	AssetLoader::GetMesh().push_back(pfb5);
 	AssetLoader::m_MeshNames.push_back("LeftOff");
 

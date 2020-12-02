@@ -20,7 +20,7 @@ void Enemy::Update()
 
 		//Red Zone
 		if (distanceNorm < lookRange * 2) {
-			std::cout << "\nRetreating\n";
+		//	std::cout << "\nRetreating\n";   
 			if (thisPosition.getX() < playerPosition.getX()) {
 				movementDirection.x = -1;
 			}
@@ -33,12 +33,12 @@ void Enemy::Update()
 
 		//Orange Zone
 		else if (distanceNorm < lookRange * 3) {
-			std::cout << "\Attacking\n";
+			//std::cout << "\Attacking\n";
 		}
 
 		//Yellow Zone
 		else if (distanceNorm < lookRange * 5) {
-			std::cout << "\Hunting\n";
+			//std::cout << "\Hunting\n";
 			if (thisPosition.getX() < playerPosition.getX()) {
 				movementDirection.x = 1;
 			}
@@ -48,9 +48,27 @@ void Enemy::Update()
 			}
 			else movementDirection.z = -1;
 		}
-		std::cout << "\nX: " << distance.getX() << "\nY: " << distance.getY() << "\nZ: " << distance.getZ() << "\n\n";
+		//std::cout << "\nX: " << distance.getX() << "\nY: " << distance.getY() << "\nZ: " << distance.getZ() << "\n\n";
 		distanceNorm = sqrtf(distance.getX() + distance.getY() + distance.getZ());
-		std::cout << "\nDistance: " << distanceNorm << "\n\n\n\n";
+	//	std::cout << "\nDistance: " << distanceNorm << "\n\n\n\n";
 	}
-	ECS::Get<PhysicsBody>(entityNumber).SetLinearVelocity(btVector3(movementDirection.x * 2, 0, movementDirection.z * 2));
+	ECS::Get<PhysicsBody>(entityNumber).SetLinearVelocity(btVector3(movementDirection.x * m_MovementSpeed, 0, movementDirection.z * m_MovementSpeed));
+
+	//check for death
+	btTransform trns;
+	trns = ECS::Get<PhysicsBody>(entityNumber).GetBody()->getCenterOfMassTransform();
+	trns.setOrigin(btVector3(0, -100, 0));
+	if (m_hp == 0)
+		ECS::Get<PhysicsBody>(entityNumber).GetBody()->setWorldTransform(trns);
+
+	//check if player should take damage
+	btVector3 Pla_Enemy_Diff;
+	Pla_Enemy_Diff = playerPosition - thisPosition;
+	glm::vec3 distance = BtToGlm::BTTOGLMV3(Pla_Enemy_Diff);
+	float length = glm::length(distance);
+//	std::cout << length << std::endl;
+	//if (length < 6.5)
+	//	std::cout << 
+
 }
+

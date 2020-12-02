@@ -13,7 +13,7 @@
 #include <Timer.h>
 #include <Texture2D.h>
 #include <Texture2DData.h>
-#include "GLFW/glfw3.h"
+#include "GLFW/glfw3.h" 
 #include <glad/glad.h>
 
 static class RenderingSystem
@@ -30,5 +30,6 @@ private:
 	static Shader::sptr shader;
 	static Shader::sptr AnimationShader;
 	static Shader::sptr BlendShader;
+	static Shader::sptr UIShader;
 	static void ECSUpdate(); //Goes through any ECS component that needs a frame by frame update, and applies that
 };

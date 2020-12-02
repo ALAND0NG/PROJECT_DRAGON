@@ -41,46 +41,42 @@ void Game::GameInput()
 	float verticalVelo = ECS::Get<PhysicsBody>(0).GetBody()->getVelocityInLocalPoint(btVector3(0, 0, 0)).getY();
 	float movementSpeed = ECS::Get<Player>(0).GetMovementSpeed();
 
-	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_W) == GLFW_PRESS)
+	/*
+	//walking forward and strafing left
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(BackEnd::m_Window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		//glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
-
-		//posTemp.x += ECS::Get<Camera>(0).GetForward().x * 8.f * Timer::dt;
-		//posTemp.z += ECS::Get<Camera>(0).GetForward().z * 8.f * Timer::dt;
-
-
-		//ECS::Get<Transform>(0).SetPosition(posTemp);
-	
+		btVector3 finalMovement;
 
 		float x = ECS::Get<Camera>(0).GetForward().x;
 		float z = ECS::Get<Camera>(0).GetForward().z;
 
+		finalMovement = btVector3(x * movementSpeed, verticalVelo, z * movementSpeed); //forward vector
+		glm::vec3 direction = glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp()));
+		finalMovement += BtToGlm::GLMTOBTV3(direction);
+
+		ECS::Get<PhysicsBody>(0).SetLinearVelocity(finalMovement);
+
+	}
+	*/
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+
+		float x = ECS::Get<Camera>(0).GetForward().x;
+		float z = ECS::Get<Camera>(0).GetForward().z;
 
 		ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(x * movementSpeed, verticalVelo, z * movementSpeed));
-
 
 	}
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		/*
-		glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
-		posTemp.x -= ECS::Get<Camera>(0).GetForward().x * 8.f * Timer::dt;
-		posTemp.z -= ECS::Get<Camera>(0).GetForward().z * 8.f * Timer::dt;
-
-		ECS::Get<Transform>(0).SetPosition(posTemp);
-		*/
-
 		float x = ECS::Get<Camera>(0).GetForward().x;
 		float z = ECS::Get<Camera>(0).GetForward().z;
-
-
-		
 		ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(-x * movementSpeed, verticalVelo, -z* movementSpeed));
 	}
+
+
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		
-		//glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
 		glm::vec3 direction = glm::normalize(glm::cross(ECS::Get<Camera>(0).GetForward(), ECS::Get<Camera>(0).GetUp()));
 
 		ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(direction.x* movementSpeed, verticalVelo, direction.z* movementSpeed));
@@ -96,16 +92,10 @@ void Game::GameInput()
 	}
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
-		/*
-		glm::vec3 posTemp = ECS::Get<Transform>(0).GetPosition();
-		posTemp.y = 15.f;
-		ECS::Get<Transform>(0).SetPosition(posTemp);
-		*/
-	//	ECS::Get<PhysicsBody>(0).GetBody()->setActivationState(1);
-		//ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(0, 10, 0));
+
 		ECS::Get<Player>(0).CheckJump();
 
-		//if (ECS::Get<Player>(0).GetPlayerData().m_CanJump)
+		if (ECS::Get<Player>(0).GetPlayerData().m_CanJump)
 		ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(0, 10, 0));
 	}
 	

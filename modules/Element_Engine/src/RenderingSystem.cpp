@@ -5,6 +5,7 @@
 Shader::sptr RenderingSystem::shader = nullptr;
 Shader::sptr RenderingSystem::AnimationShader = nullptr;
 Shader::sptr RenderingSystem::BlendShader = nullptr;
+Shader::sptr RenderingSystem::UIShader = nullptr;
 void RenderingSystem::Init()
 {
 	//Inits all shaders
@@ -19,6 +20,10 @@ void RenderingSystem::Init()
 	AnimationShader->LoadShaderPartFromFile("shader/frag_shader.glsl", GL_FRAGMENT_SHADER);
 	AnimationShader->Link();
 
+	UIShader = Shader::Create();
+	UIShader->LoadShaderPartFromFile("shader/ui_vert.glsl", GL_VERTEX_SHADER);
+	UIShader->LoadShaderPartFromFile("shader/ui_frag.glsl", GL_FRAGMENT_SHADER);
+	UIShader->Link();
 	//init attenuation
 	shader->SetUniform("u_LightAttenuationConstant", 1.f);
 	shader->SetUniform("u_LightAttenuationLinear", 0.08f);
@@ -36,8 +41,8 @@ void RenderingSystem::Init()
 		});
 
 	//initialize primary fragment shader DirLight & spotlight
-	shader->SetUniform("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
-	shader->SetUniform("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+	shader->SetUniform("dirLight.direction", glm::vec3(-0.0f, -1.0f, -0.0f));
+	shader->SetUniform("dirLight.ambient", glm::vec3(0.5f, 0.5f, 0.5f));
 	shader->SetUniform("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
 	shader->SetUniform("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
 
@@ -59,6 +64,9 @@ void RenderingSystem::ECSUpdate()
 {
 
 
+
+
+
 	//Just updates camera stuff with tranform stuff to keep it consistent
 	ECS::Get<Camera>(0).SetPosition(ECS::Get<Transform>(0).GetPosition());
 
@@ -72,9 +80,31 @@ void RenderingSystem::ECSUpdate()
 
 	AnimationShader->SetUniform("s_Diffuse", 0);
 	AnimationShader->SetUniform("s_Specular", 1);
+
+	UIShader->SetUniform("s_Specular", 0);
+	UIShader->SetUniform("s_Diffuse", 1);
 	
 	auto reg = ECS::GetReg();
 	int LightCount = 0;
+
+	
+	auto Parentingview = reg->view<Parent, Transform>();
+	for (auto entity : Parentingview)
+	{
+		Parent& parent = Parentingview.get<Parent>(entity);
+		Transform& trans = Parentingview.get<Transform>(entity);
+
+		trans.SetModelMat(trans.GetTransform() * ECS::Get<Transform>(parent.GetParent()).GetTransform());
+		trans.ComputeGlobalMat();
+	}
+	
+	//updates the enemies
+	auto enemyView = reg->view<Enemy>();
+	for (auto entity : enemyView)
+	{
+		Enemy& enemy = enemyView.get<Enemy>(entity);
+		enemy.Update();
+	}
 
 	//view for Mesh
 	auto view = reg->view<Mesh, Transform, Material>();
@@ -125,8 +155,31 @@ void RenderingSystem::ECSUpdate()
 		manim.Update();
 		manim.GetVAO()->Render();
 	}
+
+	//view for UI
+	auto UIview = reg->view<UI>();
+	for (auto entity : UIview)
+	{
+		UIShader->Bind();
+
+		UI& ui = UIview.get<UI>(entity);
+
+		
+
+
+		UIShader->SetUniform("u_Scale", 0.1f);
+		UIShader->SetUniform("u_Offset", glm::vec2(0, 0));
+		
+		ui.material.GetAlbedo()->Bind(0);
+		ui.material.GetSpecular()->Bind(1);
+
+
+		ui.mesh.GetVAO()->Render();
+
+	}
+
 	//view for lightsource
-	auto lview = reg->view<LightSource, Transform>();
+	auto lview = reg->view<LightSource, Transform>(); 
 	for (auto entity : lview)
 	{
 

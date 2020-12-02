@@ -68,7 +68,7 @@ public:
 
 	bool FireWeapon(int index)
 	{
-		return m_Weapons[index].Shoot(15.f);
+		return m_Weapons[index].Shoot(35.f);
 	}
 
 	Weapon GetWeapon(int index);
