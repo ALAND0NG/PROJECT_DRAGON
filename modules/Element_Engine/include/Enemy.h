@@ -12,7 +12,7 @@ public:
 	glm::vec3 movementDirection = glm::vec3(0, 0, 0);
 	btVector3 thisPosition;
 	btVector3 distance;
-	int entityNumber = 2;
+	int entityNumber = 2;              
 	int lookRange = 5;
 	float distanceNorm = 100.0f;
 	float mTimer = 0.0f;

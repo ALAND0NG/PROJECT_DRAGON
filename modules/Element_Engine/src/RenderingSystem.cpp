@@ -167,8 +167,8 @@ void RenderingSystem::ECSUpdate()
 		
 
 
-		UIShader->SetUniform("u_Scale", 0.5f);
-		UIShader->SetUniform("u_Offset", glm::vec2(0, -1));
+		UIShader->SetUniform("u_Scale", 0.1f);
+		UIShader->SetUniform("u_Offset", glm::vec2(0, 0));
 		
 		ui.material.GetAlbedo()->Bind(0);
 		ui.material.GetSpecular()->Bind(1);
@@ -179,7 +179,7 @@ void RenderingSystem::ECSUpdate()
 	}
 
 	//view for lightsource
-	auto lview = reg->view<LightSource, Transform>();
+	auto lview = reg->view<LightSource, Transform>(); 
 	for (auto entity : lview)
 	{
 

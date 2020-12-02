@@ -20,7 +20,7 @@ void Enemy::Update()
 
 		//Red Zone
 		if (distanceNorm < lookRange * 2) {
-		//	std::cout << "\nRetreating\n";
+		//	std::cout << "\nRetreating\n";   
 			if (thisPosition.getX() < playerPosition.getX()) {
 				movementDirection.x = -1;
 			}
@@ -67,8 +67,8 @@ void Enemy::Update()
 	glm::vec3 distance = BtToGlm::BTTOGLMV3(Pla_Enemy_Diff);
 	float length = glm::length(distance);
 //	std::cout << length << std::endl;
-	if (length < 6.5)
-		std::cout << 
+	//if (length < 6.5)
+	//	std::cout << 
 
 }
 

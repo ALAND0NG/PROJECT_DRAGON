@@ -24,16 +24,16 @@ void TestScene::InitScene()
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
 	ECS::Get<Player>(0).SetMovementSpeed(10.f);
 	ECS::Add<UI>(0);
-	ECS::Get<UI>(0).mesh.LoadOBJ("models/plane.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<UI>(0).material.LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
-	ECS::Get<UI>(0).material.LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<UI>(0).mesh.LoadOBJ("models/other/plane.obj", glm::vec4(1, 1, 1, 1));
+	ECS::Get<UI>(0).material.LoadDiffuseFromFile("images/UIGood.png");
+	ECS::Get<UI>(0).material.LoadSpecularFromFile("images/UIGood.png");
 	ECS::Get<UI>(0).material.SetAll(1.f);
 	//Drunk Walker - - - Important For World Generation
 	ECS::Create(1);
 	ECS::Add<Transform>(1);
 	ECS::Get<Transform>(1).SetPosition(glm::vec3(3.f, 0.f, 3.f));
 	ECS::Add<Mesh>(1);
-	ECS::Get<Mesh>(1).LoadOBJ("Models/cube.obj", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	ECS::Get<Mesh>(1).LoadOBJ("Models/other/cube.obj", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	ECS::Add<Material>(1);
 	ECS::Get<Material>(1).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
 	ECS::Get<Material>(1).LoadSpecularFromFile("images/Stone_001_Specular.png");

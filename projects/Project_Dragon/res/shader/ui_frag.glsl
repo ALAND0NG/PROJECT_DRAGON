@@ -12,5 +12,11 @@ uniform vec3 spriteColor;
 
 void main()
 {    
-    color = vec3(texture(s_Specular, inUV));
+
+    vec3 Full = vec3(texture(s_Specular, inUV));
+    vec3 Empty = vec3(texture(s_Diffuse, inUV));
+    vec3 Mixed = mix(Full, Empty, 1);
+    if (Mixed.rgb == vec3(0.07,1.0,0.039))
+      discard; 
+      color = Mixed;
 }
