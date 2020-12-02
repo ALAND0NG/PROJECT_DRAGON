@@ -8,14 +8,12 @@ public:
 	//Enemy Stat Values
 	int m_hp = 5;
 
-	//Enemy Behavior Values
-	float Aggression = 0.5f;
-	float Confidence = 0.5f;
-
 	//Internal Values
+	glm::vec3 movementDirection = glm::vec3(0, 0, 0);
 	btVector3 thisPosition;
 	btVector3 distance;
 	int entityNumber = 2;
+	int lookRange = 20;
 	float distanceNorm = 100.0f;
 	float mTimer = 0.0f;
 
