@@ -20,7 +20,7 @@ void BackEnd::Init()
 	InitWindow();
 	RenderingSystem::Init();
 	PhysicsSystem::Init();
-	IMGUIManager::Init();
+//	IMGUIManager::Init();
 	AssetLoader::Init();
 	SpriteRenderer::initRenderData();
 	SoundManager::init("", 512);
@@ -42,7 +42,7 @@ void BackEnd::Update()
 
 	PhysicsSystem::Update();
 	RenderingSystem::Update();
-	IMGUIManager::Update();
+	//IMGUIManager::Update();
 	
 	glfwSwapBuffers(BackEnd::m_Window);
 	glfwPollEvents();
@@ -79,7 +79,7 @@ void BackEnd::InitWindow()
 	glfwMakeContextCurrent(BackEnd::m_Window);
 
 
-		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glfwSetWindowSizeCallback(BackEnd::m_Window, GlfwWindowResizedCallback);
 	glfwSetCursorPosCallback(BackEnd::m_Window, mouse_Callback);
