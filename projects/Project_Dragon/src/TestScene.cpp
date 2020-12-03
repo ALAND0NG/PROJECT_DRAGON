@@ -184,7 +184,7 @@ void TestScene::Update()
 {
 	
 	//output an FPS
-	//  std::cout << 1/ Timer::dt << std::endl;
+	std::cout << 1/ Timer::dt << std::endl;
 
 
 
@@ -207,5 +207,5 @@ void TestScene::Update()
 		t -= Timer::dt;
 
 
-	ECS::Get<LightSource>(2).m_Diffuse.z = Interpolation::LERP(LightVal1, LightVal2, t);
+	//ECS::Get<LightSource>(2).m_Diffuse.z = Interpolation::LERP(LightVal1, LightVal2, t);
 }

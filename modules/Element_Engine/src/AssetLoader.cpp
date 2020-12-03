@@ -3,6 +3,7 @@ std::vector<Mesh> AssetLoader::m_Meshes;
 std::vector<Material> AssetLoader::m_Materials;
 std::vector<std::string> AssetLoader::m_MaterialNames;
 std::vector<std::string> AssetLoader::m_MeshNames;
+std::vector<MorphAnimator> AssetLoader::m_AnimatedModels;
 
 void AssetLoader::Init()
 {
@@ -43,6 +44,15 @@ void AssetLoader::Init()
 	AssetLoader::GetMat().push_back(mat0);
 	AssetLoader::m_MaterialNames.push_back("StraightPathTexture");
 
+	MorphAnimator mrph1;
+	for (int i = 1; i <= 8; i++)
+	{
+		std::string fileName = "models/animations/FIRE_ENEMY/FW_W_";
+		mrph1.LoadFrame(fileName + std::to_string(i) + ".obj", glm::vec4(1, 1, 1, 1));
+	}
+	mrph1.AddNewAnimation(0, 7, 2);
+	mrph1.SetActiveAnimation(0);
+	m_AnimatedModels.push_back(mrph1);
 }
 
 std::vector<Mesh>& AssetLoader::GetMesh()
@@ -54,6 +64,11 @@ std::vector<Material>& AssetLoader::GetMat()
 {
 	return m_Materials;
 	// TODO: insert return statement here
+}
+
+std::vector<MorphAnimator>& AssetLoader::GetMorph()
+{
+	return m_AnimatedModels;
 }
 
 Mesh& AssetLoader::GetMeshFromStr(std::string name)

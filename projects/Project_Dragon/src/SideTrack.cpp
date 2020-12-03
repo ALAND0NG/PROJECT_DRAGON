@@ -54,22 +54,16 @@ void SideTrack::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Add<Transform>(startAt + 4);
 	ECS::Add<PhysicsBody>(startAt + 4);
 	ECS::Add<Enemy>(startAt + 4);
-	for (int i = 1; i <= 8; i++)
-	{
-		std::string fileName = "models/animations/FIRE_ENEMY/FW_W_";
-		ECS::Get<MorphAnimator>(startAt + 4).LoadFrame(fileName + std::to_string(i) + ".obj", glm::vec4(1, 1, 1, 1));
-	}
-
-	ECS::Get<MorphAnimator>(startAt + 4).AddNewAnimation(0, 7, 1);
-	ECS::Get<MorphAnimator>(startAt + 4).SetActiveAnimation(0);
+	ECS::Get<Enemy>(startAt + 4).entityNumber = startAt + 4;
+	ECS::Get<MorphAnimator>(startAt + 4) = AssetLoader::GetMorph()[0];
 
 	//ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<Material>(startAt + 4).LoadDiffuseFromFile("images/FE_TEXTURE.png");
 	ECS::Get<Material>(startAt + 4).LoadSpecularFromFile("images/Stone_001_Specular.png");
 	ECS::Get<Material>(startAt + 4).SetAll(1.f);
-	ECS::Get<PhysicsBody>(startAt + 4).AddBody(10, btVector3(10, 1, 1), btVector3(3, 3, 3));
+	ECS::Get<PhysicsBody>(startAt + 4).AddBody(10, btVector3(BtToGlm::GLMTOBTV3(origin) + btVector3(0,2,0)), btVector3(3, 3, 3));
 	ECS::Get<PhysicsBody>(startAt + 4).SetUserData(5);
-	ECS::Get<PhysicsBody>(startAt + 4).SetUserData2(2);//this basically keeps track of what entity this is, used in order to keep track of which enemy is which
+	ECS::Get<PhysicsBody>(startAt + 4).SetUserData2(startAt + 4);//this basically keeps track of what entity this is, used in order to keep track of which enemy is which
 	ECS::Get<PhysicsBody>(startAt + 4).m_Entity = startAt + 4;
 
 }
