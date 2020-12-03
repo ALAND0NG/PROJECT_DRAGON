@@ -9,7 +9,7 @@
 struct PlayerData
 {
 	//this contains data such as hp, xp and so on
-	int m_HP;
+	int m_HP = 5;
 	int m_XP;
 	int m_EntityId = 0; //defaulting to 0, because that is the convention we have
 	bool m_CanJump;
@@ -65,6 +65,16 @@ public:
 		return m_Weapons[index].Shoot(35.f);
 	}
 
+	void SetHp(int hp)
+	{
+		m_PlayerData.m_HP = hp;
+	}
+
+	void PlayDamageSound()
+	{
+		m_DamageSound.play();
+	}
+
 	Weapon GetWeapon(int index);
 	std::vector<Weapon> GetWeaponVector();
 	void SetActiveWeapon(int activeweapon);
@@ -89,4 +99,5 @@ private:
 	Sprite m_UI;
 
 	Sound2D m_ShootSound = Sound2D("sounds/Ice_Sound.mp3", "group1");
+	Sound2D m_DamageSound = Sound2D("sounds/Damage.mp3", "group1");
 };

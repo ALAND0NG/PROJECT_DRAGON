@@ -66,7 +66,23 @@ void Enemy::Update()
 	Pla_Enemy_Diff = playerPosition - thisPosition;
 	glm::vec3 distance = BtToGlm::BTTOGLMV3(Pla_Enemy_Diff);
 	float length = glm::length(distance);
-	//	std::cout << length << std::endl;
-		//if (length < 6.5)
-		//	std::cout <<
+//	std::cout << length << std::endl;
+	if (length < 6.7)
+	{
+		if (canBeHit)
+		{
+			ECS::Get<Player>(0).SetHp(ECS::Get<Player>(0).GetPlayerData().m_HP - 1);
+			canBeHit = false;
+			HitTimer = 0.f;
+			ECS::Get<Player>(0).PlayDamageSound();
+		}
+	}
+
+	HitTimer += Timer::dt;
+	if (HitTimer >= TimeBetweenHits)
+		canBeHit = true;
+	else
+		canBeHit = false;
+		
+
 }

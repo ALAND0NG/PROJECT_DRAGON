@@ -66,7 +66,7 @@ void Game::GameInput()
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_S) == GLFW_PRESS)
 	{
 		movement.setX(movement.getX() - ECS::Get<Camera>(0).GetForward().x * 1.8);
-		movement.setZ(movement.getX() - ECS::Get<Camera>(0).GetForward().z * 1.8);
+		movement.setZ(movement.getZ() - ECS::Get<Camera>(0).GetForward().z * 1.8);
 	}
 
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_A) == GLFW_PRESS)

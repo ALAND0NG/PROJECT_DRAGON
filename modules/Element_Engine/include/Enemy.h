@@ -18,6 +18,10 @@ public:
 	float mTimer = 0.0f;
 	float m_MovementSpeed = 10.f;
 
+	float TimeBetweenHits = 1.f;
+	float HitTimer = 0.f;
+	bool canBeHit = true;
+
 	//External Values
 	btVector3 playerPosition;
 

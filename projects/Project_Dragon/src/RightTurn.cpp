@@ -40,4 +40,24 @@ void RightTurn::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Get<PhysicsBody>(startAt + 3).AddBody(0, btVector3(physBodOrigin.getX(), physBodOrigin.getY() - 7.f, physBodOrigin.getZ()), btVector3(22, 0, 22));
 	ECS::Get<PhysicsBody>(startAt + 3).m_Entity = startAt + 3;
 	m_EntityIds.push_back(startAt + 3);
+
+
+	ECS::Create(startAt + 4);
+	ECS::Add<MorphAnimator>(startAt + 4);
+	ECS::Add<LightSource>(startAt + 4);
+	ECS::Get<LightSource>(startAt + 4).m_Diffuse = glm::vec3(1, 0, 0);
+	ECS::Get<LightSource>(startAt + 4).m_Ambient = glm::vec3(1, 0, 0);
+	ECS::Add<Material>(startAt + 4);
+	ECS::Add<Transform>(startAt + 4);
+	ECS::Add<PhysicsBody>(startAt + 4);
+	ECS::Add<Enemy>(startAt + 4);
+	ECS::Get<Enemy>(startAt + 4).entityNumber = startAt + 4;
+	ECS::Get<MorphAnimator>(startAt + 4) = AssetLoader::GetMorph()[0];
+
+	//ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
+	ECS::Get<Material>(startAt + 4) = AssetLoader::GetMatFromStr("FireEnemyTex");
+	ECS::Get<PhysicsBody>(startAt + 4).AddBody(10, btVector3(BtToGlm::GLMTOBTV3(origin) + btVector3(0, 2, 0)), btVector3(3, 3, 3));
+	ECS::Get<PhysicsBody>(startAt + 4).SetUserData(5);
+	ECS::Get<PhysicsBody>(startAt + 4).SetUserData2(startAt + 4);//this basically keeps track of what entity this is, used in order to keep track of which enemy is which
+	ECS::Get<PhysicsBody>(startAt + 4).m_Entity = startAt + 4;
 }

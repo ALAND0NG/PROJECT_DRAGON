@@ -176,6 +176,8 @@ void TestScene::Update()
 
 	ECS::Get<Player>(0).Update();
 
+	//quick test
+
 	//lerp for light for algo demo
 
 

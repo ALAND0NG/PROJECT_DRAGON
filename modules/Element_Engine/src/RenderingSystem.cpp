@@ -2,6 +2,7 @@
 #include <IMGUIManager.h>
 #include <string>
 #include <Interpolation.h>
+#include "BackEnd.cpp"
 
 Shader::sptr RenderingSystem::shader = nullptr;
 Shader::sptr RenderingSystem::AnimationShader = nullptr;
@@ -70,6 +71,7 @@ float LightVal1 = 0.4;
 float LightVal2 = 1;
 
 float t = 0;
+float t2 = 0.99f;
 bool isForward = true;
 
 void RenderingSystem::ECSUpdate()
@@ -179,9 +181,10 @@ void RenderingSystem::ECSUpdate()
 
 		UI& ui = UIview.get<UI>(entity);
 
-		
-
-
+	
+		t2 = 0.2 * ECS::Get<Player>(0).GetPlayerData().m_HP;
+	
+		uiScalex = Interpolation::LERP(0,1, t2);
 
 		glm::vec2 scale = glm::vec2(uiScalex, uiScaley);
 
