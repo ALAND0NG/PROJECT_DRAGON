@@ -1,11 +1,16 @@
 #include <RenderingSystem.h>
 #include <IMGUIManager.h>
 #include <string>
+#include <Interpolation.h>
 
 Shader::sptr RenderingSystem::shader = nullptr;
 Shader::sptr RenderingSystem::AnimationShader = nullptr;
 Shader::sptr RenderingSystem::BlendShader = nullptr;
 Shader::sptr RenderingSystem::UIShader = nullptr;
+
+//uiscale
+float uiScalex = 1.f;
+float uiScaley = 0.7f;
 void RenderingSystem::Init()
 {
 	//Inits all shaders
@@ -37,7 +42,8 @@ void RenderingSystem::Init()
 	IMGUIManager::imGuiCallbacks.push_back([&]()
 		{		// We'll add some ImGui controls to control our shader
 
-			//ImGui::DragFloat("Enemy Light Ambient R", &ECS::Get<LightSource>(2).m_Diffuse.x, 1.f, 0.f, 3.f, "%.1f", 1.f);
+			//ImGui::DragFloat("UI Scale x", &uiScalex, 1.f, 0.f, 3.f, "%.1f", 0.01f);
+			ImGui::DragFloat("UI Scale x", &uiScalex, 1.f, 0.f, 3.f, "%.001f", 0.0001f);
 		});
 
 	//initialize primary fragment shader DirLight & spotlight
@@ -60,11 +66,17 @@ void RenderingSystem::Update()
 	ECSUpdate();
 }
 
+float LightVal1 = 0.4;
+float LightVal2 = 1;
+
+float t = 0;
+bool isForward = true;
+
 void RenderingSystem::ECSUpdate()
 {
 
 
-
+	
 
 
 	//Just updates camera stuff with tranform stuff to keep it consistent
@@ -170,8 +182,11 @@ void RenderingSystem::ECSUpdate()
 		
 
 
-		UIShader->SetUniform("u_Scale", 0.8f);
-		UIShader->SetUniform("u_Offset", glm::vec2(0, 0.7));
+
+		glm::vec2 scale = glm::vec2(uiScalex, uiScaley);
+
+		UIShader->SetUniform("u_Scale", scale);
+		UIShader->SetUniform("u_Offset", glm::vec2(0, 0.9));
 		
 		ui.material.GetAlbedo()->Bind(0);
 		ui.material.GetSpecular()->Bind(1);
@@ -219,7 +234,29 @@ void RenderingSystem::ECSUpdate()
 			AnimationShader->SetUniform("u_LightCount", LightCount);
 		}
 
+		//Does a LERP for enemy light
 
+		auto EnLiView = reg->view<LightSource, Enemy>();
+
+		for (auto entity : EnLiView)
+		{
+
+		
+			LightSource& liSrc = EnLiView.get<LightSource>(entity);
+
+			if (t >= 1 && t > 0)
+				isForward = false;
+			if (t <= 0)
+				isForward = true;
+
+			if (isForward)
+				t += Timer::dt * 0.001f;
+			else
+				t -= Timer::dt * 0.001f;
+
+			liSrc.m_Ambient.x = Interpolation::LERP(LightVal1, LightVal2, t);
+
+		}
 		
 		LightCount++;
 	}

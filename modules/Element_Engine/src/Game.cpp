@@ -58,6 +58,16 @@ void Game::GameInput()
 
 	}
 	*/
+	//Sprint
+	if (glfwGetKey(BackEnd::m_Window, GLFW_MOD_SHIFT) == GLFW_PRESS)
+	{
+		ECS::Get<Player>(0).SetMovementSpeed(15.f);
+	}
+	if (glfwGetKey(BackEnd::m_Window, GLFW_MOD_SHIFT) == GLFW_RELEASE)
+	{
+		ECS::Get<Player>(0).SetMovementSpeed(10.f);
+	}
+
 	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 

@@ -15,7 +15,7 @@ void main()
 
     vec3 Full = vec3(texture(s_Specular, inUV));
     vec3 Empty = vec3(texture(s_Diffuse, inUV));
-    vec3 Mixed = mix(Full, Empty, 1);
+    vec3 Mixed = mix(Full, Empty, 0);
     if (Mixed.rgb == vec3(0.0,1.0,0.0))
       discard; 
       color = Mixed;

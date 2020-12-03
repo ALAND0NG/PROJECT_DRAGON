@@ -58,9 +58,7 @@ void SideTrack::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Get<MorphAnimator>(startAt + 4) = AssetLoader::GetMorph()[0];
 
 	//ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<Material>(startAt + 4).LoadDiffuseFromFile("images/FE_TEXTURE.png");
-	ECS::Get<Material>(startAt + 4).LoadSpecularFromFile("images/Stone_001_Specular.png");
-	ECS::Get<Material>(startAt + 4).SetAll(1.f);
+	ECS::Get<Material>(startAt + 4) = AssetLoader::GetMatFromStr("FireEnemyTex");
 	ECS::Get<PhysicsBody>(startAt + 4).AddBody(10, btVector3(BtToGlm::GLMTOBTV3(origin) + btVector3(0,2,0)), btVector3(3, 3, 3));
 	ECS::Get<PhysicsBody>(startAt + 4).SetUserData(5);
 	ECS::Get<PhysicsBody>(startAt + 4).SetUserData2(startAt + 4);//this basically keeps track of what entity this is, used in order to keep track of which enemy is which

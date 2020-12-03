@@ -5,6 +5,7 @@
 #include <PhysicsSystem.h>
 #include <SpriteRendering.h>
 #include <Camera.h>
+#include <AudioEngine.h>
 struct PlayerData
 {
 	//this contains data such as hp, xp and so on
@@ -51,6 +52,7 @@ public:
 		
 		
 		
+		
 	}
 
 
@@ -68,6 +70,9 @@ public:
 
 	bool FireWeapon(int index)
 	{
+		if (m_Weapons[index].m_CanShoot)
+			m_ShootSound.play();
+
 		return m_Weapons[index].Shoot(35.f);
 	}
 
@@ -93,4 +98,6 @@ private:
 	Camera m_Camera; //ortho camera
 	
 	Sprite m_UI;
+
+	Sound2D m_ShootSound = Sound2D("sounds/Ice_Sound.mp3", "group1");
 };
