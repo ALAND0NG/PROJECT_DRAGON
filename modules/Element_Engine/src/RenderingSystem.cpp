@@ -106,6 +106,9 @@ void RenderingSystem::ECSUpdate()
 		enemy.Update();
 	}
 
+
+
+
 	//view for Mesh
 	auto view = reg->view<Mesh, Transform, Material>();
 	for (auto entity : view)
