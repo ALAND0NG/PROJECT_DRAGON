@@ -73,7 +73,7 @@ bool Shader::LoadShaderPartFromFile(const char* path, GLenum type) {
 	stream << file.rdbuf();
 	bool result = LoadShaderPart(stream.str().c_str(), type);
 	file.close();
-	return result;
+	return result; 
 }
 
 bool Shader::Link()

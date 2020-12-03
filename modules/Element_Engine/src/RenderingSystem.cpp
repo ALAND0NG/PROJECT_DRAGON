@@ -1,12 +1,20 @@
 #include <RenderingSystem.h>
 #include <IMGUIManager.h>
+#include <string>
+#include <Interpolation.h>
+#include "BackEnd.cpp"
 
 Shader::sptr RenderingSystem::shader = nullptr;
 Shader::sptr RenderingSystem::AnimationShader = nullptr;
 Shader::sptr RenderingSystem::BlendShader = nullptr;
+Shader::sptr RenderingSystem::UIShader = nullptr;
+
+//uiscale
+float uiScalex = 1.f;
+float uiScaley = 0.7f;
 void RenderingSystem::Init()
 {
-	//Inits all shader constants
+	//Inits all shaders
 	
 	shader = Shader::Create();
 	shader->LoadShaderPartFromFile("shader/vertex_shader.glsl", GL_VERTEX_SHADER);
@@ -17,68 +25,60 @@ void RenderingSystem::Init()
 	AnimationShader->LoadShaderPartFromFile("shader/morph_vert.glsl", GL_VERTEX_SHADER);
 	AnimationShader->LoadShaderPartFromFile("shader/frag_shader.glsl", GL_FRAGMENT_SHADER);
 	AnimationShader->Link();
-	
-	BlendShader = Shader::Create();
-	BlendShader->LoadShaderPartFromFile("shader/blending_vert.glsl", GL_VERTEX_SHADER);
-	BlendShader->LoadShaderPartFromFile("shader/morph_frag.glsl", GL_FRAGMENT_SHADER);
-	BlendShader->Link();
 
+	UIShader = Shader::Create();
+	UIShader->LoadShaderPartFromFile("shader/ui_vert.glsl", GL_VERTEX_SHADER);
+	UIShader->LoadShaderPartFromFile("shader/ui_frag.glsl", GL_FRAGMENT_SHADER);
+	UIShader->Link();
+	//init attenuation
+	shader->SetUniform("u_LightAttenuationConstant", 1.f);
+	shader->SetUniform("u_LightAttenuationLinear", 0.08f);
+	shader->SetUniform("u_LightAttenuationQuadratic", 0.032f);
 
-
-	//Set these values to your liking
-	float     lightAmbientPow = 0.5f;
-	float     lightSpecularPow = 1.0f;
-	glm::vec3 ambientCol = glm::vec3(1.f, 1.f, 1.f);
-	float     ambientPow = 0.1f;
-	float     shininess = 1.0f;
-	float     lightLinearFalloff = 0.09f;
-	float     lightQuadraticFalloff = 0.032f;
-
-
-
-	shader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
-	shader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
-	shader->SetUniform("u_AmbientCol", ambientCol);
-	shader->SetUniform("u_AmbientStrength", ambientPow);
-	shader->SetUniform("u_Shininess", shininess);
-	shader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
-	shader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
-
-	AnimationShader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
-	AnimationShader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
-	AnimationShader->SetUniform("u_AmbientCol", ambientCol);
-	AnimationShader->SetUniform("u_AmbientStrength", ambientPow);
-	AnimationShader->SetUniform("u_Shininess", shininess);
-	AnimationShader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
-	AnimationShader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
-
-	BlendShader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
-	BlendShader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
-	BlendShader->SetUniform("u_AmbientCol", ambientCol);
-	BlendShader->SetUniform("u_AmbientStrength", ambientPow);
-	BlendShader->SetUniform("u_Shininess", shininess);
-	BlendShader->SetUniform("u_LightAttenuationLinear", lightLinearFalloff);
-	BlendShader->SetUniform("u_LightAttenuationQuadratic", lightQuadraticFalloff);
-	
-	int frameIx = 0;
-	float fpsBuffer[128];
-	float minFps, maxFps, avgFps;
-	int selectedVao = 0; // select cube by default
+	//init attenuation
+	AnimationShader->SetUniform("u_LightAttenuationConstant", 1.f);
+	AnimationShader->SetUniform("u_LightAttenuationLinear", 0.08f);
+	AnimationShader->SetUniform("u_LightAttenuationQuadratic", 0.032f);
 
 	IMGUIManager::imGuiCallbacks.push_back([&]()
 		{		// We'll add some ImGui controls to control our shader
 
-			
+			//ImGui::DragFloat("UI Scale x", &uiScalex, 1.f, 0.f, 3.f, "%.1f", 0.01f);
+			ImGui::DragFloat("UI Scale x", &uiScalex, 1.f, 0.f, 3.f, "%.001f", 0.0001f);
 		});
+
+	//initialize primary fragment shader DirLight & spotlight
+	shader->SetUniform("dirLight.direction", glm::vec3(-0.0f, -1.0f, -0.0f));
+	shader->SetUniform("dirLight.ambient", glm::vec3(0.5f, 0.5f, 0.5f));
+	shader->SetUniform("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+	shader->SetUniform("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+
+	//initialize primary fragment shader DirLight & spotlight
+	AnimationShader->SetUniform("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+	AnimationShader->SetUniform("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+	AnimationShader->SetUniform("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+	AnimationShader->SetUniform("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+
 }
+
 
 void RenderingSystem::Update()
 {
 	ECSUpdate();
 }
 
+float LightVal1 = 0.4;
+float LightVal2 = 1;
+
+float t = 0;
+float t2 = 0.99f;
+bool isForward = true;
+
 void RenderingSystem::ECSUpdate()
 {
+
+
+	
 
 
 	//Just updates camera stuff with tranform stuff to keep it consistent
@@ -91,9 +91,37 @@ void RenderingSystem::ECSUpdate()
 	// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
 	shader->SetUniform("s_Diffuse", 0);
 	shader->SetUniform("s_Specular", 1);
+
+	AnimationShader->SetUniform("s_Diffuse", 0);
+	AnimationShader->SetUniform("s_Specular", 1);
+
+	UIShader->SetUniform("s_Specular", 0);
+	UIShader->SetUniform("s_Diffuse", 1);
 	
 	auto reg = ECS::GetReg();
 	int LightCount = 0;
+
+	
+	auto Parentingview = reg->view<Parent, Transform>();
+	for (auto entity : Parentingview)
+	{
+		Parent& parent = Parentingview.get<Parent>(entity);
+		Transform& trans = Parentingview.get<Transform>(entity);
+
+		trans.SetModelMat(trans.GetTransform() * ECS::Get<Transform>(parent.GetParent()).GetTransform());
+		trans.ComputeGlobalMat();
+	}
+	
+	//updates the enemies
+	auto enemyView = reg->view<Enemy>();
+	for (auto entity : enemyView)
+	{
+		Enemy& enemy = enemyView.get<Enemy>(entity);
+		enemy.Update();
+	}
+
+
+
 
 	//view for Mesh
 	auto view = reg->view<Mesh, Transform, Material>();
@@ -101,9 +129,9 @@ void RenderingSystem::ECSUpdate()
 	{
 		shader->Bind();
 
-		auto& mesh = view.get<Mesh>(entity);
-		auto& trns = view.get<Transform>(entity);
-		auto& mat = view.get<Material>(entity);
+		Mesh& mesh = view.get<Mesh>(entity);
+		Transform& trns = view.get<Transform>(entity);
+		Material& mat = view.get<Material>(entity);
 
 		trns.ComputeGlobalMat();
 
@@ -119,40 +147,21 @@ void RenderingSystem::ECSUpdate()
 		mesh.GetVAO()->Render();
 	}
 	
-	//view for lightsource
-	auto lview = reg->view<LightSource, Transform>();
-	for (auto entity : lview)
-	{
-
-		auto& trns = lview.get<Transform>(entity);
-		auto& lsrc = lview.get<LightSource>(entity);
-
-		shader->SetUniform("LightPositions[" + std::to_string(LightCount) + "]", trns.GetPosition());
-		shader->SetUniform("u_LightCol", lsrc.m_Colour);
-		AnimationShader->SetUniform("LightPositions[" + std::to_string(LightCount) + "]", trns.GetPosition());
-		AnimationShader->SetUniform("u_LightCol", lsrc.m_Colour);
-		LightCount++;
-	}
-	
 	//view for morph animator
 	auto mview = reg->view<MorphAnimator, Transform, Material>();
 	for (auto entity : mview)
 	{
 		AnimationShader->Bind();
 
-		auto& manim = mview.get<MorphAnimator>(entity);
-		auto& trns = mview.get<Transform>(entity);
-		auto& mat = mview.get<Material>(entity);
+		MorphAnimator& manim = mview.get<MorphAnimator>(entity);
+		Transform& trns = mview.get<Transform>(entity);
+		Material& mat = mview.get<Material>(entity);
 
 		trns.ComputeGlobalMat();
 
 		AnimationShader->SetUniformMatrix("u_ModelViewProjection", ECS::Get<Camera>(0).GetViewProjection() * trns.GetTransform());
 		AnimationShader->SetUniformMatrix("u_Model", trns.GetTransform());
 
-	
-		// Tell OpenGL that slot 0 will hold the diffuse, and slot 1 will hold the specular
-		AnimationShader->SetUniform("s_Diffuse", 0);
-		AnimationShader->SetUniform("s_Specular", 1);
 
 		mat.GetAlbedo()->Bind(0);
 		mat.GetSpecular()->Bind(1);
@@ -160,7 +169,102 @@ void RenderingSystem::ECSUpdate()
 
 		AnimationShader->SetUniform("u_Shininess", mat.GetShininess());
 		AnimationShader->SetUniform("t", manim.GetAnimData().t);
+		manim.Update();
+		manim.GetVAO()->Render();
 	}
+
+	//view for UI
+	auto UIview = reg->view<UI>();
+	for (auto entity : UIview)
+	{
+		UIShader->Bind();
+
+		UI& ui = UIview.get<UI>(entity);
+
+	
+		t2 = 0.2 * ECS::Get<Player>(0).GetPlayerData().m_HP;
+	
+		uiScalex = Interpolation::LERP(0,1, t2);
+
+		glm::vec2 scale = glm::vec2(uiScalex, uiScaley);
+
+		UIShader->SetUniform("u_Scale", scale);
+		UIShader->SetUniform("u_Offset", glm::vec2(0, 0.9));
+		
+		ui.material.GetAlbedo()->Bind(0);
+		ui.material.GetSpecular()->Bind(1);
+
+
+		ui.mesh.GetVAO()->Render();
+
+	}
+
+	//view for lightsource
+	auto lview = reg->view<LightSource, Transform>(); 
+	for (auto entity : lview)
+	{
+
+		Transform& trns = lview.get<Transform>(entity);
+		LightSource& lsrc = lview.get<LightSource>(entity);
+
+		if (LightCount <= 50)
+		{
+			//create the string to send to the shader
+			std::string uniformName;
+			uniformName = "pointLights[";
+			uniformName += std::to_string(LightCount);
+			uniformName += "].";
+			//this will be the begining, now we just need to add the part of the struct we want to set
+			shader->SetUniform(uniformName + "position", trns.GetPosition());
+			shader->SetUniform(uniformName + "ambient", lsrc.m_Ambient);
+			shader->SetUniform(uniformName + "diffuse", lsrc.m_Diffuse);
+			shader->SetUniform(uniformName + "specular", lsrc.m_Specular);
+			shader->SetUniform("u_LightCount", LightCount);
+		}
+
+		if (LightCount <= 50)
+		{
+			//create the string to send to the shader
+			std::string uniformName;
+			uniformName = "pointLights[";
+			uniformName += std::to_string(LightCount);
+			uniformName += "].";
+			//this will be the begining, now we just need to add the part of the struct we want to set
+			AnimationShader->SetUniform(uniformName + "position", trns.GetPosition());
+			AnimationShader->SetUniform(uniformName + "ambient", lsrc.m_Ambient);
+			AnimationShader->SetUniform(uniformName + "diffuse", lsrc.m_Diffuse);
+			AnimationShader->SetUniform(uniformName + "specular", lsrc.m_Specular);
+			AnimationShader->SetUniform("u_LightCount", LightCount);
+		}
+
+		//Does a LERP for enemy light
+
+		auto EnLiView = reg->view<LightSource, Enemy>();
+
+		for (auto entity : EnLiView)
+		{
+
+		
+			LightSource& liSrc = EnLiView.get<LightSource>(entity);
+
+			if (t >= 1 && t > 0)
+				isForward = false;
+			if (t <= 0)
+				isForward = true;
+
+			if (isForward)
+				t += Timer::dt * 0.001f;
+			else
+				t -= Timer::dt * 0.001f;
+
+			liSrc.m_Ambient.x = Interpolation::LERP(LightVal1, LightVal2, t);
+
+		}
+		
+		LightCount++;
+	}
+	
+
 	
 
 
