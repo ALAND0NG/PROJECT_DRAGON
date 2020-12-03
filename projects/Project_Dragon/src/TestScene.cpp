@@ -13,13 +13,6 @@ void TestScene::InitScene()
 	m_sceneReg = new entt::registry;
 	ECS::AttachRegistry(m_sceneReg);
 
-
-	Sound2D _Music("sounds/song.mp3", "group1");
-	_Music.setLoopCount(-1);
-	_Music.play();
-
-
-
 	ECS::Create(0); //please please please always have camera be entity 0 it will break otherwise
 	ECS::Add<Transform>(0);
 	ECS::Add<PhysicsBody>(0);
@@ -48,32 +41,7 @@ void TestScene::InitScene()
 	ECS::Get<Material>(1).SetAll(1.f);
 
 	//Enemy for animation test
-	ECS::Create(2);
-	ECS::Add<MorphAnimator>(2);
-	ECS::Add<LightSource>(2);
-	ECS::Get<LightSource>(2).m_Diffuse = glm::vec3(1, 0, 0);
-	ECS::Get<LightSource>(2).m_Ambient = glm::vec3(1, 0, 0);
-	ECS::Add<Material>(2);
-	ECS::Add<Transform>(2);
-	ECS::Add<PhysicsBody>(2);
-	ECS::Add<Enemy>(2);
-	for (int i = 1; i <= 2; i++)
-	{
-		std::string fileName = "models/animations/FIRE_ENEMY/FW_W_";
-		ECS::Get<MorphAnimator>(2).LoadFrame(fileName + std::to_string(i) + ".obj", glm::vec4(1, 1, 1, 1));
-	}
 
-	ECS::Get<MorphAnimator>(2).AddNewAnimation(0, 1, 1);
-	ECS::Get<MorphAnimator>(2).SetActiveAnimation(0);
-
-	//ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<Material>(2).LoadDiffuseFromFile("images/FE_TEXTURE.png");
-	ECS::Get<Material>(2).LoadSpecularFromFile("images/Stone_001_Specular.png");
-	ECS::Get<Material>(2).SetAll(1.f);
-	ECS::Get<PhysicsBody>(2).AddBody(10, btVector3(10, 1, 1), btVector3(3, 3, 3));
-	ECS::Get<PhysicsBody>(2).SetUserData(5);
-	ECS::Get<PhysicsBody>(2).SetUserData2(2);//this basically keeps track of what entity this is, used in order to keep track of which enemy is which
-	ECS::Get<PhysicsBody>(2).m_Entity = 2;
 
 	//to help debug the ray cast
 	ECS::Create(3);
@@ -201,6 +169,11 @@ void TestScene::InitScene()
 		}
 	}
 	//WORLD GENERATOR - - - WIP
+
+	//music
+	Sound2D _Music("sounds/song.mp3", "group1");
+	_Music.setLoopCount(-1);
+	_Music.play();
 }
 
 //please change this later
@@ -214,7 +187,7 @@ void TestScene::Update()
 	//  std::cout << 1/ Timer::dt << std::endl;
 
 
-	ECS::Get<Enemy>(2).Update();
+
 	ECS::Get<Player>(0).Update();
 
 	//lerp for light for algo demo

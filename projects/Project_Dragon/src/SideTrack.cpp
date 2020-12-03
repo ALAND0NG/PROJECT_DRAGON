@@ -43,4 +43,33 @@ void SideTrack::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Get<PhysicsBody>(startAt + 3).AddBody(0, btVector3(physBodOrigin.getX(), physBodOrigin.getY() + 1.3f, physBodOrigin.getZ()), btVector3(21, 0, 21));
 	ECS::Get<PhysicsBody>(startAt + 3).m_Entity = startAt + 3;
 	m_EntityIds.push_back(startAt + 3);
+
+
+	ECS::Create(startAt + 4);
+	ECS::Add<MorphAnimator>(startAt + 4);
+	ECS::Add<LightSource>(startAt + 4);
+	ECS::Get<LightSource>(startAt + 4).m_Diffuse = glm::vec3(1, 0, 0);
+	ECS::Get<LightSource>(startAt + 4).m_Ambient = glm::vec3(1, 0, 0);
+	ECS::Add<Material>(startAt + 4);
+	ECS::Add<Transform>(startAt + 4);
+	ECS::Add<PhysicsBody>(startAt + 4);
+	ECS::Add<Enemy>(startAt + 4);
+	for (int i = 1; i <= 8; i++)
+	{
+		std::string fileName = "models/animations/FIRE_ENEMY/FW_W_";
+		ECS::Get<MorphAnimator>(startAt + 4).LoadFrame(fileName + std::to_string(i) + ".obj", glm::vec4(1, 1, 1, 1));
+	}
+
+	ECS::Get<MorphAnimator>(startAt + 4).AddNewAnimation(0, 7, 1);
+	ECS::Get<MorphAnimator>(startAt + 4).SetActiveAnimation(0);
+
+	//ECS::Get<Mesh>(2).LoadOBJ("models/cube.obj", glm::vec4(1, 1, 1, 1));
+	ECS::Get<Material>(startAt + 4).LoadDiffuseFromFile("images/FE_TEXTURE.png");
+	ECS::Get<Material>(startAt + 4).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(startAt + 4).SetAll(1.f);
+	ECS::Get<PhysicsBody>(startAt + 4).AddBody(10, btVector3(10, 1, 1), btVector3(3, 3, 3));
+	ECS::Get<PhysicsBody>(startAt + 4).SetUserData(5);
+	ECS::Get<PhysicsBody>(startAt + 4).SetUserData2(2);//this basically keeps track of what entity this is, used in order to keep track of which enemy is which
+	ECS::Get<PhysicsBody>(startAt + 4).m_Entity = startAt + 4;
+
 }
