@@ -24,12 +24,7 @@ public:
 	int m_Damage = 1;
 	float m_Timer = 1.5f;
 	bool m_CanShoot = true;
-
 };
-
-
-
-
 
 class Player
 {
@@ -49,19 +44,13 @@ public:
 		Texture2DData::sptr TexData = Texture2DData::LoadFromFile("images/box.bmp");
 		m_UI.m_Texture = Texture2D::Create();
 		m_UI.m_Texture->LoadData(TexData);
-		
-		
-		
-		
 	}
-
 
 	void Update();
 	void CheckJump();
 
 	void DrawUI()
 	{
-
 		SpriteRenderer::DrawSprite(m_UI, m_Camera.GetViewProjection());
 	}
 
@@ -94,9 +83,9 @@ private:
 	PlayerData m_PlayerData;
 	std::vector<Weapon> m_Weapons;
 	int m_ActiveWeapon = 0;
-	float m_MovementSpeed = 8.f;
+	float m_MovementSpeed = 14.f;
 	Camera m_Camera; //ortho camera
-	
+
 	Sprite m_UI;
 
 	Sound2D m_ShootSound = Sound2D("sounds/Ice_Sound.mp3", "group1");

@@ -35,20 +35,13 @@ void PhysicsSystem::Init()
 
 	m_World = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
-	m_World->setGravity(btVector3(0, -10, 0));
-
-
-	
+	m_World->setGravity(btVector3(0, -30, 0));
 }
 
 void PhysicsSystem::Update()
 {
-	
-	
-	
 	auto reg = ECS::GetReg();
 
-	
 	m_World->stepSimulation(Timer::dt, 10);
 	auto view = reg->view<PhysicsBody, Transform>();
 
@@ -59,7 +52,6 @@ void PhysicsSystem::Update()
 
 		Trans.SetPosition(BtToGlm::BTTOGLMV3(physBod.GetBody()->getCenterOfMassTransform().getOrigin()));
 	}
-	
 }
 
 btDiscreteDynamicsWorld* PhysicsSystem::GetWorld()

@@ -7,12 +7,11 @@ GLFWwindow* BackEnd::m_Window = glfwCreateWindow(1920, 1080, "The funny game", n
 
 int BackEnd::m_WindowHeight = 0;
 int BackEnd::m_WindowWidth = 0;
- // ^^ same comment
+// ^^ same comment
 
 void mouse_Callback(GLFWwindow* window, double xpos, double ypos);
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-
 
 void BackEnd::Init()
 {
@@ -26,14 +25,9 @@ void BackEnd::Init()
 	SoundManager::init("", 512);
 
 	glEnable(GL_DEPTH_TEST);
-	
-
-
-
 }
 bool spacePressed = false;
 bool currentType = true;
-
 
 void BackEnd::Update()
 {
@@ -43,7 +37,7 @@ void BackEnd::Update()
 	PhysicsSystem::Update();
 	RenderingSystem::Update();
 	IMGUIManager::Update();
-	
+
 	glfwSwapBuffers(BackEnd::m_Window);
 	glfwPollEvents();
 }
@@ -57,7 +51,6 @@ void window_close_callback(GLFWwindow* window)
 {
 	glfwSetWindowShouldClose(window, GLFW_FALSE);
 }
-
 
 void BackEnd::InitWindow()
 {
@@ -78,14 +71,12 @@ void BackEnd::InitWindow()
 
 	glfwMakeContextCurrent(BackEnd::m_Window);
 
-
-		glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	glfwSetInputMode(BackEnd::m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glfwSetWindowSizeCallback(BackEnd::m_Window, GlfwWindowResizedCallback);
 	glfwSetCursorPosCallback(BackEnd::m_Window, mouse_Callback);
 	glfwSetMouseButtonCallback(BackEnd::m_Window, mouse_button_callback);
 
-	
 	//This initializes OpenGL via GLAD.
 	if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == 0)
 	{
@@ -95,9 +86,6 @@ void BackEnd::InitWindow()
 
 	printf("OpenGL Renderer: %s\n", glGetString(GL_RENDERER));
 	printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
-
-
-
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -117,7 +105,6 @@ float fov = 90.0f;
 
 void mouse_Callback(GLFWwindow* window, double xpos, double ypos)
 {
-	
 	if (firstMouse)
 	{
 		lastX = xpos;
@@ -148,8 +135,6 @@ void mouse_Callback(GLFWwindow* window, double xpos, double ypos)
 	front.y = sin(glm::radians(pitch));
 	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	ECS::Get<Camera>(0).SetForward(glm::normalize(front));
-	
-
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
