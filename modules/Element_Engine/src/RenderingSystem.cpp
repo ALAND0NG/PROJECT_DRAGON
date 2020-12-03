@@ -167,8 +167,8 @@ void RenderingSystem::ECSUpdate()
 		
 
 
-		UIShader->SetUniform("u_Scale", 0.1f);
-		UIShader->SetUniform("u_Offset", glm::vec2(0, 0));
+		UIShader->SetUniform("u_Scale", 0.8f);
+		UIShader->SetUniform("u_Offset", glm::vec2(0, 0.7));
 		
 		ui.material.GetAlbedo()->Bind(0);
 		ui.material.GetSpecular()->Bind(1);

@@ -13,13 +13,6 @@ void TestScene::InitScene()
 	m_sceneReg = new entt::registry;
 	ECS::AttachRegistry(m_sceneReg);
 
-
-	Sound2D _Music("sounds/song.mp3", "group1");
-	_Music.setLoopCount(-1);
-	_Music.play();
-
-
-
 	ECS::Create(0); //please please please always have camera be entity 0 it will break otherwise
 	ECS::Add<Transform>(0);
 	ECS::Add<PhysicsBody>(0);
@@ -201,6 +194,11 @@ void TestScene::InitScene()
 		}
 	}
 	//WORLD GENERATOR - - - WIP
+
+	//music
+	Sound2D _Music("sounds/song.mp3", "group1");
+	_Music.setLoopCount(-1);
+	_Music.play();
 }
 
 //please change this later
