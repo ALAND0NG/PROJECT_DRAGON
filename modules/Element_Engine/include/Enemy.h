@@ -6,7 +6,7 @@ class Enemy
 {
 public:
 	//Enemy Stat Values
-	int m_hp = 5;
+	int m_hp = 3;
 
 	//Internal Values
 	glm::vec3 movementDirection = glm::vec3(0, 0, 0);

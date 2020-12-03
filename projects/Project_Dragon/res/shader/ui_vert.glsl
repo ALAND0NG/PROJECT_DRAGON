@@ -10,12 +10,12 @@ layout(location = 1) out vec3 outColor;
 layout(location = 2) out vec3 outNormal;
 layout(location = 3) out vec2 outUV;
 
-uniform float u_Scale;
+uniform vec2 u_Scale;
 uniform vec2 u_Offset;
 
 void main()
 {
-	vec4 scaled = u_Scale * vec4(inPosition.x, -inPosition.z * 16/9, inPosition.y, 1.0);
+	vec4 scaled = vec4(inPosition.x * u_Scale.x, -inPosition.z * 16/9, inPosition.y * u_Scale.y, 1.0);
 	gl_Position = vec4(scaled.x+u_Offset.x, scaled.y+u_Offset.y, scaled.zw);
 
 	outPos = gl_Position.xyz;

@@ -26,7 +26,7 @@ void TestScene::InitScene()
 	ECS::Get<Player>(0).SetMovementSpeed(10.f);
 	ECS::Add<UI>(0);
 	ECS::Get<UI>(0).mesh.LoadOBJ("models/other/plane.obj", glm::vec4(1, 1, 1, 1));
-	ECS::Get<UI>(0).material.LoadDiffuseFromFile("images/UIGood.png");
+	ECS::Get<UI>(0).material.LoadDiffuseFromFile("images/HP_FULL.png");
 	ECS::Get<UI>(0).material.LoadSpecularFromFile("images/UIGood.png");
 	ECS::Get<UI>(0).material.SetAll(1.f);
 	//Drunk Walker - - - Important For World Generation
@@ -165,8 +165,7 @@ void TestScene::InitScene()
 
 //please change this later
 int projId = 0;
-float t = 0;
-bool isForward = true;
+
 void TestScene::Update()
 {
 	
@@ -179,20 +178,7 @@ void TestScene::Update()
 
 	//lerp for light for algo demo
 
-	float LightVal1 = 0.4;
-	float LightVal2 = 1;
 
 
-	if (t >= 1 && t > 0)
-		isForward = false;
-	if (t <= 0)
-		isForward = true;
-
-	if (isForward)
-		t += Timer::dt;
-	else
-		t -= Timer::dt;
-
-
-	//ECS::Get<LightSource>(2).m_Diffuse.z = Interpolation::LERP(LightVal1, LightVal2, t);
+	
 }

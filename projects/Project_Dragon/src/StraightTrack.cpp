@@ -64,4 +64,5 @@ void StraightTrack::LoadPrefab(int startAt, glm::vec3 origin)
 	ECS::Get<PhysicsBody>(startAt + 3).AddBody(0, btVector3(physBodOrigin.getX(), physBodOrigin.getY() - 7.f, physBodOrigin.getZ()), btVector3(25, 0, 25));
 	ECS::Get<PhysicsBody>(startAt + 3).m_Entity = startAt + 3;
 	m_EntityIds.push_back(startAt + 3);
+
 }
