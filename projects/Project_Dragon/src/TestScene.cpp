@@ -21,7 +21,7 @@ void TestScene::InitScene()
 	ECS::Get<Camera>(0).ResizeWindow(1920, 1080);
 	ECS::Get<PhysicsBody>(0).AddBody(100, btVector3(3, 10, 3), btVector3(1, 2, 1), 3.0f);
 	ECS::Add<LightSource>(0);
-	ECS::Get<LightSource>(0).m_Ambient = glm::vec3(0.1, 1, 0.1);
+	ECS::Get<LightSource>(0).m_Ambient = glm::vec3(1, 1, 1);
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
 	ECS::Get<Player>(0).SetMovementSpeed(10.f);
 	ECS::Add<UI>(0);
@@ -44,49 +44,36 @@ void TestScene::InitScene()
 
 
 	//to help debug the ray cast
+	ECS::Create(2);
+	ECS::Add<Mesh>(2);
+	ECS::Add<Material>(2);
+	ECS::Add<Transform>(2);
+	ECS::Add<LightSource>(2);
+	ECS::Get<LightSource>(2).m_Diffuse = glm::vec3(0, 0.01, 1);
+	ECS::Get<Transform>(2).SetPosition(glm::vec3(0, 5, 0));
+	ECS::Get<Transform>(2).SetScale(glm::vec3(2.f, 2.f, 2.f));
+	ECS::Get<Mesh>(2).LoadOBJ("models/other/ice_projectile.obj", glm::vec4(0, 1, 0, 1));
+	ECS::Get<Material>(2).LoadDiffuseFromFile("images/ice_tex.png");
+	ECS::Get<Material>(2).LoadSpecularFromFile("images/ice_tex.png");
+	ECS::Get<Material>(2).SetAll(1.f);
+
+
+
+
+	//Wall to prevent player from walking off the end
 	ECS::Create(3);
 	ECS::Add<Mesh>(3);
 	ECS::Add<Material>(3);
 	ECS::Add<Transform>(3);
-	ECS::Add<LightSource>(3);
-	ECS::Get<Transform>(3).SetPosition(glm::vec3(0, 5, 0));
-	ECS::Get<Transform>(3).SetScale(glm::vec3(1.f, 1.f, 1.f));
-	ECS::Get<Mesh>(3).LoadOBJ("models/other/ice_projectile.obj", glm::vec4(0, 1, 0, 1));
-	ECS::Get<Material>(3).LoadDiffuseFromFile("images/ice_tex.png");
-	ECS::Get<Material>(3).LoadSpecularFromFile("images/ice_tex.png");
-	ECS::Get<Material>(3).SetAll(1.f);
-
-
-
-	//hand
-	ECS::Create(4);
-	ECS::Add<Mesh>(4);
-	ECS::Add<Material>(4);
-	ECS::Add<Transform>(4);
-	ECS::Add<LightSource>(4);
-	ECS::Add<Parent>(4);
-	ECS::Get<Parent>(4).SetParent(0);
-	ECS::Get<Transform>(4).SetPosition(glm::vec3(0, 5, 0));
-	ECS::Get<Transform>(4).SetScale(glm::vec3(1.f, 1.f, 1.f));
-	ECS::Get<Mesh>(4).LoadOBJ("models/hand.obj", glm::vec4(0, 1, 0, 1));
-	ECS::Get<Material>(4).LoadDiffuseFromFile("images/handtexture.png");
-	ECS::Get<Material>(4).LoadSpecularFromFile("images/handtexture.png");
-	ECS::Get<Material>(4).SetAll(0.1f);
-
-	//Wall to prevent player from walking off the end
-	ECS::Create(5);
-	ECS::Add<Mesh>(5);
-	ECS::Add<Material>(5);
-	ECS::Add<Transform>(5);
-	ECS::Add<PhysicsBody>(5);
-	ECS::Get<Transform>(5).SetPosition(glm::vec3(-10, 0, 5));
-	ECS::Get<Transform>(5).SetRotation(glm::vec3(0, 0, 1), glm::radians(90.f));
-	ECS::Get<Transform>(5).SetScale(glm::vec3(10.f, 1.f, 25.f));
-	ECS::Get<Mesh>(5).LoadOBJ("models/other/plane.obj", glm::vec4(0, 1, 0, 1));
-	ECS::Get<Material>(5).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
-	ECS::Get<Material>(5).LoadSpecularFromFile("images/Stone_001_Specular.png");
-	ECS::Get<Material>(5).SetAll(0.1f);
-	ECS::Get<PhysicsBody>(5).AddBody(0.f, btVector3(-10, 0, 5), btVector3(1.f, 25.f, 25.f));
+	ECS::Add<PhysicsBody>(3);
+	ECS::Get<Transform>(3).SetPosition(glm::vec3(-10, 0, 5));
+	ECS::Get<Transform>(3).SetRotation(glm::vec3(0, 0, 1), glm::radians(90.f));
+	ECS::Get<Transform>(3).SetScale(glm::vec3(10.f, 1.f, 25.f));
+	ECS::Get<Mesh>(3).LoadOBJ("models/other/plane.obj", glm::vec4(0, 1, 0, 1));
+	ECS::Get<Material>(3).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
+	ECS::Get<Material>(3).LoadSpecularFromFile("images/Stone_001_Specular.png");
+	ECS::Get<Material>(3).SetAll(0.1f);
+	ECS::Get<PhysicsBody>(3).AddBody(0.f, btVector3(-10, 0, 5), btVector3(1.f, 25.f, 25.f));
 
 
 #pragma endregion
@@ -102,7 +89,7 @@ void TestScene::InitScene()
 	//WORLD GENERATOR - - - WIP
 	bool isForward = true, isRight = false, isLeft = false;
 	InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition()); //Creates a block on spawn for the player
-	for (int i = 0; i < 25; i++) { //Creates a drunk walker of 25 length
+	for (int i = 0; i < 15; i++) { //Creates a drunk walker of 25 length
 		if (isForward) {
 			for (int i = 0; i < rand() % 3 + 1; i++) {
 				ECS::Get<Transform>(1).SetPosition(glm::vec3(
@@ -172,7 +159,7 @@ void TestScene::InitScene()
 
 	//music
 	Sound2D _Music("sounds/song.mp3", "group1");
-	_Music.setLoopCount(-1);
+	_Music.setLoopCount(1000);
 	_Music.play();
 }
 

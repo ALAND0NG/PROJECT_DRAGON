@@ -1,4 +1,6 @@
 #include <Player.h>
+#include <AudioEngine.h>
+
 
 bool Weapon::Shoot(float range)
 {
@@ -26,11 +28,14 @@ bool Weapon::Shoot(float range)
 		{
 			//std::cout << Results.m_collisionObject->getUserIndex2();
 			ECS::Get<Enemy>(Results.m_collisionObject->getUserIndex2()).m_hp = ECS::Get<Enemy>(Results.m_collisionObject->getUserIndex2()).m_hp - m_Damage;
-			ECS::Get<Transform>(3).SetPosition(BtToGlm::BTTOGLMV3(Results.m_collisionObject->getWorldTransform().getOrigin()) + BtToGlm::BTTOGLMV3(playerPosition) * 0.2f);
+			ECS::Get<Transform>(2).SetPosition(BtToGlm::BTTOGLMV3(Results.m_collisionObject->getWorldTransform().getOrigin()) + BtToGlm::BTTOGLMV3(playerPosition) * 0.2f);
+			
 			return true;
 		}
 		else
 		{
+			
+			ECS::Get<Transform>(2).SetPosition(BtToGlm::BTTOGLMV3(to));
 			return false;
 		}
 	}

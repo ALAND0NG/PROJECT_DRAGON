@@ -44,6 +44,13 @@ void AssetLoader::Init()
 	AssetLoader::GetMat().push_back(mat0);
 	AssetLoader::m_MaterialNames.push_back("StraightPathTexture");
 
+	Material mat1;
+	mat1.LoadDiffuseFromFile("images/FE_TEXTURE.png");
+	mat1.LoadSpecularFromFile("images/Stone_001_Specular.png");
+	mat1.SetAll(1);
+	AssetLoader::GetMat().push_back(mat1);
+	AssetLoader::m_MaterialNames.push_back("FireEnemyTex");
+
 	MorphAnimator mrph1;
 	for (int i = 1; i <= 8; i++)
 	{
