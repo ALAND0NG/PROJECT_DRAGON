@@ -5,7 +5,7 @@ std::vector<std::string> AssetLoader::m_MaterialNames;
 std::vector<std::string> AssetLoader::m_MeshNames;
 std::vector<MorphAnimator> AssetLoader::m_AnimatedModels;
 
-void AssetLoader::Init()
+void AssetLoader::Init() //doing it manually because, actually I don't know why
 {
 	Mesh pfb0;
 	pfb0.LoadOBJ("models/Straight_Nodes/StraightTrack.obj", glm::vec4(1, 1, 1, 1));
