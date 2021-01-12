@@ -157,10 +157,16 @@ void TestScene::InitScene()
 	}
 	//WORLD GENERATOR - - - WIP
 
+	/*
 	//music
 	Sound2D _Music("sounds/song.mp3", "group1");
 	_Music.setLoopCount(1000);
 	_Music.play();
+	*/
+	
+	//test the file loader
+	InstantiatingSystem::LoadPrefabFromFile(ECS::GetSize(), glm::vec3(0, 0, 0), "prefabs/test_file.bit");
+
 }
 
 //please change this later
@@ -169,18 +175,6 @@ int projId = 0;
 void TestScene::Update()
 {
 	
-	//output an FPS
-	std::cout << 1/ Timer::dt << std::endl;
-
-
-
 	ECS::Get<Player>(0).Update();
 
-	//quick test
-
-	//lerp for light for algo demo
-
-
-
-	
 }

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <AssetLoader.h>
 #include <AudioEngine.h>
+
 GLFWwindow* BackEnd::m_Window = glfwCreateWindow(1920, 1080, "The funny game", nullptr, nullptr); //Initializing outside of class because its a static
 
 int BackEnd::m_WindowHeight = 0;

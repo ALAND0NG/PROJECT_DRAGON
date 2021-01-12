@@ -1,0 +1,21 @@
+#Just loading in one obj as a test, all syntax for this file format can be found in this file
+#First and foremost the hashtag is a comment
+#This file is just to test the basic loader
+#It will function by using the ECS system, and the file just provides all the information required to create entities
+#We also assume that when loading a file, we provide both a entity number to start at, as well as a base position
+#Meaning that numbers in these files function more like offsets from the information provided in the c++ game code
+#Creates a new entity, E creates a new entity, and until another E is added the loader will assume all instructions are for that entity
+#0 here is the entity number offset, CTRNS adds a transform component, and CMAT & CMESH do the same for material and mesh
+E 0
+CTRNS
+CMAT
+CMESH
+#Here we add our transform data (In the order of position, scale, rotation)
+#We use the prefix S to set the values in a component
+STRNS 0,0,0 1,1,1 0,0,0,0
+#For the material, we will use the loadfromstring of the assetmanager, so we just need to give a string
+SMAT StraightPathTexture
+#Similar to the material, the mesh goes through assetmanager and will only need one string
+SMESH StraightTrack
+
+
