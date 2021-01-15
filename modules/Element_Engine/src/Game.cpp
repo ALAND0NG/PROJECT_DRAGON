@@ -85,7 +85,7 @@ void Game::GameInput()
 	{
 		ECS::Get<Player>(0).CheckJump();
 
-		if (ECS::Get<Player>(0).GetPlayerData().m_CanJump)
+		//if (ECS::Get<Player>(0).GetPlayerData().m_CanJump)
 			verticalVelo = 22.f;
 	}
 	ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(movement.getX() * movementSpeed, verticalVelo, movement.getZ() * movementSpeed));

@@ -1,5 +1,5 @@
 #include <InstantiatingSystem.h>
-
+#include <AssetLoader.h>
 // Borrowed from https://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
 #pragma region String Trimming
 
@@ -43,7 +43,7 @@ void InstantiatingSystem::AddPrefab(Prefab* prefab)
 
 void InstantiatingSystem::LoadPrefabFromFile(int index, glm::vec3 origin, std::string filename)
 {
-	//similar to OBJ loader, lots of if statements there is probably a better way to do this
+	//similar to OBJ loader
 	std::stringstream ss;
 	std::ifstream file;
 	file.open(filename, std::ios::binary);
@@ -53,9 +53,11 @@ void InstantiatingSystem::LoadPrefabFromFile(int index, glm::vec3 origin, std::s
 
 	std::string line = "";
 	std::string prefix = "";
-
+	//will only get changed whenever a new entity is created from the file
+	int ENumb = 0;
 	while (std::getline(file, line))
 	{
+
 		trim(line);
 		ss = std::stringstream(line);
 		ss >> prefix;
@@ -68,9 +70,54 @@ void InstantiatingSystem::LoadPrefabFromFile(int index, glm::vec3 origin, std::s
 			//create a new entity
 			int fileIndex;
 			ss >> fileIndex;
-			ECS::Create(index + fileIndex);
-			std::cout << "Created entity: " << index + fileIndex << "\n";
+			ENumb = index + fileIndex;
+			ECS::Create(ENumb);
+			std::cout << "Created entity: "<< ENumb << '\n';
 		}
+		else if (prefix == "CTRNS")
+		{
+			ECS::Add<Transform>(ENumb);
+			std::cout << ENumb << '\n';
+		}
+		else if (prefix == "CMAT")
+		{
+			ECS::Add<Material>(ENumb);
+			std::cout << ENumb << '\n';
+		}
+		else if (prefix == "CMESH")
+		{
+			ECS::Add<Mesh>(ENumb);
+			std::cout << ENumb << '\n';
+		}
+		else if (prefix == "STRNS")
+		{
+			glm::vec3 tempPos, tempScale;
+			glm::vec4 tempRot;
+			ss >> tempPos.x >> tempPos.y >> tempPos.z >> tempScale.x >> tempScale.y >> tempScale.z >> tempRot.x >> tempRot.y >> tempRot.z >> tempRot.w; //Loads all the positions from the file into our vectors
+
+			//Then set the active entity with those positions
+			ECS::Get<Transform>(ENumb).SetPosition(tempPos);
+			ECS::Get<Transform>(ENumb).SetScale(tempScale);
+			ECS::Get<Transform>(ENumb).SetRotation(glm::vec3(tempRot.x, tempRot.y, tempRot.z), tempRot.w);
+			std::cout << ENumb << '\n';
+		}
+		else if (prefix == "SMAT")
+		{
+			std::string matName;
+			ss >> matName;
+			std::cout << matName;
+			ECS::Get<Material>(ENumb) = AssetLoader::GetMatFromStr(matName);
+			std::cout << ENumb << '\n';
+		}
+		else if (prefix == "SMESH")
+		{
+			std::string MeshName;
+			ss >> MeshName;
+			std::cout << MeshName;
+			ECS::Get<Mesh>(ENumb).SetVAO(AssetLoader::GetMeshFromStr(MeshName).GetVAO());
+			std::cout << ENumb << '\n';
+		}
+	
 	}
 
 }

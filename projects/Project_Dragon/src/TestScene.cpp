@@ -165,7 +165,7 @@ void TestScene::InitScene()
 	*/
 	
 	//test the file loader
-	InstantiatingSystem::LoadPrefabFromFile(ECS::GetSize(), glm::vec3(0, 0, 0), "prefabs/test_file.bit");
+	InstantiatingSystem::LoadPrefabFromFile(ECS::GetSize(), glm::vec3(0, 10, 0), "prefabs/test_file.bit");
 
 }
 

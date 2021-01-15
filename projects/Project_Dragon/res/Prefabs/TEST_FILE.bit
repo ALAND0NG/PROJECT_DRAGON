@@ -10,9 +10,9 @@ E 0
 CTRNS
 CMAT
 CMESH
-#Here we add our transform data (In the order of position, scale, rotation)
+#Here we add our transform data (In the order of position vec3, scale vec3, rotation vec4, first 3 are axis 4th is amount)
 #We use the prefix S to set the values in a component
-STRNS 0,0,0 1,1,1 0,0,0,0
+STRNS 0 10 0 10 10 10 1 1 1 0
 #For the material, we will use the loadfromstring of the assetmanager, so we just need to give a string
 SMAT StraightPathTexture
 #Similar to the material, the mesh goes through assetmanager and will only need one string
