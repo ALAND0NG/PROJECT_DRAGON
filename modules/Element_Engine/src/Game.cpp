@@ -30,7 +30,6 @@ void Game::GameInput()
 {
 	btVector3 movement = btVector3(0, 0, 0);
 	float verticalVelo = ECS::Get<PhysicsBody>(0).GetBody()->getVelocityInLocalPoint(btVector3(0, 0, 0)).getY();
-	float movementSpeed = ECS::Get<Player>(0).GetMovementSpeed();
 
 	/*
 	//walking forward and strafing left
@@ -88,7 +87,7 @@ void Game::GameInput()
 		//if (ECS::Get<Player>(0).GetPlayerData().m_CanJump)
 			verticalVelo = 22.f;
 	}
-	ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(movement.getX() * movementSpeed, verticalVelo, movement.getZ() * movementSpeed));
+	ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(movement.getX() * ECS::Get<Player>(0).GetMovementSpeed(), verticalVelo, movement.getZ() * ECS::Get<Player>(0).GetMovementSpeed()));
 }
 
 void Game::GameLoop() //Main update function
