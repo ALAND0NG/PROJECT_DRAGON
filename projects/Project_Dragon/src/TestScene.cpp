@@ -9,6 +9,8 @@ void TestScene::InitScene()
 {
 	srand(time(NULL)); // This is needed for generating a new seed for randoms
 
+
+
 	//Player Camera - - - Need This For A Game To Run
 	m_sceneReg = new entt::registry;
 	ECS::AttachRegistry(m_sceneReg);
@@ -163,9 +165,9 @@ void TestScene::InitScene()
 	_Music.setLoopCount(1000);
 	_Music.play();
 	*/
-	
 	//test the file loader
 	InstantiatingSystem::LoadPrefabFromFile(ECS::GetSize(), glm::vec3(0, 10, 0), "prefabs/test_file.bit");
+
 
 }
 

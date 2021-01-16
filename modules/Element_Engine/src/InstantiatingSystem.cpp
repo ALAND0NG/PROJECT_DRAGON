@@ -1,5 +1,6 @@
 #include <InstantiatingSystem.h>
 #include <AssetLoader.h>
+#include <BtToGlm.h>
 // Borrowed from https://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
 #pragma region String Trimming
 
@@ -59,13 +60,13 @@ void InstantiatingSystem::LoadPrefabFromFile(int index, glm::vec3 origin, std::s
 	{
 
 		trim(line);
-		ss = std::stringstream(line);
+		ss = std::stringstream(line); 
 		ss >> prefix;
 		if (prefix == "#")
 		{
 			//comment nothing happens
 		}
-		else if (prefix == "E")
+		if (prefix == "E")
 		{
 			//create a new entity
 			int fileIndex;
@@ -77,17 +78,21 @@ void InstantiatingSystem::LoadPrefabFromFile(int index, glm::vec3 origin, std::s
 		else if (prefix == "CTRNS")
 		{
 			ECS::Add<Transform>(ENumb);
-			std::cout << ENumb << '\n';
+		
 		}
 		else if (prefix == "CMAT")
 		{
 			ECS::Add<Material>(ENumb);
-			std::cout << ENumb << '\n';
 		}
 		else if (prefix == "CMESH")
 		{
 			ECS::Add<Mesh>(ENumb);
-			std::cout << ENumb << '\n';
+		
+		}
+		else if (prefix == "CPHYS")
+		{
+			ECS::Add<PhysicsBody>(ENumb);
+		
 		}
 		else if (prefix == "STRNS")
 		{
@@ -98,24 +103,28 @@ void InstantiatingSystem::LoadPrefabFromFile(int index, glm::vec3 origin, std::s
 			//Then set the active entity with those positions
 			ECS::Get<Transform>(ENumb).SetPosition(tempPos);
 			ECS::Get<Transform>(ENumb).SetScale(tempScale);
-			ECS::Get<Transform>(ENumb).SetRotation(glm::vec3(tempRot.x, tempRot.y, tempRot.z), tempRot.w);
-			std::cout << ENumb << '\n';
+			ECS::Get<Transform>(ENumb).SetRotation(glm::vec3(tempRot.x, tempRot.y, tempRot.z), tempRot.w); 
 		}
 		else if (prefix == "SMAT")
 		{
 			std::string matName;
 			ss >> matName;
-			std::cout << matName;
 			ECS::Get<Material>(ENumb) = AssetLoader::GetMatFromStr(matName);
-			std::cout << ENumb << '\n';
+		
 		}
 		else if (prefix == "SMESH")
 		{
 			std::string MeshName;
 			ss >> MeshName;
-			std::cout << MeshName;
-			ECS::Get<Mesh>(ENumb).SetVAO(AssetLoader::GetMeshFromStr(MeshName).GetVAO());
-			std::cout << ENumb << '\n';
+			ECS::Get<Mesh>(ENumb).SetVAO(AssetLoader::GetMeshFromStr(MeshName).GetVAO()); 
+		
+		}
+		else if (prefix == "SPHYS")
+		{
+			float mass, friction;
+			glm::vec3 position, size;
+			ss >> mass >> position.x >> position.y >> position.z >> size.x >> size.y >> size.z >> friction;
+			ECS::Get<PhysicsBody>(ENumb).AddBody(mass, BtToGlm::GLMTOBTV3(position), BtToGlm::GLMTOBTV3(size), friction);
 		}
 	
 	}

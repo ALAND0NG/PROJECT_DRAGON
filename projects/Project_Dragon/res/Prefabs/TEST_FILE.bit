@@ -10,6 +10,7 @@ E 0
 CTRNS
 CMAT
 CMESH
+CPHYS
 #Here we add our transform data (In the order of position vec3, scale vec3, rotation vec4, first 3 are axis 4th is amount)
 #We use the prefix S to set the values in a component
 STRNS 0 10 0 0.5 0.5 0.5 1 1 1 0
@@ -17,5 +18,21 @@ STRNS 0 10 0 0.5 0.5 0.5 1 1 1 0
 SMAT StraightPathTexture
 #Similar to the material, the mesh goes through assetmanager and will only need one string
 SMESH StraightTrack
+#To Set Physics body, mass float, position vec3, size vec3, friction float
+SPHYS 0 0 10 0 10 1 10 10
+E 1
+CTRNS
+CMAT
+CMESH
+CPHYS
+#Here we add our transform data (In the order of position vec3, scale vec3, rotation vec4, first 3 are axis 4th is amount)
+#We use the prefix S to set the values in a component
+STRNS 0 30 0 0.5 0.5 0.5 1 1 1 0
+#For the material, we will use the loadfromstring of the assetmanager, so we just need to give a string
+SMAT StraightPathTexture
+#Similar to the material, the mesh goes through assetmanager and will only need one string
+SMESH StraightTrack
+#To Set Physics body, mass float, position vec3, size vec3, friction float
+SPHYS 0 0 20 0 10 1 10 10
 
 
