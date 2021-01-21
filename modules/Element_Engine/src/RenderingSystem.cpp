@@ -40,12 +40,6 @@ void RenderingSystem::Init()
 	AnimationShader->SetUniform("u_LightAttenuationLinear", 0.08f);
 	AnimationShader->SetUniform("u_LightAttenuationQuadratic", 0.032f);
 
-	IMGUIManager::imGuiCallbacks.push_back([&]()
-		{		// We'll add some ImGui controls to control our shader
-
-			//ImGui::DragFloat("UI Scale x", &uiScalex, 1.f, 0.f, 3.f, "%.1f", 0.01f);
-			ImGui::DragFloat("UI Scale x", &uiScalex, 1.f, 0.f, 3.f, "%.001f", 0.0001f);
-		});
 
 	//initialize primary fragment shader DirLight & spotlight
 	shader->SetUniform("dirLight.direction", glm::vec3(-0.0f, -1.0f, -0.0f));
@@ -76,9 +70,6 @@ bool isForward = true;
 
 void RenderingSystem::ECSUpdate()
 {
-
-
-	
 
 
 	//Just updates camera stuff with tranform stuff to keep it consistent

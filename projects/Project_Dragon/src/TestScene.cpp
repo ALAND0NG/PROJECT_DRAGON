@@ -5,7 +5,9 @@
 #include <SpriteRendering.h>
 #include <AudioEngine.h>
 
-void TestScene::InitScene()
+
+
+void PFB_EDITOR::InitScene()
 {
 	srand(time(NULL)); // This is needed for generating a new seed for randoms
 
@@ -31,6 +33,7 @@ void TestScene::InitScene()
 	ECS::Get<UI>(0).material.LoadDiffuseFromFile("images/HP_FULL.png");
 	ECS::Get<UI>(0).material.LoadSpecularFromFile("images/UIGood.png");
 	ECS::Get<UI>(0).material.SetAll(1.f);
+	
 	//Drunk Walker - - - Important For World Generation
 	ECS::Create(1);
 	ECS::Add<Transform>(1);
@@ -38,9 +41,7 @@ void TestScene::InitScene()
 	ECS::Add<Mesh>(1);
 	ECS::Get<Mesh>(1).LoadOBJ("Models/other/cube.obj", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	ECS::Add<Material>(1);
-	ECS::Get<Material>(1).LoadDiffuseFromFile("images/Stone_001_Diffuse.png");
-	ECS::Get<Material>(1).LoadSpecularFromFile("images/Stone_001_Specular.png");
-	ECS::Get<Material>(1).SetAll(1.f);
+	ECS::Get<Material>(1) = AssetLoader::GetMatFromStr("StraightPathTexture");
 
 	//Enemy for animation test
 
@@ -87,7 +88,7 @@ void TestScene::InitScene()
 	InstantiatingSystem::AddPrefab(new RightOff()); // prefab 4
 	InstantiatingSystem::AddPrefab(new LeftTurn()); // prefab 5
 	InstantiatingSystem::AddPrefab(new LeftOff()); // prefab 6
-
+	
 	//WORLD GENERATOR - - - WIP
 	bool isForward = true, isRight = false, isLeft = false;
 	InstantiatingSystem::InitPrefab(1, ECS::Get<Transform>(1).GetPosition()); //Creates a block on spawn for the player
@@ -164,17 +165,22 @@ void TestScene::InitScene()
 	Sound2D _Music("sounds/song.mp3", "group1");
 	_Music.setLoopCount(1000);
 	_Music.play();
-	*/
+	
 	//test the file loader
 	InstantiatingSystem::LoadPrefabFromFile(ECS::GetSize(), glm::vec3(0, 10, 0), "prefabs/test_file.bit");
 
+	
+	//static const char* items[]{ Entity_Numbers.data() };
+	*/
 
 }
+
+
 
 //please change this later
 int projId = 0;
 
-void TestScene::Update()
+void PFB_EDITOR::Update()
 {
 	
 	ECS::Get<Player>(0).Update();

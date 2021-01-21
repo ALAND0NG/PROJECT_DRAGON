@@ -42,10 +42,26 @@ void IMGUIManager::Update()
 	ImGui::NewFrame();
 
 	if (ImGui::Begin("Debug")) {
+
+
+		static int selected = 0;
+		std::vector<const char*> Entity_Numbers;
+
+
+		for (int i = 0; i <= ECS::GetSize(); i++)
+		{
+			Entity_Numbers.push_back(std::to_string(i).c_str());
+		};
 		// Render our GUI stuff
-		for (auto& func : imGuiCallbacks) {
-			func();
+		if (ImGui::BeginCombo("MultiSelect", " "))
+		{
+			for (size_t i = 0; i < Entity_Numbers.size(); i++)
+			{
+				ImGui::Selectable(Entity_Numbers.data()[i]);
+			}
+			ImGui::EndCombo();
 		}
+
 		ImGui::End();
 	}
 

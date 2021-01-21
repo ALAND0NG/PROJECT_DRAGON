@@ -60,7 +60,7 @@ public:
 	{
 		return EntList.size();
 	}
-
+	
 
 private:
 	static entt::registry* m_Registry;

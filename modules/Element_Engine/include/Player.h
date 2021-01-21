@@ -60,7 +60,7 @@ public:
 	bool FireWeapon(int index)
 	{
 		if (m_Weapons[index].m_CanShoot)
-			m_ShootSound.play();
+		//	m_ShootSound.play();
 
 		return m_Weapons[index].Shoot(35.f);
 	}
@@ -72,7 +72,7 @@ public:
 
 	void PlayDamageSound()
 	{
-		m_DamageSound.play();
+		//m_DamageSound.play();
 	}
 
 	Weapon GetWeapon(int index);
