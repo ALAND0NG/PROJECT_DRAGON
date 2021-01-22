@@ -32,7 +32,8 @@ void IMGUIManager::Init()
 		style.Colors[ImGuiCol_WindowBg].w = 0.8f;
 	}
 }
-
+int EntId = 0;
+float Position[3];
 void IMGUIManager::Update()
 {
 	// Implementation new frame
@@ -41,27 +42,14 @@ void IMGUIManager::Update()
 	// ImGui context new frame
 	ImGui::NewFrame();
 
-	if (ImGui::Begin("Debug")) {
 
 
-		static int selected = 0;
-		std::vector<const char*> Entity_Numbers;
+	if (ImGui::Begin("Node Editor")) {
 
-
-		for (int i = 0; i <= ECS::GetSize(); i++)
-		{
-			Entity_Numbers.push_back(std::to_string(i).c_str());
-		};
-		// Render our GUI stuff
-		if (ImGui::BeginCombo("MultiSelect", " "))
-		{
-			for (size_t i = 0; i < Entity_Numbers.size(); i++)
-			{
-				ImGui::Selectable(Entity_Numbers.data()[i]);
-			}
-			ImGui::EndCombo();
-		}
-
+		ImGui::ShowDemoWindow();
+		ImGui::InputInt("Entity Number", &EntId);
+		ImGui::InputFloat3("Position", Position, 0, 0);
+	
 		ImGui::End();
 	}
 
