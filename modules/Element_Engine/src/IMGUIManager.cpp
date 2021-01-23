@@ -32,7 +32,7 @@ void IMGUIManager::Init()
 		style.Colors[ImGuiCol_WindowBg].w = 0.8f;
 	}
 }
-int EntId = 1;
+int EntId = 0;
 float Position[3];
 void IMGUIManager::Update()
 {
@@ -46,7 +46,7 @@ void IMGUIManager::Update()
 
 	if (ImGui::Begin("Node Editor")) {
 
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
 		ImGui::InputInt("Entity Number", &EntId);
 		ImGui::InputFloat3("Position", Position, 0, 0);
 		if (ImGui::Button("Apply Physics Body Transform"))

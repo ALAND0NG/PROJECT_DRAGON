@@ -7,6 +7,7 @@ std::vector<MorphAnimator> AssetLoader::m_AnimatedModels;
 
 void AssetLoader::Init() //doing it manually because, actually I don't know why
 {
+	
 	Mesh pfb0;
 	pfb0.LoadOBJ("models/Straight_Nodes/StraightTrack.obj", glm::vec4(1, 1, 1, 1));
 	AssetLoader::GetMesh().push_back(pfb0);
@@ -60,6 +61,7 @@ void AssetLoader::Init() //doing it manually because, actually I don't know why
 	mrph1.AddNewAnimation(0, 1, 2);
 	mrph1.SetActiveAnimation(0);
 	m_AnimatedModels.push_back(mrph1);
+	
 }
 
 std::vector<Mesh>& AssetLoader::GetMesh()

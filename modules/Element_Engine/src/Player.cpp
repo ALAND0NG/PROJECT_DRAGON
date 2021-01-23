@@ -4,6 +4,8 @@
 
 bool Weapon::Shoot(float range)
 {
+	/*
+	* Commented out for now because testing with a scene without enemies and crashed if I don't comment this out :)
 	if (m_CanShoot)
 	{
 		m_Timer = 0.f;
@@ -20,7 +22,7 @@ bool Weapon::Shoot(float range)
 
 		//std::cout << "Raycast ended at point: " << to.getX() << ", " << to.getY() << ", " << to.getZ() << std::endl;
 
-		ECS::Get<Transform>(3).SetPosition(BtToGlm::BTTOGLMV3(to));
+	//	ECS::Get<Transform>(3).SetPosition(BtToGlm::BTTOGLMV3(to));
 
 		
 
@@ -45,6 +47,8 @@ bool Weapon::Shoot(float range)
 		return false;
 		
 	}
+	*/
+	return false;
 }
 
 void Weapon::Update()
