@@ -32,7 +32,7 @@ void IMGUIManager::Init()
 		style.Colors[ImGuiCol_WindowBg].w = 0.8f;
 	}
 }
-int EntId = 0;
+int EntId = 1;
 float Position[3];
 void IMGUIManager::Update()
 {
@@ -49,9 +49,18 @@ void IMGUIManager::Update()
 		ImGui::ShowDemoWindow();
 		ImGui::InputInt("Entity Number", &EntId);
 		ImGui::InputFloat3("Position", Position, 0, 0);
+		if (ImGui::Button("Apply Physics Body Transform"))
+		{
+			//apply the transform
+			btTransform bodyTrns = ECS::Get<PhysicsBody>(EntId).GetBody()->getCenterOfMassTransform();
+			bodyTrns.setOrigin(btVector3(Position[0], Position[1], Position[2]));
+			ECS::Get<PhysicsBody>(EntId).GetBody()->setWorldTransform(bodyTrns);
+		}
 	
 		ImGui::End();
 	}
+
+	
 
 	// Make sure ImGui knows how big our window is
 	ImGuiIO& io = ImGui::GetIO();
