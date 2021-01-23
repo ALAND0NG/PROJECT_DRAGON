@@ -1,4 +1,5 @@
 #include "IMGUIManager.h"
+#include <AssetLoader.h>
 #include <BackEnd.h>
 std::vector<std::function<void()>> IMGUIManager::imGuiCallbacks;
 
@@ -43,12 +44,13 @@ void IMGUIManager::Update()
 	ImGui::NewFrame();
 
 
-
+	//Im not even going to deny it, this sucks
 	if (ImGui::Begin("Node Editor")) {
 
 		//ImGui::ShowDemoWindow();
 		ImGui::InputInt("Entity Number", &EntId);
 		ImGui::InputFloat3("Position", Position, 0, 0);
+		
 		if (ImGui::Button("Apply Physics Body Transform"))
 		{
 			//apply the transform
@@ -56,9 +58,35 @@ void IMGUIManager::Update()
 			bodyTrns.setOrigin(btVector3(Position[0], Position[1], Position[2]));
 			ECS::Get<PhysicsBody>(EntId).GetBody()->setWorldTransform(bodyTrns);
 		}
-	
-		//Button to save current scene starting from and including entity #2 since #0 & #1 are camera and plane
+		if (ImGui::Button("Apply Transform (Position)"))
+		{
+			ECS::Get<Transform>(EntId).SetPosition(glm::vec3(Position[0], Position[1], Position[2]));
+		}
+		if (ImGui::Button("Create New Entity"))
+		{
+			int HighestEntity = ECS::GetSize();
+			ECS::Create(HighestEntity);
+			ECS::Add<Transform>(HighestEntity);
+			ECS::Add<Material>(HighestEntity);
+			ECS::Add<Mesh>(HighestEntity);
+			ECS::Get<Mesh>(HighestEntity) = AssetLoader::GetMesh()[0];
+			ECS::Get<Material>(HighestEntity) = AssetLoader::GetMat()[0];
 
+		}
+
+		if (ImGui::Button("Apply Scale"))
+		{
+			ECS::Get<Transform>(EntId).SetScale(glm::vec3(Position[0], Position[1], Position[2]));
+		}
+
+
+
+
+		//Button to save current scene starting from and including entity #2 since #0 & #1 are camera and plane
+		if (ImGui::Button("Save Room"))
+		{
+			//Add implementation here
+		}
 
 		ImGui::End();
 	}
