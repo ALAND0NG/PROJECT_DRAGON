@@ -7,10 +7,6 @@
 #Creates a new entity, E creates a new entity, and until another E is added the loader will assume all instructions are for that entity
 #0 here is the entity number offset, CTRNS adds a transform component, and CMAT & CMESH do the same for material and mesh
 E 0
-CTRNS
-CMAT
-CMESH
-CPHYS
 #Here we add our transform data (In the order of position vec3, scale vec3, rotation vec4, first 3 are axis 4th is amount)
 #We use the prefix S to set the values in a component
 STRNS 0 10 0 0.5 0.5 0.5 1 1 1 0
@@ -21,10 +17,6 @@ SMESH StraightTrack
 #To Set Physics body, mass float, position vec3, size vec3, friction float
 SPHYS 0 0 10 0 10 1 10 10
 E 1
-CTRNS
-CMAT
-CMESH
-CPHYS
 #Here we add our transform data (In the order of position vec3, scale vec3, rotation vec4, first 3 are axis 4th is amount)
 #We use the prefix S to set the values in a component
 STRNS 0 30 0 0.5 0.5 0.5 1 1 1 0

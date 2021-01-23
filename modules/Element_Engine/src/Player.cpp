@@ -4,8 +4,8 @@
 
 bool Weapon::Shoot(float range)
 {
-	/*
-	* Commented out for now because testing with a scene without enemies and crashed if I don't comment this out :)
+	
+	//* Commented out for now because testing with a scene without enemies and crashed if I don't comment this out :)
 	if (m_CanShoot)
 	{
 		m_Timer = 0.f;
@@ -47,8 +47,8 @@ bool Weapon::Shoot(float range)
 		return false;
 		
 	}
-	*/
-	return false;
+	
+	//return false;
 }
 
 void Weapon::Update()

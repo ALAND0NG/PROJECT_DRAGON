@@ -75,27 +75,11 @@ void InstantiatingSystem::LoadPrefabFromFile(int index, glm::vec3 origin, std::s
 			ECS::Create(ENumb);
 			std::cout << "Created entity: "<< ENumb << '\n';
 		}
-		else if (prefix == "CTRNS")
-		{
-			ECS::Add<Transform>(ENumb);
-		
-		}
-		else if (prefix == "CMAT")
-		{
-			ECS::Add<Material>(ENumb);
-		}
-		else if (prefix == "CMESH")
-		{
-			ECS::Add<Mesh>(ENumb);
-		
-		}
-		else if (prefix == "CPHYS")
-		{
-			ECS::Add<PhysicsBody>(ENumb);
-		
-		}
 		else if (prefix == "STRNS")
 		{
+			if (!ECS::Has<Transform>(ENumb))
+				ECS::Add<Transform>(ENumb);
+
 			glm::vec3 tempPos, tempScale;
 			glm::vec4 tempRot;
 			ss >> tempPos.x >> tempPos.y >> tempPos.z >> tempScale.x >> tempScale.y >> tempScale.z >> tempRot.x >> tempRot.y >> tempRot.z >> tempRot.w; //Loads all the positions from the file into our vectors
@@ -107,6 +91,10 @@ void InstantiatingSystem::LoadPrefabFromFile(int index, glm::vec3 origin, std::s
 		}
 		else if (prefix == "SMAT")
 		{
+			if (!ECS::Has<Material>(ENumb))
+				ECS::Add<Material>(ENumb);
+
+
 			std::string matName;
 			ss >> matName;
 			ECS::Get<Material>(ENumb) = AssetLoader::GetMatFromStr(matName);
@@ -114,6 +102,9 @@ void InstantiatingSystem::LoadPrefabFromFile(int index, glm::vec3 origin, std::s
 		}
 		else if (prefix == "SMESH")
 		{
+			if (!ECS::Has<Mesh>(ENumb))
+				ECS::Add<Mesh>(ENumb);
+
 			std::string MeshName;
 			ss >> MeshName;
 			ECS::Get<Mesh>(ENumb).SetVAO(AssetLoader::GetMeshFromStr(MeshName).GetVAO()); 
@@ -121,6 +112,9 @@ void InstantiatingSystem::LoadPrefabFromFile(int index, glm::vec3 origin, std::s
 		}
 		else if (prefix == "SPHYS")
 		{
+			if (!ECS::Has<PhysicsBody>(ENumb))
+				ECS::Add<PhysicsBody>(ENumb);
+
 			float mass, friction;
 			glm::vec3 position, size;
 			ss >> mass >> position.x >> position.y >> position.z >> size.x >> size.y >> size.z >> friction;

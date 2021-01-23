@@ -57,6 +57,9 @@ void IMGUIManager::Update()
 			ECS::Get<PhysicsBody>(EntId).GetBody()->setWorldTransform(bodyTrns);
 		}
 	
+		//Button to save current scene starting from and including entity #2 since #0 & #1 are camera and plane
+
+
 		ImGui::End();
 	}
 

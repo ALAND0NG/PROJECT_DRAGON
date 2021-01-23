@@ -8,7 +8,7 @@
 #include <LeftTurn.h>
 #include <LeftOff.h>
 
-class PFB_EDITOR : public Scene
+class Game_Scene : public Scene
 {
 public:
 	void InitScene() override;

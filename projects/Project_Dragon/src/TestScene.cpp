@@ -7,7 +7,7 @@
 
 
 
-void PFB_EDITOR::InitScene()
+void Game_Scene::InitScene()
 {
 	srand(time(NULL)); // This is needed for generating a new seed for randoms
 
@@ -180,7 +180,7 @@ void PFB_EDITOR::InitScene()
 //please change this later
 int projId = 0;
 
-void PFB_EDITOR::Update()
+void Game_Scene::Update()
 {
 	
 	ECS::Get<Player>(0).Update();
