@@ -24,6 +24,8 @@ public:
 
 	void GameLoop(); //this is the core update function
 
+	void SwitchScene(int SceneIndex);
+
 	//void InitWindow(float width, float height, std::string name);
 
 

@@ -88,6 +88,11 @@ void Game::GameInput()
 		//if (ECS::Get<Player>(0).GetPlayerData().m_CanJump)
 			verticalVelo = 22.f;
 	}
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_0) == GLFW_PRESS)
+	{
+		SwitchScene(0);
+	}
+
 	ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(movement.getX() * movementSpeed, verticalVelo, movement.getZ() * movementSpeed));
 }
 
@@ -104,4 +109,14 @@ void Game::GameLoop() //Main update function
 		m_ActiveScene->Update(); //Scene specific update
 	}
 	Logger::Uninitialize();
+}
+
+void Game::SwitchScene(int SceneIndex)
+{
+	PhysicsSystem::ClearWorld();
+	for (int i = 0; i < ECS::GetSize(); i++)
+		ECS::DestroyEntity(i);
+	m_ActiveScene = m_Scenes[SceneIndex];
+	m_ActiveScene->InitScene();
+
 }

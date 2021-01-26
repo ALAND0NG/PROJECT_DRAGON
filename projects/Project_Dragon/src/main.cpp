@@ -5,8 +5,8 @@
 int main()
 {
 	Game game;
-	//game.AddScene(new Game_Scene());
+	game.AddScene(new Game_Scene());
 	game.AddScene(new PrefabMakeScene());
-	game.InitGame(0);
+	game.InitGame(1);
 	return 0;
 }

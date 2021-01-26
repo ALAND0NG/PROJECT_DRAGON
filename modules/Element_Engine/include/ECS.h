@@ -60,6 +60,11 @@ public:
 	{
 		return EntList.size();
 	}
+
+	static void DestroyEntity(unsigned int EntityNum)
+	{
+		m_Registry->destroy(EntList[EntityNum]);
+	}
 	
 
 private:

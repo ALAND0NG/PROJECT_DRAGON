@@ -54,6 +54,12 @@ void PhysicsSystem::Update()
 	}
 }
 
+void PhysicsSystem::ClearWorld()
+{
+	for (int i = 0; i < m_bodies.size(); i++)
+		m_World->removeRigidBody(m_bodies[i]);
+}
+
 btDiscreteDynamicsWorld* PhysicsSystem::GetWorld()
 {
 	return m_World;
