@@ -92,6 +92,14 @@ void Game::GameInput()
 	{
 		SwitchScene(0);
 	}
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_1) == GLFW_PRESS)
+	{
+		SwitchScene(1);
+	}
+	if (glfwGetKey(BackEnd::m_Window, GLFW_KEY_2) == GLFW_PRESS)
+	{
+		SwitchScene(2);
+	}
 
 	ECS::Get<PhysicsBody>(0).SetLinearVelocity(btVector3(movement.getX() * movementSpeed, verticalVelo, movement.getZ() * movementSpeed));
 }
@@ -100,6 +108,9 @@ void Game::GameLoop() //Main update function
 {
 	while (!glfwWindowShouldClose(BackEnd::m_Window))
 	{
+
+
+
 		Timer::Tick();
 
 		GameInput();
@@ -114,8 +125,7 @@ void Game::GameLoop() //Main update function
 void Game::SwitchScene(int SceneIndex)
 {
 	PhysicsSystem::ClearWorld();
-	for (int i = 0; i < ECS::GetSize(); i++)
-		ECS::DestroyEntity(i);
+	ECS::DestroyAllEntities();
 	m_ActiveScene = m_Scenes[SceneIndex];
 	m_ActiveScene->InitScene();
 

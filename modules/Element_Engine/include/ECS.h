@@ -61,9 +61,14 @@ public:
 		return EntList.size();
 	}
 
-	static void DestroyEntity(unsigned int EntityNum)
+	static void DestroyAllEntities()
 	{
-		m_Registry->destroy(EntList[EntityNum]);
+		for (int i = 0; i < EntList.size(); i++)
+		{
+			m_Registry->destroy(EntList[i]);
+			
+		}
+		EntList.clear();
 	}
 	
 
