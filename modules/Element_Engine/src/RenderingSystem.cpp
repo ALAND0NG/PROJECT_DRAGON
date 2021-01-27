@@ -88,6 +88,7 @@ void RenderingSystem::ECSUpdate()
 
 	UIShader->SetUniform("s_Specular", 0);
 	UIShader->SetUniform("s_Diffuse", 1);
+	UIShader->SetUniform("u_IsMenu", 1);
 	
 	auto reg = ECS::GetReg();
 	int LightCount = 0;
@@ -165,10 +166,12 @@ void RenderingSystem::ECSUpdate()
 	}
 
 	//view for UI
-	auto UIview = reg->view<UI>();
+	auto UIview = reg->view<UI, LightSource>(); 
 	for (auto entity : UIview)
 	{
 		UIShader->Bind();
+
+		UIShader->SetUniform("u_IsMenu", 0);
 
 		UI& ui = UIview.get<UI>(entity);
 
@@ -189,6 +192,28 @@ void RenderingSystem::ECSUpdate()
 		ui.mesh.GetVAO()->Render();
 
 	}
+
+	auto Menuview = reg->view<UI, Menu>();
+	for (auto entity : Menuview)
+	{
+		UIShader->Bind();
+
+		UI& ui = Menuview.get<UI>(entity);
+
+
+		UIShader->SetUniform("u_IsMenu", 1);
+
+		UIShader->SetUniform("u_Scale", glm::vec2(1,1.5));
+		UIShader->SetUniform("u_Offset", glm::vec2(0, 0.7));
+
+		ui.material.GetAlbedo()->Bind(0);
+		ui.material.GetSpecular()->Bind(1);
+
+
+		ui.mesh.GetVAO()->Render();
+
+	}
+
 
 	//view for lightsource
 	auto lview = reg->view<LightSource, Transform>(); 

@@ -20,7 +20,7 @@ public:
 
 	float TimeBetweenHits = 1.f;
 	float HitTimer = 0.f;
-	bool canBeHit = true;
+	bool canBeHit = false;
 
 	//External Values
 	btVector3 playerPosition;

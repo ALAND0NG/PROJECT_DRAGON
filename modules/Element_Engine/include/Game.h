@@ -29,7 +29,7 @@ public:
 	//void InitWindow(float width, float height, std::string name);
 
 
-
+	int m_SceneIndex; //to tell us what scene we are currently on for some input stuff
 
 
 	//void Tick()//Gives us a deltaTime

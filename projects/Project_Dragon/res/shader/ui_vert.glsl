@@ -12,17 +12,28 @@ layout(location = 3) out vec2 outUV;
 
 uniform vec2 u_Scale;
 uniform vec2 u_Offset;
+uniform int u_IsMenu;
 
 void main()
 {
 	vec4 scaled = vec4(inPosition.x * u_Scale.x, -inPosition.z * 16/9, inPosition.y * u_Scale.y, 1.0);
 	gl_Position = vec4(scaled.x+u_Offset.x, scaled.y+u_Offset.y, scaled.zw);
+	
 
 	outPos = gl_Position.xyz;
 
 	outNormal = inNormal;
 
 	outColor = vec3(1.0,1.0,1.0);
-	outUV = inUV;
+	
+	
 
+	if (u_IsMenu == 1)
+	{
+	outUV = vec2(inUV.x * u_Scale.x, inUV.y * u_Scale.y);
+	}
+	if (u_IsMenu == 0)
+	{
+	outUV = inUV;
+	}
 }

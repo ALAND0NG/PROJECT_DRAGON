@@ -7,3 +7,7 @@ public:
 	Mesh mesh;
 	Material material;
 };
+class Menu
+{
+
+};

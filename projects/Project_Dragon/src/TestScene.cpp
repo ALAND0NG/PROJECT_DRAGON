@@ -28,6 +28,7 @@ void Game_Scene::InitScene()
 	ECS::Get<LightSource>(0).m_Ambient = glm::vec3(1, 1, 1);
 	ECS::Get<PhysicsBody>(0).m_Entity = 0;
 	ECS::Get<Player>(0).SetMovementSpeed(10.f);
+	ECS::Get<Player>(0).SetHp(5);
 	ECS::Add<UI>(0);
 	ECS::Get<UI>(0).mesh.LoadOBJ("models/other/plane.obj", glm::vec4(1, 1, 1, 1));
 	ECS::Get<UI>(0).material.LoadDiffuseFromFile("images/HP_FULL.png");
